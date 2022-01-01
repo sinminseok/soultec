@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "467091027615",
+    "project_id": "soultec-6f71d",
+    "storage_bucket": "soultec-6f71d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467091027615:android:b85711bd7771fe321e94aa",
+        "android_client_info": {
+          "package_name": "com.example.soultec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467091027615-03uu5jq373695ndrp0j743e8trb5te61.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxWCh4uCHs2al4WAWjFC12szwZcG6yq6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467091027615-03uu5jq373695ndrp0j743e8trb5te61.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
