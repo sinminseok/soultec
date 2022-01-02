@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../constants.dart';
-import 'inputPages/bluetooth_connect.dart';
+import 'inputPages/Test.dart';
 import 'inputPages/first_input.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
@@ -43,7 +43,7 @@ class _Main_pageState extends State<Main_page> {
           SizedBox(height: size.height*0.05,),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Bluetooth_page()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
             },
             borderRadius: BorderRadius.circular(20),
             child: Container(
