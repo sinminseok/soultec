@@ -101,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen>
                       width: 200,
                     ),
 
+                    //input Email
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
@@ -141,9 +142,8 @@ class _LoginScreenState extends State<LoginScreen>
                           print('userlogin');
                           UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
                           User? user = userCredential.user;
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: user!.uid)));
-
                           return showtoast("Login!");
+
                         }on FirebaseAuthException catch(e){
                           print('login error');
                           print(e.toString());

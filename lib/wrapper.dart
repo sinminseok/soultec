@@ -22,6 +22,7 @@ class Wrapper extends StatelessWidget {
       return LoginScreen();
           //Sign_Page();
     } else {
+      //uid: providerUserModel.uid
       return Home_page(uid: providerUserModel.uid);
     }
   }

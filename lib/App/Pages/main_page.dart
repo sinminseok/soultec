@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../constants.dart';
+import 'inputPages/bluetooth_connect.dart';
 import 'inputPages/first_input.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 class Main_page extends StatefulWidget {
   const Main_page({Key? key}) : super(key: key);
@@ -13,7 +16,6 @@ class Main_page extends StatefulWidget {
 class _Main_pageState extends State<Main_page> {
 
   final TextEditingController _inputController = TextEditingController();
-
 
 
   @override
@@ -41,7 +43,7 @@ class _Main_pageState extends State<Main_page> {
           SizedBox(height: size.height*0.05,),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => First_page()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Bluetooth_page()));
             },
             borderRadius: BorderRadius.circular(20),
             child: Container(
