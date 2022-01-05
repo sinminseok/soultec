@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/wrapper.dart';
 
+import 'App/Pages/start_page.dart';
+import 'App/home_page.dart';
 import 'Data/database.dart';
 import 'auth.dart';
 import 'constants.dart';
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
           primaryColor: kPrimaryColor,
           // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
         ),
-        home: Wrapper(),
+        home: Start_page()
       ),
     );
   }

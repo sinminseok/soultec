@@ -21,7 +21,8 @@ class _RegisterScreen extends State<RegisterScreen>
   late AnimationController animationController;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _checkpasswordController = TextEditingController();
+  final TextEditingController _checkpasswordController =
+      TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   Duration animationDuration = Duration(microseconds: 270);
 
@@ -41,7 +42,6 @@ class _RegisterScreen extends State<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-
     final formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     double viewInset = MediaQuery.of(context).viewInsets.bottom;
@@ -49,9 +49,9 @@ class _RegisterScreen extends State<RegisterScreen>
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
     containerSize = Tween<double>(
-        begin: size.height * 0.1, end: defaultRegisterSize)
+            begin: size.height * 0.1, end: defaultRegisterSize)
         .animate(
-        CurvedAnimation(parent: animationController, curve: Curves.linear));
+            CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return Scaffold(
       body: Stack(
@@ -93,19 +93,15 @@ class _RegisterScreen extends State<RegisterScreen>
                     Text(
                       '회원가입',
                       style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     SizedBox(
-                      height: 10,
-                    ),
-                    Image(
-                      image: AssetImage('assets/images/mainimg.png'),
-                      width: 200,
+                      height: size.height*0.07,
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -113,15 +109,15 @@ class _RegisterScreen extends State<RegisterScreen>
                       child: TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                            icon: Icon(Icons.email, color: kPrimaryColor),
-                            hintText: 'email',
+                            icon: Icon(Icons.person, color: kPrimaryColor),
+                            hintText: '기사번호',
                             border: InputBorder.none),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -131,14 +127,14 @@ class _RegisterScreen extends State<RegisterScreen>
                         keyboardType: TextInputType.visiblePassword, //inp
                         decoration: InputDecoration(
                             icon: Icon(Icons.face, color: kPrimaryColor),
-                            hintText: 'name',
+                            hintText: '이름',
                             border: InputBorder.none),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -149,14 +145,14 @@ class _RegisterScreen extends State<RegisterScreen>
                         keyboardType: TextInputType.visiblePassword, //inp
                         decoration: InputDecoration(
                             icon: Icon(Icons.lock, color: kPrimaryColor),
-                            hintText: 'password',
+                            hintText: '비밀번호',
                             border: InputBorder.none),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -167,20 +163,36 @@ class _RegisterScreen extends State<RegisterScreen>
                         keyboardType: TextInputType.visiblePassword, //inp
                         decoration: InputDecoration(
                             icon: Icon(Icons.check, color: kPrimaryColor),
-                            hintText: 'confirm password',
+                            hintText: '비밀번호 확인',
                             border: InputBorder.none),
                       ),
                     ),
+                    SizedBox(
+                      height: size.height * 0.05,
+                    ),
                     InkWell(
-                      onTap: () async{
+                      onTap: () async {
                         // if(_passwordController.text != _checkpasswordController){
                         //   showtoast("password is not confirm");
                         // }
-                        try{
-                          await AuthService().register(_emailController.text, _passwordController.text, _nameController.text);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                        try {
+                          await AuthService().register(_emailController.text,
+                              _passwordController.text, _nameController.text);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                          if(_passwordController != _checkpasswordController) {
+                            return showtoast("입력한 비밀번호가 다릅니다.");
+                          }else{
+                            if(_nameController == null){
+                              showtoast("이름을 입력하세요");
+                            }else{
+                              return showtoast("기사번호를 입력하세요");
+                            }
+                          }
                           return showtoast("회원가입이 완료 되었습니다 로그인 페이지로 이동합니다!");
-                        }catch(e){
+                        } catch (e) {
                           print(e.toString());
                         }
                       },
@@ -195,34 +207,29 @@ class _RegisterScreen extends State<RegisterScreen>
                         alignment: Alignment.center,
                         child: Text("Register",
                             style:
-                            TextStyle(color: Colors.white, fontSize: 14)),
+                                TextStyle(color: Colors.white, fontSize: 14)),
                       ),
+                    ),
+                    SizedBox(height: size.height*0.02,),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()));
+                      },
+                      child: Container(
+                          child: Text(
+                            "로그인페이지로 이동",
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          )),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.only(top:660),
-            child: Center(
-              child: FlatButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                },
-                child: Container(
-                    child: Text(
-                        "로그인페이지로 이동",
-                      style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 12),
-                    )
-                ),
-              ),
-            ),
-          ),
-
-
-
 
           Visibility(
             visible: !isLogin,
@@ -244,14 +251,10 @@ class _RegisterScreen extends State<RegisterScreen>
                       SizedBox(
                         height: 10,
                       ),
-                      Image(
-                        image: AssetImage('assets/images/mainimg.png'),
-                        width: 200,
-                      ),
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         width: size.width * 0.8,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -267,7 +270,7 @@ class _RegisterScreen extends State<RegisterScreen>
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         width: size.width * 0.8,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -285,7 +288,7 @@ class _RegisterScreen extends State<RegisterScreen>
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         width: size.width * 0.8,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -303,7 +306,7 @@ class _RegisterScreen extends State<RegisterScreen>
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         width: size.width * 0.8,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -331,7 +334,7 @@ class _RegisterScreen extends State<RegisterScreen>
                           alignment: Alignment.center,
                           child: Text('SIGN UP',
                               style:
-                              TextStyle(color: Colors.white, fontSize: 14)),
+                                  TextStyle(color: Colors.white, fontSize: 14)),
                         ),
                       ),
                     ],

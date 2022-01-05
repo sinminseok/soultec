@@ -24,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool _isChecked =false;
+
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen>
     animationController =
         AnimationController(vsync: this, duration: animationDuration);
   }
+
 
   @override
   void dispose() {
@@ -89,32 +92,41 @@ class _LoginScreenState extends State<LoginScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Soul Tec',
+                      '빠르고 편한 주입',
+                      style:
+                      TextStyle( fontSize: 19),
+                    ),
+                    Text(
+                      '스마트필 환영합니다.',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Image(
-                      image: AssetImage('assets/images/mainimg.png'),
-                      width: 200,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0),
+                      child: Image(
+                        image: AssetImage('assets/images/mainimg.png'),
+                        width: 140,
+                      ),
                     ),
-
-                    //input Email
+                    SizedBox(
+                      height: size.height*0.03,
+                    ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(4),
                           color: kPrimaryColor.withAlpha(30)),
                       child: TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                            icon: Icon(Icons.email, color: kPrimaryColor),
-                            hintText: 'email',
+                            icon: Icon(Icons.person, color: kPrimaryColor),
+                            hintText: '기사번호 입력',
                             border: InputBorder.none),
                       ),
                     ),
@@ -124,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen>
                           EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       width: size.width * 0.8,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(4),
                           color: kPrimaryColor.withAlpha(30)),
                       child: TextFormField(
                         controller: _passwordController,
@@ -132,21 +144,63 @@ class _LoginScreenState extends State<LoginScreen>
                         keyboardType: TextInputType.visiblePassword, //inp
                         decoration: InputDecoration(
                             icon: Icon(Icons.lock, color: kPrimaryColor),
-                            hintText: 'password',
+                            hintText: '비밀번호',
                             border: InputBorder.none),
                       ),
+                    ),
+                    Container(
+                      width: size.width*0.8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                    value: _isChecked,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isChecked = value!;
+                                      });
+                                    }),
+
+                              Text("로그인상태 유지"),
+                            ],
+                          ),
+                          FlatButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: '',)));
+                            },
+                            child: Container(
+                                child: Text(
+                                    "회원가입",
+                                    style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 12)
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height*0.03,
                     ),
                     InkWell(
                       onTap: ()async{
                         try{
                           print('userlogin');
                           UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+                          print("...");
                           User? user = userCredential.user;
                           return showtoast("Login!");
 
                         }on FirebaseAuthException catch(e){
                           print('login error');
                           print(e.toString());
+                          if(e.toString() == "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred."){
+                            return showtoast("네트워크 연결을 확인하세요.");
+                          }
+
+                          return showtoast("등록된 직원이 아닙니다.관리자에게 문의 하십시오.");
                         }
                       },
                       borderRadius: BorderRadius.circular(20),
@@ -154,36 +208,19 @@ class _LoginScreenState extends State<LoginScreen>
                         width: size.width * 0.8,
                         height: 60,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(4),
                             color: kPrimaryColor),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         alignment: Alignment.center,
-                        child: Text('Login',
+                        child: Text('로그인',
                             style:
-                                TextStyle(color: Colors.white, fontSize: 14)),
+                                TextStyle(color: Colors.white, fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(top:600),
-            child: Center(
-                child: FlatButton(
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-                    },
-                    child: Container(
-                      child: Text(
-                        "회원가입",
-                          style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 12)
-                      )
-                    ),
-                  ),
-              ),
           ),
 
 

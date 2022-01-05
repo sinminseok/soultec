@@ -46,6 +46,7 @@ dependencies:
   flutter_blue: ^0.8.0
   scoped_model: ^1.1.0
   fl_chart: ^0.40.6
+  nfc_manager: ^3.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -77,6 +78,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/mainimg.png
+    - assets/images/cartoonimg.png
+    - assets/images/nfc.png
 
 
   # To add assets to your application, add an assets section, like this:
