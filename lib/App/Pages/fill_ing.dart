@@ -9,14 +9,14 @@ class Filling extends StatefulWidget {
   late final String? l;
 
   Filling({@required this.l});
-  print(l);
+
   @override
   _FillingState createState() => _FillingState();
 }
 
 class _FillingState extends State<Filling> {
   int pageIndex = 0;
-  print(l);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -62,7 +62,6 @@ class _FillingState extends State<Filling> {
             height: size.height * 0.15,
           ),
           Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          //Text(this.l.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
             height: size.height * 0.03,
           ),
