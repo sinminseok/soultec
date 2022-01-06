@@ -120,7 +120,7 @@ class _Home_pageState extends State<Home_page> {
               //data push
               print(inputController.text);
               print('asd');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: inputController.text)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(liter: inputController.text)));
             },
             child: Container(
               width: size.width * 0.8,

@@ -6,8 +6,8 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  final String? l;
-  Filling({@required this.l});
+  final String? liter;
+  Filling({@required this.liter});
 
   @override
   _FillingState createState() => _FillingState();
@@ -30,7 +30,6 @@ class _FillingState extends State<Filling> {
 
   getBody(Size size) {
     print("Asa");
-    print(this.l);
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
