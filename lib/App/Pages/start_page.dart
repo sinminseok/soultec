@@ -3,6 +3,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:soultec/App/Bluetooth/DiscoveryPage.dart';
 import '../../constants.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:soultec/wrapper.dart';
 
 class Start_page extends StatefulWidget {
   const Start_page({Key? key}) : super(key: key);
