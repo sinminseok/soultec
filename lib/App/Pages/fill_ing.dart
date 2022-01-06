@@ -30,7 +30,7 @@ class _FillingState extends State<Filling> {
 
   getBody(Size size) {
     print("Asaaa");
-    print(this.liter.toString());
+    print(this.liter);
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
