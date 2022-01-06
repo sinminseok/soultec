@@ -118,7 +118,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             ),
           ),
           Text(
-            "블루투스와 연결할 기기를 선택해주세요",
+            "블루투스와 연결할 기기를 선택해주세요!!",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(
