@@ -7,9 +7,9 @@ import 'package:soultec/auth.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  late final String? uid;
+  //late final String? uid;
 
-  Filling({required this.uid});
+  //Filling({required this.uid});
 
   @override
   _FillingState createState() => _FillingState();
