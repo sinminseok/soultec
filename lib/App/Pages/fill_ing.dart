@@ -5,14 +5,19 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 
 import '../../constants.dart';
 
-class Filling extends StatefulWidget {
+class Filling extends StatelessWidget {
   final String? liter;
   Filling({@required this.liter});
 
-  //print(this.liter);
-  @override
-  _FillingState createState() => _FillingState();
+  print(liter);
 }
+// class Filling extends StatefulWidget {
+//   final String? liter;
+//   Filling({@required this.liter});
+
+//   @override
+//   _FillingState createState() => _FillingState();
+// }
 
 class _FillingState extends State<Filling> {
   int pageIndex = 0;
