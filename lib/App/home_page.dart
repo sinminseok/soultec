@@ -118,8 +118,8 @@ class _Home_pageState extends State<Home_page> {
           InkWell(
             onTap: () {
               //data push
-              print(inputController);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: this._select_value)));
+              print(inputController.text);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: inputController.text)));
             },
             child: Container(
               width: size.width * 0.8,
