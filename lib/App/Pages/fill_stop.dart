@@ -1,22 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/widgets/drawer.dart';
-import 'package:soultec/App/Pages/fill_stop.dart';
 
 import 'package:soultec/auth.dart';
 
 import '../../constants.dart';
 
-class Filling extends StatefulWidget {
+class FillStop extends StatefulWidget {
   //late final String? uid;
 
   //Filling({required this.uid});
 
   @override
-  _FillingState createState() => _FillingState();
+  _FillStopState createState() => _FillStopState();
 }
 
-class _FillingState extends State<Filling> {
+class _FillStopState extends State<FillStop> {
   int pageIndex = 0;
 
   String? _select_value;
@@ -39,7 +38,7 @@ class _FillingState extends State<Filling> {
       child: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "주 입 중",
+            "주 입 멈 춤",
             style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -63,18 +62,12 @@ class _FillingState extends State<Filling> {
           Text("주입 중입니다.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue)),
           Text("계속해서 주입해주세요.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.15,
+            height: size.height * 0.10,
           ),
-          Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-          Text("주입 중입니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          Text("잠시만 기다려 주시기 바랍니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           InkWell(
             onTap: () {
               //data push
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FillStop()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
             },
             child: Container(
               width: size.width * 0.8,
@@ -82,9 +75,15 @@ class _FillingState extends State<Filling> {
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kPrimaryColor),
               padding: EdgeInsets.symmetric(vertical: 20),
               alignment: Alignment.center,
-              child: Text('다음', style: TextStyle(color: Colors.white, fontSize: 16)),
+              child: Text('정량', style: TextStyle(color: Colors.white, fontSize: 16)),
             ),
           ),
+          Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          Text("정량을 맞추시려면", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text("정량 버튼을 터치해 주세요.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ]),
       ),
     );
