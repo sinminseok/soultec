@@ -38,25 +38,31 @@ class _FillingState extends State<Filling> {
       child: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "주입중",
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            "주 입 중",
+            style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: size.height * 0.1,
           ),
           Text(
-            "[김영솔]님 환영합니다\n\n[30]L로 주입을 원하십니다.",
+            "[김영솔]님 환영합니다\n",
+            style: TextStyle(fontSize: 22),
+          ),
+          Text(
+            "[30]L로 주입을 원하십니다.",
+            style: TextStyle(fontSize: 20),
           ),
           SizedBox(
             height: size.height * 0.02,
           ),
-          Container(width: 500, child: Divider(color: Colors.black, thickness: 1.0)),
+          Container(width: size.width * 0.8, child: Divider(color: Colors.black, thickness: 1.0)),
           SizedBox(
-            height: size.height * 0.08,
+            height: size.height * 0.02,
           ),
-          Text("주유 중입니다.\n계속해서 주유하세요.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text("주유 중입니다.계속해서 주유하세요.", style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Colors.blue)),
+          Text("계속해서 주유하세요.", style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.08,
+            height: size.height * 0.12,
           ),
           Text("리터[0]L"),
           SizedBox(
