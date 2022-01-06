@@ -23,7 +23,7 @@ class Wrapper extends StatelessWidget {
           //Sign_Page();
     } else {
       //uid: providerUserModel.uid
-      return Home_page(uid: providerUserModel.uid);
+      return CarNumberPage(uid: providerUserModel.uid);
     }
   }
 }

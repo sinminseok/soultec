@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:soultec/Account/login_main.dart';
 import 'package:soultec/constants.dart';
 import 'package:soultec/wrapper.dart';
 

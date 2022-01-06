@@ -1,84 +1,115 @@
 
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:soultec/App/Pages/start_page.dart';
+import 'package:soultec/Data/database.dart';
+import 'package:soultec/Data/toast.dart';
+import 'package:soultec/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../constants.dart';
+import '../home_page.dart';
 import 'car_loading.dart';
+import 'car_register.dart';
 
-class CarNumberPage extends StatelessWidget {
-  const CarNumberPage({Key? key}) : super(key: key);
+class CarNumberPage extends StatefulWidget {
+  final String? uid;
+  CarNumberPage({required this.uid});
+
+  @override
+  State<CarNumberPage> createState() => _CarNumberPageState();
+}
+
+class _CarNumberPageState extends State<CarNumberPage> {
+  final firestoreInstance = FirebaseFirestore.instance;
+  
+  TextEditingController _carnumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
+      appBar: AppBar(elevation: 0,backgroundColor: kPrimaryColor,leading: Container(),),
       body:  SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              Text("차량조회",style: TextStyle(fontSize: 26 , fontWeight: FontWeight.bold),),
+
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              Image(
+                image: AssetImage('assets/images/cartoonimg.png'),
+                width: 140,
+              ),
+              // Center(
+              //   child: Text(
+              //     "카메라를 차량 번호판에 맞춰줍니다\n조회가 완료 될 때까지 기다려 주십시오.",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: size.height * 0.15,
+              // ),
+              // Center(
+              //   child: Text(
+              //     "프레임에 맞춰지면 조회를 시작합니다.",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(color: kPrimaryColor, fontSize: 13, fontWeight: FontWeight.normal),
+              //   ),
+              // ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              FlatButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CarRegister(uid: widget.uid,)));
+                },
+                child: Container(
+                    child: Text(
+                        "아직 차량 등록을 하지 않았으면 등록해주세요.",
+                        style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 12)
+                    )
+                ),
+              ),
+
+
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              // Center(
+              //   child: Text(
+              //     "차량 번호를 직접 입력하실 수 있습니다.",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
               Container(
-                height: size.height * 0.2,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: size.height * 0.2 - 27,
-                      decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                          )),
-                    ),
-                    Center(
-                      child: Text(
-                        "차량 인증",
-                        style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Center(
-                child: Text(
-                  "카메라를 차량 번호판에 맞춰줍니다\n조회가 완료 될 때까지 기다려 주십시오.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.15,
-              ),
-              Center(
-                child: Text(
-                  "프레임에 맞춰지면 조회를 시작합니다.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: kPrimaryColor, fontSize: 13, fontWeight: FontWeight.normal),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Container(width: 500, child: Divider(color: Colors.red, thickness: 1.0)),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Center(
-                child: Text(
-                  "차량 번호를 직접 입력하실 수 있습니다.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: '00가0000',
+                margin: EdgeInsets.symmetric(vertical: 10),
+                padding:
+                EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                width: size.width * 0.8,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: kPrimaryColor.withAlpha(30)),
+                child: TextFormField(
+                  controller: _carnumber,
+
+                  decoration: InputDecoration(
+
+                      hintText: '자동차 번호를 입력해주세요 ex)00가 0000',
+                      border: InputBorder.none),
                 ),
               ),
               SizedBox(
@@ -96,7 +127,34 @@ class CarNumberPage extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CarLoadingPage()));
+                  firestoreInstance.collection("users").get().then((querySnapshot) {
+                    querySnapshot.docs.forEach((result) {
+                      firestoreInstance
+                          .collection("users")
+                          .doc(widget.uid)
+                          .collection("cars")
+                          .get()
+                          .then((querySnapshot) {
+                        querySnapshot.docs.forEach((result) {
+                          var d = result.data().values.single;
+                          print("sex");
+                          print(_carnumber.text);
+                          if(d == _carnumber.text){
+                            print('success');
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: widget.uid,)));
+                          }else{
+                            print('x');
+                            return showtoast("등록된 차량이 아닙니다 .");
+                          }
+                        });
+                      });
+                    });
+                  });
+
+
+
+
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => CarLoadingPage()));
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(

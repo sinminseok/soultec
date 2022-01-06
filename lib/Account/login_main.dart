@@ -224,9 +224,6 @@ class _LoginScreenState extends State<LoginScreen>
           ),
 
 
-
-
-
           Visibility(
             visible: !isLogin,
             child: Align(

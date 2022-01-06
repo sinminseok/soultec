@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:soultec/App/widgets/drawer.dart';
+import 'package:soultec/Data/database.dart';
 
 import 'package:soultec/auth.dart';
 
 import '../constants.dart';
+import 'Pages/car_number.dart';
 
 class Home_page extends StatefulWidget {
-  late final String? uid;
+  String? uid;
 
   Home_page({required this.uid});
 
@@ -19,23 +24,38 @@ class _Home_pageState extends State<Home_page> {
   int pageIndex = 0;
   TextEditingController inputController = TextEditingController();
 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   final values = ["가득", "리터"];
   var select_firest = "가득";
   String? _select_value;
 
   @override
   Widget build(BuildContext context) {
+    print(widget.uid);
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        drawer: My_Drawer(),
-        appBar: AppBar(
-          backgroundColor: kPrimaryColor,
-          elevation: 0,
-        ),
-        body: getBody(size));
+
+    String user_name;
+    user_name = auth.currentUser!.email.toString();
+    print(user_name);
+
+
+    return StreamProvider<DocumentSnapshot?>.value(
+      value: DatabaseService(uid : widget.uid).getuser,
+      initialData: null,
+
+      child: Scaffold(
+          drawer: My_Drawer(),
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+            elevation: 0,
+          ),
+          body: getBody(size , user_name)),
+    );
   }
 
-  getBody(Size size) {
+  getBody(Size size , String username) {
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -123,11 +143,12 @@ class _Home_pageState extends State<Home_page> {
                   ),
                 ],
               ),
+
               SizedBox(height: size.height*0.03,),
               InkWell(
                 onTap: (){
                   //data push
-                  print('click');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CarNumberPage(uid : widget.uid)));
 
                 },
                 child: Container(
