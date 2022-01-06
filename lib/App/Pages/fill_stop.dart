@@ -67,7 +67,8 @@ class _FillStopState extends State<FillStop> {
           InkWell(
             onTap: () {
               //data push
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
+              print("aa");
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
             },
             child: Container(
               width: size.width * 0.8,
