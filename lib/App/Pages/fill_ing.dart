@@ -7,9 +7,9 @@ import '../../constants.dart';
 
 class Filling extends StatefulWidget {
   final String? l;
-  print(l);
   Filling({@required this.l});
 
+  print(l);
   @override
   _FillingState createState() => _FillingState();
 }
