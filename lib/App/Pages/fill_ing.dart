@@ -9,7 +9,6 @@ class Filling extends StatefulWidget {
   final String? l;
   Filling({@required this.l});
 
-  print(l);
   @override
   _FillingState createState() => _FillingState();
 }
@@ -30,6 +29,7 @@ class _FillingState extends State<Filling> {
   }
 
   getBody(Size size) {
+    print("Aa");
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
