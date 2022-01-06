@@ -119,7 +119,7 @@ class _Home_pageState extends State<Home_page> {
             onTap: () {
               //data push
               print('click');
-              print(this._select_value);
+              print(_select_value);
               Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: this._select_value)));
             },
             child: Container(
