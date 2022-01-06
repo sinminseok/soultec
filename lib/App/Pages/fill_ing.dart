@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:soultec/App/widgets/drawer.dart';
 import 'package:soultec/App/Pages/fill_stop.dart';
 
-import 'package:soultec/auth.dart';
-
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
@@ -18,8 +16,6 @@ class Filling extends StatefulWidget {
 
 class _FillingState extends State<Filling> {
   int pageIndex = 0;
-
-  String? _select_value;
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:soultec/App/widgets/drawer.dart';
 import 'package:soultec/App/Pages/fill_ing.dart';
 
-import 'package:soultec/auth.dart';
-
 import '../constants.dart';
 
 class Home_page extends StatefulWidget {
@@ -121,7 +119,7 @@ class _Home_pageState extends State<Home_page> {
             onTap: () {
               //data push
               print('click');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: this._select_value)));
             },
             child: Container(
               width: size.width * 0.8,

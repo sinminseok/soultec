@@ -19,8 +19,6 @@ class FillStop extends StatefulWidget {
 class _FillStopState extends State<FillStop> {
   int pageIndex = 0;
 
-  String? _select_value;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
