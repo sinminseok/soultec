@@ -42,7 +42,7 @@ class _FillEndState extends State<FillEnd> {
             style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
           ),
           SizedBox(
-            height: size.height * 0.1,
+            height: size.height * 0.08,
           ),
           Text(
             "[김영솔]님 환영합니다.\n",
@@ -59,19 +59,19 @@ class _FillEndState extends State<FillEnd> {
           SizedBox(
             height: size.height * 0.02,
           ),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-          Text("리터 [30] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 30.0),
             child: Image(
               image: AssetImage('assets/images/cartoonimg.png'),
               width: 140,
             ),
+          ),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          Text("리터 [30] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(
+            height: size.height * 0.03,
           ),
           SizedBox(
             height: size.height * 0.03,

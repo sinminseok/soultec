@@ -43,7 +43,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
           ),
           SizedBox(
-            height: size.height * 0.1,
+            height: size.height * 0.08,
           ),
           Text(
             "[김영솔]님 환영합니다\n",
