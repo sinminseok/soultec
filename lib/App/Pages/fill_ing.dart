@@ -6,7 +6,7 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  final String l;
+  final String? l;
   Filling({@required this.l});
 
   @override
@@ -29,7 +29,7 @@ class _FillingState extends State<Filling> {
   }
 
   getBody(Size size) {
-    print("Aa");
+    print("Asa");
     print(this.l);
     return Align(
       alignment: Alignment.center,
