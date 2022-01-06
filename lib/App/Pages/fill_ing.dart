@@ -5,19 +5,14 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 
 import '../../constants.dart';
 
-class Filling extends StatelessWidget {
-  final String? liter;
-  Filling({@required this.liter});
+class Filling extends StatefulWidget {
+  final String liter;
 
-  //print(liter);
+  Filling({Key key, @required this.liter}) : super(key: key);
+
+  @override
+  _FillingState createState() => _FillingState();
 }
-// class Filling extends StatefulWidget {
-//   final String? liter;
-//   Filling({@required this.liter});
-
-//   @override
-//   _FillingState createState() => _FillingState();
-// }
 
 class _FillingState extends State<Filling> {
   int pageIndex = 0;
@@ -35,7 +30,7 @@ class _FillingState extends State<Filling> {
   }
 
   getBody(Size size) {
-    print("A1");
+    print("A12");
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
