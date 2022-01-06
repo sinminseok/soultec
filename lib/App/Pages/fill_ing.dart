@@ -9,7 +9,7 @@ class Filling extends StatefulWidget {
   late final String? l;
 
   Filling({@required this.l});
-
+  print(l);
   @override
   _FillingState createState() => _FillingState();
 }
