@@ -73,11 +73,14 @@ class _FillStopState extends State<FillStop> {
             child: Container(
               width: size.width * 0.7,
               height: 45,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kPrimaryColor),
-              padding: EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: kPrimaryColor),
+              padding: EdgeInsets.symmetric(vertical: 8),
               alignment: Alignment.center,
-              child: Text('정량', style: TextStyle(color: Colors.white, fontSize: 20)),
+              child: Text('정 량', style: TextStyle(color: Colors.white, fontSize: 20)),
             ),
+          ),
+          SizedBox(
+            height: size.height * 0.03,
           ),
           Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
