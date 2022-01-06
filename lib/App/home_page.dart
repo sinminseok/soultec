@@ -24,7 +24,6 @@ class _Home_pageState extends State<Home_page> {
   ];
   var select_firest = "가득";
   String? _select_value;
-  String? _liter;
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +118,8 @@ class _Home_pageState extends State<Home_page> {
           InkWell(
             onTap: () {
               //data push
-              print('click');
               print(inputController);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: inputController)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: this._select_value)));
             },
             child: Container(
               width: size.width * 0.8,
