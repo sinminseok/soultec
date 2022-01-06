@@ -71,12 +71,12 @@ class _FillStopState extends State<FillStop> {
               //Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
             },
             child: Container(
-              width: size.width * 0.8,
-              height: 60,
+              width: size.width * 0.7,
+              height: 45,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kPrimaryColor),
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: 12),
               alignment: Alignment.center,
-              child: Text('정량', style: TextStyle(color: Colors.white, fontSize: 16)),
+              child: Text('정량', style: TextStyle(color: Colors.white, fontSize: 20)),
             ),
           ),
           Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
