@@ -59,16 +59,17 @@ class _FillingState extends State<Filling> {
           SizedBox(
             height: size.height * 0.02,
           ),
-          Text("주유 중입니다.계속해서 주유하세요.", style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Colors.blue)),
-          Text("계속해서 주유하세요.", style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold)),
+          Text("주유 중입니다.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue)),
+          Text("계속해서 주유하세요.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
           SizedBox(
             height: size.height * 0.12,
           ),
-          Text("리터[0]L"),
+          Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.01,
+            height: size.height * 0.03,
           ),
-          Text("주입 중입니다.\n잠시만 기다려 주시기 바랍니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text("주입 중입니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text("잠시만 기다려 주시기 바랍니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ]),
       ),
     );
