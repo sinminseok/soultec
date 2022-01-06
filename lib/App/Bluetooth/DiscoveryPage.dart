@@ -18,10 +18,8 @@ class DiscoveryPage extends StatefulWidget {
 }
 
 class _DiscoveryPage extends State<DiscoveryPage> {
-
   StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
-  List<BluetoothDiscoveryResult> results =
-  List<BluetoothDiscoveryResult>.empty(growable: true);
+  List<BluetoothDiscoveryResult> results = List<BluetoothDiscoveryResult>.empty(growable: true);
   bool isDiscovering = false;
 
   _DiscoveryPage();
@@ -45,17 +43,15 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   void _startDiscovery() {
-    _streamSubscription =
-        FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
-          setState(() {
-            final existingIndex = results.indexWhere(
-                    (element) => element.device.address == r.device.address);
-            if (existingIndex >= 0)
-              results[existingIndex] = r;
-            else
-              results.add(r);
-          });
-        });
+    _streamSubscription = FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
+      setState(() {
+        final existingIndex = results.indexWhere((element) => element.device.address == r.device.address);
+        if (existingIndex >= 0)
+          results[existingIndex] = r;
+        else
+          results.add(r);
+      });
+    });
 
     _streamSubscription!.onDone(() {
       setState(() {
@@ -84,30 +80,33 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         actions: <Widget>[
           isDiscovering
               ? FittedBox(
-            child: Container(
-              margin: new EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-          )
+                  child: Container(
+                    margin: new EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
+                )
               : IconButton(
-            icon: Icon(Icons.replay),
-            onPressed: _restartDiscovery,
-          )
+                  icon: Icon(Icons.replay),
+                  onPressed: _restartDiscovery,
+                )
         ],
       ),
       body: Column(
         children: [
-          Container(height: size.height*0.2,
+          Container(
+            height: size.height * 0.2,
             child: Stack(
               children: [
                 Container(
                   height: size.height * 0.2 - 27,
-                  decoration: BoxDecoration(color: kPrimaryColor,borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  )),
+                  decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      )),
                 ),
                 Center(
                   child: Image(
@@ -116,11 +115,15 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   ),
                 ),
               ],
-
             ),
           ),
-          Text("블루투스와 연결할 기기를 선택해주세요",style: TextStyle(fontWeight: FontWeight.bold),),
-          SizedBox(height: size.height*0.05,),
+          Text(
+            "블루투스와 연결할 기기를 선택해주세요",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: size.height * 0.05,
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: results.length,
@@ -140,15 +143,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                       bool bonded = false;
                       if (device.isBonded) {
                         print('Unbonding from ${device.address}...');
-                        await FlutterBluetoothSerial.instance
-                            .removeDeviceBondWithAddress(address);
+                        await FlutterBluetoothSerial.instance.removeDeviceBondWithAddress(address);
                         print('Unbonding from ${device.address} has succed');
                       } else {
                         print('Bonding with ${device.address}...');
-                        bonded = (await FlutterBluetoothSerial.instance
-                            .bondDeviceAtAddress(address))!;
-                        print(
-                            'Bonding with ${device.address} has ${bonded ? 'succed' : 'failed'}.');
+                        bonded = (await FlutterBluetoothSerial.instance.bondDeviceAtAddress(address))!;
+                        print('Bonding with ${device.address} has ${bonded ? 'succed' : 'failed'}.');
                       }
                       setState(() {
                         results[results.indexOf(result)] = BluetoothDiscoveryResult(
@@ -156,9 +156,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                               name: device.name ?? '',
                               address: address,
                               type: device.type,
-                              bondState: bonded
-                                  ? BluetoothBondState.bonded
-                                  : BluetoothBondState.none,
+                              bondState: bonded ? BluetoothBondState.bonded : BluetoothBondState.none,
                             ),
                             rssi: result.rssi);
                       });
@@ -173,7 +171,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                               new TextButton(
                                 child: new Text("Close"),
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
                                 },
                               ),
                             ],
