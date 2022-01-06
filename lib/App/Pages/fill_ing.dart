@@ -49,7 +49,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[30]L로 주입을 원하십니다.",
+            "[30]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
@@ -59,8 +59,8 @@ class _FillingState extends State<Filling> {
           SizedBox(
             height: size.height * 0.02,
           ),
-          Text("주유 중입니다.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue)),
-          Text("계속해서 주유하세요.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+          Text("주입 중입니다.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue)),
+          Text("계속해서 주입해주세요.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
           SizedBox(
             height: size.height * 0.12,
           ),
