@@ -7,7 +7,7 @@ import '../../constants.dart';
 
 class Filling extends StatefulWidget {
   late final String? l;
-
+  print(l);
   Filling({@required this.l});
 
   @override
