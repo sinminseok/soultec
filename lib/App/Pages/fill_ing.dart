@@ -6,7 +6,7 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  late final String l;
+  late final String? l;
 
   Filling({required this.l});
 
