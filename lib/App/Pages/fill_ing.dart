@@ -46,7 +46,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[$this.l]리터로 주입을 원하십니다.",
+            "[$l]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
