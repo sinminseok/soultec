@@ -6,7 +6,7 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  late final String? l;
+  late final String? l = "123";
 
   Filling({@required this.l});
 
@@ -46,7 +46,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[n]리터로 주입을 원하십니다.",
+            "[${l}]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
@@ -84,11 +84,5 @@ class _FillingState extends State<Filling> {
         ]),
       ),
     );
-  }
-
-  selectedTap(index) {
-    setState(() {
-      pageIndex = index;
-    });
   }
 }
