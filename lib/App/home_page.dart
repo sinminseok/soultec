@@ -121,7 +121,7 @@ class _Home_pageState extends State<Home_page> {
             onTap: () {
               //data push
               print('click');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(this.uid)));
             },
             child: Container(
               width: size.width * 0.8,
