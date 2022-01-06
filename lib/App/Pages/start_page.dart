@@ -51,7 +51,7 @@ class _Start_pageState extends State<Start_page> {
                   height: size.height * 0.08,
                 ),
                 Text(
-                  "페어링이 시작 됩니다 잠시만 기다려 주십시오.",
+                  "페어링이 시작 됩니다 잠시만 기다려 주십시오.a",
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(
