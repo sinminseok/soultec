@@ -6,9 +6,9 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  late final int;
+  late final int l;
 
-  //Filling({required this.uid});
+  Filling({required this.l});
 
   @override
   _FillingState createState() => _FillingState();
@@ -46,7 +46,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[30]리터로 주입을 원하십니다.",
+            l + "[30]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
