@@ -4,8 +4,6 @@ import 'package:soultec/App/Bluetooth/DiscoveryPage.dart';
 import '../../constants.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-
-
 class Start_page extends StatefulWidget {
   const Start_page({Key? key}) : super(key: key);
 
@@ -57,20 +55,20 @@ class _Start_pageState extends State<Start_page> {
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(
-                  height: size.height*0.08,
+                  height: size.height * 0.08,
                 ),
                 RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                  onPressed: () async{
-                    final BluetoothDevice? selectedDevice =
-                        await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DiscoveryPage();
-                        },
-                      ),
-                    );
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  onPressed: () async {
+                    // final BluetoothDevice? selectedDevice =
+                    //     await Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return DiscoveryPage();
+                    //     },
+                    //   ),
+                    // );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
 
                     if (selectedDevice != null) {
                       print('Discovery -> selected ' + selectedDevice.address);
