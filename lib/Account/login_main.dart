@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                           FlatButton(
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: '',)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
                             },
                             child: Container(
                                 child: Text(

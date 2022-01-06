@@ -22,3 +22,20 @@ class DatabaseService{
   }
 
 }
+
+class Carnumbers{
+  final String? uid;
+  Carnumbers({required this.uid});
+
+  final CollectionReference carCollection = FirebaseFirestore.instance.collection('carnumber');
+
+  Future updateCarnumber(
+      String car_number,
+      )async{
+    print('update carnumber');
+    return await carCollection.doc(uid).set({
+      'car_number': car_number
+    });
+  }
+
+}
