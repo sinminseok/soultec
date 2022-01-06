@@ -119,6 +119,7 @@ class _Home_pageState extends State<Home_page> {
             onTap: () {
               //data push
               print(inputController.text);
+              print('asd');
               Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: inputController.text)));
             },
             child: Container(
