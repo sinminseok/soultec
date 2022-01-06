@@ -119,7 +119,7 @@ class _Home_pageState extends State<Home_page> {
           InkWell(
             onTap: () {
               //data push
-              print('clicka');
+              print('click');
               print(inputController);
               Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(l: inputController)));
             },
