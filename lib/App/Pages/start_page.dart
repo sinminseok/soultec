@@ -70,11 +70,11 @@ class _Start_pageState extends State<Start_page> {
                     // );
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
 
-                    if (selectedDevice != null) {
-                      print('Discovery -> selected ' + selectedDevice.address);
-                    } else {
-                      print('Discovery -> no device selected');
-                    }
+                    // if (selectedDevice != null) {
+                    //   print('Discovery -> selected ' + selectedDevice.address);
+                    // } else {
+                    //   print('Discovery -> no device selected');
+                    // }
                     //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
                   },
                   //Text("연결",style: TextStyle(fontWeight: FontWeight.bold),),
