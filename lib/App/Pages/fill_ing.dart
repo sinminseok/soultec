@@ -62,7 +62,7 @@ class _FillingState extends State<Filling> {
             height: size.height * 0.15,
           ),
           Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text(widget.l.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(this.l.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
             height: size.height * 0.03,
           ),
