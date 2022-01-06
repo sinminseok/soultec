@@ -57,7 +57,7 @@ class _FillEndState extends State<FillEnd> {
           ),
           Container(width: size.width * 0.8, child: Divider(color: Colors.black, thickness: 1.0)),
           SizedBox(
-            height: size.height * 0.02,
+            height: size.height * 0.03,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 30.0),
@@ -71,10 +71,7 @@ class _FillEndState extends State<FillEnd> {
           ),
           Text("리터 [30] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.03,
-          ),
-          SizedBox(
-            height: size.height * 0.03,
+            height: size.height * 0.05,
           ),
           Text("주입이 완료되었습니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text("노즐을 주입기에 걸어주세요.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
