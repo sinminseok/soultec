@@ -7,7 +7,7 @@ import '../../constants.dart';
 
 class Filling extends StatelessWidget {
   //4번-전달 받을 textToSend를 받기 위한 변수 text를 정의
-  final String liter;
+  final String? liter;
 
   //키값으로 text와 textToSend값을 매핑처리
   Filling({Key key, @required this.liter}) : super(key: key);
