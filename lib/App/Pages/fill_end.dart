@@ -7,7 +7,7 @@ import '../../constants.dart';
 class FillEnd extends StatefulWidget {
   final String liter;
 
-  FillStop({required this.liter});
+  FillEnd({required this.liter});
 
   @override
   _FillEndState createState() => _FillEndState();
