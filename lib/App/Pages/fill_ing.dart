@@ -10,6 +10,8 @@ class Filling extends StatefulWidget {
 
   Filling({required this.liter});
 
+  print(liter);
+
   @override
   _FillingState createState() => _FillingState();
 }
@@ -24,10 +26,10 @@ class _FillingState extends State<Filling> {
           backgroundColor: kPrimaryColor,
           elevation: 0,
         ),
-        body: getBody(size, liter));
+        body: getBody(size));
   }
 
-  getBody(Size size, String liter) {
+  getBody(Size size) {
     print("A12");
     return Align(
       alignment: Alignment.center,
