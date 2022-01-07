@@ -19,7 +19,7 @@ class Filling extends StatelessWidget {
       body: Center(
         //해당 클래스에서 정의한 text 변수 값을 body 부분에 출력하도록 Text 위젯의 값으로 text 변수를 지정
         child: Text(
-          "liter",
+          liter,
           style: TextStyle(fontSize: 24),
         ),
       ),
