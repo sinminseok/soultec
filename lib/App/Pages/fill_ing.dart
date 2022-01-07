@@ -50,7 +50,7 @@ class _FillingState extends State<Filling> {
             "[n]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
-          Text(liter),
+          //Text(liter),
           SizedBox(
             height: size.height * 0.02,
           ),
