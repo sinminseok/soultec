@@ -58,7 +58,7 @@ class _Home_pageState extends State<Home_page> {
           SizedBox(
             height: size.height * 0.03,
           ),
-          Text("페어링이 정상적으로 연결 되었습니다!"),
+          Text("페어링이 정상적으로 연결 되었습니다"),
           Text("리터랑을 설정해주십시요"),
           SizedBox(
             height: size.height * 0.01,
