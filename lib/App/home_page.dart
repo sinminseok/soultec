@@ -139,7 +139,7 @@ class _Home_pageState extends State<Home_page> {
     //별도의 변수로 textToSend를 정의하고, textFieldController.text를 통해 값 전달
     String textToSend = inputController.text;
     //Navigator.push 함수는 여기서 실행이 되며, 이동할 route인 SecondScreen을 정의하고, 전달할 변수 textToSend를 지정
-    print(inputController.text);
+    print(textToSend);
     print('asdda');
     Navigator.push(
         context,
