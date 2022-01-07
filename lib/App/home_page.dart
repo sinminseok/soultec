@@ -145,8 +145,8 @@ class _Home_pageState extends State<Home_page> {
         context,
         MaterialPageRoute(
           builder: (context) => Filling(
-              //liter: textToSend,
-              ),
+            liter: textToSend,
+          ),
         ));
   }
 
