@@ -119,7 +119,7 @@ class _Home_pageState extends State<Home_page> {
             onTap: () {
               //data push
               //Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(liter: inputController.text)));
-              _sendDataToFilling(context);
+              _sendDataToFilling(context),
             },
             child: Container(
               width: size.width * 0.8,
