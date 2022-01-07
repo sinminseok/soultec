@@ -8,7 +8,7 @@ import '../../constants.dart';
 class Filling extends StatefulWidget {
   final String liter;
 
-  Filling({Key key, @required this.liter}) : super(key: key);
+  Filling({Key key, @required this.text}) : super(key: key);
 
   @override
   _FillingState createState() => _FillingState();
