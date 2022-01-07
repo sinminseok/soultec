@@ -28,7 +28,6 @@ class _FillingState extends State<Filling> {
   }
 
   getBody(Size size) {
-    print(widget.liter);
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -45,7 +44,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[n]리터로 주입을 원하십니다.",
+            "[${widget.liter}리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           //Text(liter),
