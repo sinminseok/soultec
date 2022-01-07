@@ -120,7 +120,8 @@ class _Home_pageState extends State<Home_page> {
               //data push
               print(inputController.text);
               print('asd');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(liter: inputController.text)));
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(liter: inputController.text)));
+              _sendDataToFilling(context);
             },
             child: Container(
               width: size.width * 0.8,
@@ -134,6 +135,19 @@ class _Home_pageState extends State<Home_page> {
         ]),
       ),
     );
+  }
+
+  void _sendDataToFilling(BuildContext context) {
+    //별도의 변수로 textToSend를 정의하고, textFieldController.text를 통해 값 전달
+    String textToSend = inputController.text;
+    //Navigator.push 함수는 여기서 실행이 되며, 이동할 route인 SecondScreen을 정의하고, 전달할 변수 textToSend를 지정
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Filling(
+            liter: textToSend,
+          ),
+        ));
   }
 
   selectedTap(index) {
