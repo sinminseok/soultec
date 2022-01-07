@@ -126,35 +126,17 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 height: size.height * 0.05,
               ),
               InkWell(
-                onTap: () {
-                  firestoreInstance.collection("users").get().then((querySnapshot) {
-                    querySnapshot.docs.forEach((result) {
-                      firestoreInstance
-                          .collection("users")
-                          .doc(widget.uid)
-                          .collection("cars")
-                          .get()
-                          .then((querySnapshot) {
-                        querySnapshot.docs.forEach((result) {
-                          var d = result.data().values.single;
-                          print("sex");
-                          print(_carnumber.text);
-                          if(d == _carnumber.text){
-                            print('success');
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: widget.uid,)));
-                          }else{
-                            print('x');
-                            return showtoast("등록된 차량이 아닙니다 .");
-                          }
-                        });
-                      });
-                    });
-                  });
+                onTap: () async{
+                  var result = await DatabaseService(uid: null).readCar(_carnumber.text);
+                  print('g');
+                  print(result);
 
-
-
-
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => CarLoadingPage()));
+                  if(result == true){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home_page(uid: widget.uid,)));
+                  }else{
+                    showAlertDialog(
+                        context, '등록된 차량이 아닙니다','');
+                  }
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
