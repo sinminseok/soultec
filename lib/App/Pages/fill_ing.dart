@@ -5,23 +5,6 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 
 import '../../constants.dart';
 
-// class Filling extends StatelessWidget {
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Second screen')),
-//       body: Center(
-//         //해당 클래스에서 정의한 text 변수 값을 body 부분에 출력하도록 Text 위젯의 값으로 text 변수를 지정
-//         child: Text(
-//           liter,
-//           style: TextStyle(fontSize: 24),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class Filling extends StatefulWidget {
   final String liter;
 
@@ -41,10 +24,10 @@ class _FillingState extends State<Filling> {
           backgroundColor: kPrimaryColor,
           elevation: 0,
         ),
-        body: getBody(size));
+        body: getBody(size, liter));
   }
 
-  getBody(Size size) {
+  getBody(Size size, String liter) {
     print("A12");
     return Align(
       alignment: Alignment.center,
@@ -65,7 +48,7 @@ class _FillingState extends State<Filling> {
             "[n]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
-          Text(this.liter),
+          Text(liter),
           SizedBox(
             height: size.height * 0.02,
           ),
