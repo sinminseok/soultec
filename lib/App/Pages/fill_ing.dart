@@ -32,8 +32,6 @@ class Filling extends StatefulWidget {
 }
 
 class _FillingState extends State<Filling> {
-  int pageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -67,7 +65,7 @@ class _FillingState extends State<Filling> {
             "[n]리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
-          Text(liter),
+          Text(this.liter),
           SizedBox(
             height: size.height * 0.02,
           ),
