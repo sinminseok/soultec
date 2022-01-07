@@ -24,7 +24,7 @@ class _FillingState extends State<Filling> {
           backgroundColor: kPrimaryColor,
           elevation: 0,
         ),
-        body: getBody(size, liter));
+        body: getBody(size, this.liter));
   }
 
   getBody(Size size, String liter) {
