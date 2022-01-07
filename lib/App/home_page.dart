@@ -141,13 +141,13 @@ class _Home_pageState extends State<Home_page> {
     //Navigator.push 함수는 여기서 실행이 되며, 이동할 route인 SecondScreen을 정의하고, 전달할 변수 textToSend를 지정
     print(inputController.text);
     print('asd');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Filling(
-            liter: textToSend,
-          ),
-        ));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Filling(
+    //         liter: textToSend,
+    //       ),
+    //     ));
   }
 
   selectedTap(index) {
