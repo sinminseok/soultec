@@ -8,9 +8,9 @@ import 'package:soultec/auth.dart';
 import '../../constants.dart';
 
 class FillStop extends StatefulWidget {
-  //late final String? uid;
+  final String liter;
 
-  //Filling({required this.uid});
+  FillStop({required this.liter});
 
   @override
   _FillStopState createState() => _FillStopState();
@@ -48,7 +48,7 @@ class _FillStopState extends State<FillStop> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[30]리터로 주입을 원하십니다.",
+            "${widget.liter}리터로 주입을 원하십니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
