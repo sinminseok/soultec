@@ -10,7 +10,7 @@ class Filling extends StatelessWidget {
   final String liter;
 
   // //키값으로 text와 textToSend값을 매핑처리
-  Filling({@required this.liter});
+  Filling({required this.liter});
 
   @override
   Widget build(BuildContext context) {
