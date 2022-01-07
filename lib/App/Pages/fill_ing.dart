@@ -6,9 +6,9 @@ import 'package:soultec/App/Pages/fill_stop.dart';
 import '../../constants.dart';
 
 class Filling extends StatefulWidget {
-  final String liter;
+  final String? liter;
 
-  Filling({@required this.liter});
+  Filling({Key key, @required this.liter}) : super(key: key);
 
   @override
   _FillingState createState() => _FillingState();
