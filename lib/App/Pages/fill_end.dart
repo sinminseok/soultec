@@ -5,19 +5,15 @@ import 'package:soultec/App/widgets/drawer.dart';
 import '../../constants.dart';
 
 class FillEnd extends StatefulWidget {
-  //late final String? uid;
+  final String liter;
 
-  //Filling({required this.uid});
+  FillStop({required this.liter});
 
   @override
   _FillEndState createState() => _FillEndState();
 }
 
 class _FillEndState extends State<FillEnd> {
-  int pageIndex = 0;
-
-  String? _select_value;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -47,7 +43,7 @@ class _FillEndState extends State<FillEnd> {
             style: TextStyle(fontSize: 22),
           ),
           Text(
-            "[30]리터로 주입이 끝났습니다.",
+            "${widget.liter}리터로 주입이 끝났습니다.",
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
@@ -67,7 +63,7 @@ class _FillEndState extends State<FillEnd> {
           SizedBox(
             height: size.height * 0.03,
           ),
-          Text("리터 [30] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("리터 ${widget.liter}L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(
             height: size.height * 0.05,
           ),
@@ -77,11 +73,5 @@ class _FillEndState extends State<FillEnd> {
         ]),
       ),
     );
-  }
-
-  selectedTap(index) {
-    setState(() {
-      pageIndex = index;
-    });
   }
 }

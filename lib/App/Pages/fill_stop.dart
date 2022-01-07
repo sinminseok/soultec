@@ -17,8 +17,6 @@ class FillStop extends StatefulWidget {
 }
 
 class _FillStopState extends State<FillStop> {
-  int pageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -67,7 +65,7 @@ class _FillStopState extends State<FillStop> {
             onTap: () {
               //data push
 
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FillEnd()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FillEnd(liter: widget.liter)));
             },
             child: Container(
               width: size.width * 0.7,
@@ -90,11 +88,5 @@ class _FillStopState extends State<FillStop> {
         ]),
       ),
     );
-  }
-
-  selectedTap(index) {
-    setState(() {
-      pageIndex = index;
-    });
   }
 }
