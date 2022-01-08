@@ -1,18 +1,12 @@
 
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/App/Pages/start_page.dart';
 import 'package:soultec/Data/database.dart';
 import 'package:soultec/Data/toast.dart';
-import 'package:soultec/auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../constants.dart';
-import '../home_page.dart';
-import 'car_loading.dart';
+import '../../../constants.dart';
+import '../../home_page.dart';
 import 'car_register.dart';
 
 class CarNumberPage extends StatefulWidget {
@@ -31,6 +25,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final providerUserModel = Provider.of<DatabaseService?>(context);
+    print(providerUserModel);
 
     return Scaffold(
       appBar: AppBar(elevation: 0,backgroundColor: kPrimaryColor,leading: Container(),),
@@ -49,28 +45,12 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 image: AssetImage('assets/images/cartoonimg.png'),
                 width: 140,
               ),
-              // Center(
-              //   child: Text(
-              //     "카메라를 차량 번호판에 맞춰줍니다\n조회가 완료 될 때까지 기다려 주십시오.",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: size.height * 0.15,
-              // ),
-              // Center(
-              //   child: Text(
-              //     "프레임에 맞춰지면 조회를 시작합니다.",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(color: kPrimaryColor, fontSize: 13, fontWeight: FontWeight.normal),
-              //   ),
-              // ),
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.03,
               ),
               FlatButton(
                 onPressed: (){
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CarRegister(uid: widget.uid,)));
                 },
                 child: Container(
@@ -81,20 +61,10 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 ),
               ),
 
+              SizedBox(
+                height: size.height * 0.04,
+              ),
 
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              // Center(
-              //   child: Text(
-              //     "차량 번호를 직접 입력하실 수 있습니다.",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
-              //   ),
-              // ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 padding:
@@ -122,9 +92,11 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
+
               SizedBox(
                 height: size.height * 0.05,
               ),
+
               InkWell(
                 onTap: () async{
                   var result = await DatabaseService(uid: null).readCar(_carnumber.text);

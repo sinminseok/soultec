@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:soultec/App/Bluetooth/DiscoveryPage.dart';
+import 'package:soultec/Data/database.dart';
 import '../../constants.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 
 
 class Start_page extends StatefulWidget {
-  const Start_page({Key? key}) : super(key: key);
 
   @override
   _Start_pageState createState() => _Start_pageState();
@@ -15,6 +15,7 @@ class Start_page extends StatefulWidget {
 
 class _Start_pageState extends State<Start_page> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
+
 
   @override
   Widget build(BuildContext context) {

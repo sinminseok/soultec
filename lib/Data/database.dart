@@ -50,6 +50,18 @@ class DatabaseService {
     return car_data;
   }
 
+
+  // Future readname(String? uid) async{
+  //   print("howwww");
+  //   var name = await carCollection.doc(uid).get().then((value){
+  //     value;
+  //     print(value.get());
+  //     print("how");
+  //     return null;
+  //   });
+  // }
+
+
   Future readCarData(String number,) async {
     print(userCollection.doc(uid).collection("cars").get().then((value) {
       value.docs.forEach((element) {
@@ -72,4 +84,5 @@ class DatabaseService {
   Stream<DocumentSnapshot> get getuser {
     return userCollection.doc(uid).snapshots();
   }
+
 }

@@ -9,11 +9,11 @@ import 'package:soultec/Data/database.dart';
 import 'package:soultec/auth.dart';
 
 import '../constants.dart';
-import 'Pages/car_number.dart';
+import 'Pages/cars/car_number.dart';
+import 'Pages/fills/fill_ing.dart';
 
 class Home_page extends StatefulWidget {
   String? uid;
-
   Home_page({required this.uid});
 
   @override
@@ -31,31 +31,41 @@ class _Home_pageState extends State<Home_page> {
   var select_firest = "가득";
   String? _select_value;
 
+
   @override
   Widget build(BuildContext context) {
-    print(widget.uid);
-    Size size = MediaQuery.of(context).size;
 
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    Size size = MediaQuery.of(context).size;
     String user_name;
     user_name = auth.currentUser!.email.toString();
-    print(user_name);
 
 
-    return StreamProvider<DocumentSnapshot?>.value(
-      value: DatabaseService(uid : widget.uid).getuser,
-      initialData: null,
 
-      child: Scaffold(
-          drawer: My_Drawer(),
-          appBar: AppBar(
-            backgroundColor: kPrimaryColor,
-            elevation: 0,
-          ),
-          body: getBody(size , user_name)),
+    return FutureBuilder<DocumentSnapshot>(
+      future: users.doc(widget.uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          return     Scaffold(
+              drawer: My_Drawer(),
+              appBar: AppBar(
+                backgroundColor: kPrimaryColor,
+                elevation: 0,
+              ),
+              body: getBody(data["name"] ,size , user_name));
+
+      },
+
     );
+
   }
 
-  getBody(Size size , String username) {
+  getBody(String user_name, Size size , String username) {
+    // final user = Provider.of<DocumentSnapshot>.
+    print(user_name);
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -76,6 +86,7 @@ class _Home_pageState extends State<Home_page> {
                 height: size.height * 0.03,
               ),
               Text("기사님 환영합니다"),
+              Text("차량 조회가 완료되었습니다."),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -147,8 +158,7 @@ class _Home_pageState extends State<Home_page> {
               SizedBox(height: size.height*0.03,),
               InkWell(
                 onTap: (){
-                  //data push
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CarNumberPage(uid : widget.uid)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Filling(user_name : user_name,liter: inputController.text)));
 
                 },
                 child: Container(

@@ -1,14 +1,9 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:soultec/Data/database.dart';
 import 'package:soultec/Data/toast.dart';
-import 'package:soultec/auth.dart';
 
-import '../../constants.dart';
-import 'car_loading.dart';
+import '../../../constants.dart';
 import 'car_number.dart';
 
 class CarRegister extends StatefulWidget {
@@ -96,7 +91,7 @@ class _CarRegister extends State<CarRegister> {
             InkWell(
               onTap: () {
                 DatabaseService(uid: widget.uid ).updateCarData(_carnumber.text);
-                return showtoast("차량 등록이 완료되었습니다.");
+                return showtoast("차량 등록이 완료되었습니다 .");
               },
               borderRadius: BorderRadius.circular(20),
               child: Container(
