@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-import 'App/Pages/start_page.dart';
+import 'App/start_page.dart';
 import 'Data/database.dart';
 import 'auth.dart';
 import 'constants.dart';

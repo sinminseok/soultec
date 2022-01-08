@@ -1,14 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:soultec/App/Bluetooth/DiscoveryPage.dart';
 import 'package:soultec/Data/database.dart';
-import '../../constants.dart';
+import '../constants.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-
+import '../wrapper.dart';
 
 class Start_page extends StatefulWidget {
-
   @override
   _Start_pageState createState() => _Start_pageState();
 }
@@ -16,6 +17,65 @@ class Start_page extends StatefulWidget {
 class _Start_pageState extends State<Start_page> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
+  String _address = "...";
+  String _name = "...";
+
+  Timer? _discoverableTimeoutTimer;
+  int _discoverableTimeoutSecondsLeft = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Get current state
+    FlutterBluetoothSerial.instance.state.then((state) {
+      setState(() {
+        _bluetoothState = state;
+      });
+    });
+
+    Future.doWhile(() async {
+      // Wait if adapter not enabled
+      if ((await FlutterBluetoothSerial.instance.isEnabled) ?? false) {
+        return false;
+      }
+      await Future.delayed(Duration(milliseconds: 0xDD));
+      return true;
+    }).then((_) {
+      // Update the address field
+      FlutterBluetoothSerial.instance.address.then((address) {
+        setState(() {
+          _address = address!;
+        });
+      });
+    });
+
+    FlutterBluetoothSerial.instance.name.then((name) {
+      setState(() {
+        _name = name!;
+      });
+    });
+
+    // Listen for futher state changes
+    FlutterBluetoothSerial.instance
+        .onStateChanged()
+        .listen((BluetoothState state) {
+      setState(() {
+        _bluetoothState = state;
+
+        // Discoverable mode is disabled when Bluetooth gets disabled
+        _discoverableTimeoutTimer = null;
+        _discoverableTimeoutSecondsLeft = 0;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    FlutterBluetoothSerial.instance.setPairingRequestHandler(null);
+    _discoverableTimeoutTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +118,17 @@ class _Start_pageState extends State<Start_page> {
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(
-                  height: size.height*0.08,
+                  height: size.height * 0.08,
                 ),
                 RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                  onPressed: () async{
-                    final BluetoothDevice? selectedDevice =
-                        await Navigator.of(context).push(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  onPressed: () async {
+                    print('sex');
+                    print(
+                        await FlutterBluetoothSerial.instance.requestEnable());
+
+                    final BluetoothDevice? selectedDevice = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
                           return DiscoveryPage();
@@ -74,7 +137,9 @@ class _Start_pageState extends State<Start_page> {
                     );
 
                     if (selectedDevice != null) {
-                      print('Discovery -> selected ' + selectedDevice.address);
+                      print('Discovddery -> selected ' + selectedDevice.address);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+
                     } else {
                       print('Discovery -> no device selected');
                     }
