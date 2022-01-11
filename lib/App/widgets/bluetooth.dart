@@ -1,41 +1,46 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
-class BluetoothApp extends StatefulWidget {
-  @override
-  _BluetoothAppState createState() => _BluetoothAppState();
-}
 
-class _BluetoothAppState extends State<BluetoothApp> {
-  FlutterBlue? flutterBlue;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-//ble instance 생성
-    flutterBlue = FlutterBlue.instance;
+class Bluetooth_Service with ChangeNotifier{
+  String? device_address;
+  //블루투스 디바이스를 선택해서 연결해주는  함수
+  Future<void> connect_device(String address) async{
+// Some simplest connection :F
+    try {
+      device_address=address;
+      BluetoothConnection connection = await BluetoothConnection.toAddress(device_address);
+      print('Connected to the device');
+      connection.input!.listen((Uint8List data) {
+        print('Data incoming: ${ascii.decode(data)}');
+        connection.output.add(data); // Sending data
+
+        if (ascii.decode(data).contains('!')) {
+          connection.finish(); // Closing connection
+          print('Disconnecting by local host');
+        }
+      }).onDone(() {
+        print('Disconnected by remote request');
+      });
+    }
+    catch (exception) {
+      print('Cannot connect, exception occured');
+      print(exception);
+    }
+
+    notifyListeners();
   }
 
-  void _startscan() {
-// 검색 시작 -> 검색 시간 4초
-    flutterBlue!.startScan(timeout: Duration(seconds: 5));
-
-
-    var subscription = flutterBlue!.scanResults.listen((results) {
-      // do something with scan results
-
-      for (ScanResult r in results) {
-        print(
-            'Device Name : ${r.device.name} // Device ID : ${r.device.id} // Device rssi: ${r.rssi}');
-      }
-    });
+  //블루투스 페어링을 끊어주는 함수
+  Future<void> dispose_device(String address)async{
+    BluetoothConnection connection = await BluetoothConnection.toAddress(address);
+    connection.close();
+    notifyListeners();
   }
 
-  Widget build(BuildContext context) {
-    return Container(
-        // We have to work on the UI in this part
-        );
-  }
+
 }

@@ -50,7 +50,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
               ),
               FlatButton(
                 onPressed: (){
-
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CarRegister(uid: widget.uid,)));
                 },
                 child: Container(
