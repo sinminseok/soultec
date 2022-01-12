@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/App/widgets/drawer.dart';
@@ -84,10 +85,12 @@ class _FillEndState extends State<FillEnd> {
                   InkWell(
                     onTap: () {
                       print(address);
+                      SystemNavigator.pop();
                        provider.dispose_device(address!);
                        print("this is");
                        //추후에 블루투스 페어링끊기는지 확인해보자
                        print(address);
+                      SystemNavigator.pop();
                       //data push
                     },
                     child: Container(

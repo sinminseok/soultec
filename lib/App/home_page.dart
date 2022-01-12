@@ -38,26 +38,27 @@ class _Home_pageState extends State<Home_page> {
     String user_name;
     user_name = auth.currentUser!.email.toString();
 
-    return FutureBuilder<DocumentSnapshot>(
+    return FutureBuilder<DocumentSnapshot?>(
       future: users.doc(widget.uid).get(),
       builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        Map<String, dynamic> data =
-            snapshot.data!.data() as Map<String, dynamic>;
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot?> snapshot) {
+        //Futurebuilder에서 snapdata가 null일 경우 반환값을 넣어줘야 에러가 안생김
+            if(!snapshot.hasData){
+              return Container();
+            }
+        Map<String?, dynamic>? data = snapshot.data!.data() as Map<String?, dynamic>;
         return Scaffold(
             drawer: My_Drawer(),
             appBar: AppBar(
               backgroundColor: kPrimaryColor,
               elevation: 0,
             ),
-            body: getBody(data["name"], size, user_name));
+            body: getBody(data["name"], size));
       },
     );
   }
 
-  getBody(String user_name, Size size, String username) {
-    // final user = Provider.of<DocumentSnapshot>.
-    print(user_name);
+  getBody(String user_name, Size size) {
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -84,6 +85,7 @@ class _Home_pageState extends State<Home_page> {
               ),
               Text("페어링이 정상적으로 연결 되었습니다!"),
               Text("리터랑을 설정해주십시요"),
+
               SizedBox(
                 height: size.height * 0.01,
               ),

@@ -124,6 +124,7 @@ class _Start_pageState extends State<Start_page> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(16.0))),
                     onPressed: () async {
+                      print(provider.device_address);
                       print('requestEnable is');
                       print(await FlutterBluetoothSerial.instance.requestEnable());
 
@@ -138,7 +139,6 @@ class _Start_pageState extends State<Start_page> {
 
                       if (selectedDevice != null){
                         print('Discovddery -> selected ' + selectedDevice.address);
-                        print("TTHHIS");
                         provider.connect_device(selectedDevice.address);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
 
