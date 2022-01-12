@@ -6,6 +6,7 @@ import 'package:soultec/App/home_page.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:animations/animations.dart';
+import 'package:soultec/wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -191,6 +192,7 @@ class _LoginScreenState extends State<LoginScreen>
                           UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
                           print("...");
                           User? user = userCredential.user;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
                           return showtoast("Login!");
 
                         }on FirebaseAuthException catch(e){

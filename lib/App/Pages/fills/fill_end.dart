@@ -26,7 +26,7 @@ class _FillEndState extends State<FillEnd> {
     var provider = Provider.of<Bluetooth_Service>(context);
     String? address = provider.device_address;
     return Scaffold(
-        drawer: My_Drawer(),
+        drawer: My_Drawer(context),
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           elevation: 0,

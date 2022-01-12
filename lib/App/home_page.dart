@@ -31,6 +31,7 @@ class _Home_pageState extends State<Home_page> {
   final values = ["가득", "리터"];
   String? _select_value;
 
+
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -48,7 +49,7 @@ class _Home_pageState extends State<Home_page> {
             }
         Map<String?, dynamic>? data = snapshot.data!.data() as Map<String?, dynamic>;
         return Scaffold(
-            drawer: My_Drawer(),
+            drawer: My_Drawer(context),
             appBar: AppBar(
               backgroundColor: kPrimaryColor,
               elevation: 0,

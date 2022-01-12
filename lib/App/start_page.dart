@@ -6,6 +6,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/Bluetooth/DiscoveryPage.dart';
 import 'package:soultec/App/widgets/bluetooth.dart';
+import 'package:soultec/Data/toast.dart';
 import '../wrapper.dart';
 
 class Start_page extends StatefulWidget {
@@ -144,6 +145,7 @@ class _Start_pageState extends State<Start_page> {
 
                       } else {
                         print('Discovery -> no device selected');
+                        showAlertDialog(context , "연결오류","블루투스 기기를 선택해주세요");
                       }
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
                     },
