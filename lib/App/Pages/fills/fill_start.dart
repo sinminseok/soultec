@@ -2,15 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:soultec/App/widgets/drawer.dart';
-import 'package:soultec/Data/database.dart';
-
-import 'package:soultec/auth.dart';
-
-import '../constants.dart';
-import 'Pages/cars/car_number.dart';
-import 'Pages/fills/fill_ing.dart';
+import 'package:soultec/Data/toast.dart';
+import '../../../constants.dart';
+import 'fill_ing.dart';
 
 class Home_page extends StatefulWidget {
   String? uid;
@@ -27,10 +21,8 @@ class _Home_pageState extends State<Home_page> {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-
   final values = ["가득", "리터"];
   String? _select_value;
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +36,12 @@ class _Home_pageState extends State<Home_page> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot?> snapshot) {
         //Futurebuilder에서 snapdata가 null일 경우 반환값을 넣어줘야 에러가 안생김
-            if(!snapshot.hasData){
-              return Container();
-            }
-        Map<String?, dynamic>? data = snapshot.data!.data() as Map<String?, dynamic>;
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        Map<String?, dynamic>? data =
+            snapshot.data!.data() as Map<String?, dynamic>;
         return Scaffold(
-            drawer: My_Drawer(context),
             appBar: AppBar(
               backgroundColor: kPrimaryColor,
               elevation: 0,
@@ -86,7 +78,6 @@ class _Home_pageState extends State<Home_page> {
               ),
               Text("페어링이 정상적으로 연결 되었습니다!"),
               Text("리터랑을 설정해주십시요"),
-
               SizedBox(
                 height: size.height * 0.01,
               ),
@@ -146,8 +137,9 @@ class _Home_pageState extends State<Home_page> {
                     child: TextFormField(
                       controller: inputController,
                       decoration: InputDecoration(
-                        hoverColor: Colors.black,
-                          hintText: 'L', border: InputBorder.none),
+                          hoverColor: Colors.black,
+                          hintText: 'L',
+                          border: InputBorder.none),
                     ),
                   ),
                 ],
@@ -158,12 +150,16 @@ class _Home_pageState extends State<Home_page> {
               InkWell(
                 onTap: () {
                   if (_select_value == null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Filling(
-                                user_name: user_name,
-                                liter: inputController.text)));
+                    if (!inputController.text.isEmpty) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Filling(
+                                  user_name: user_name,
+                                  liter: inputController.text)));
+                    } else {
+                      showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
+                    }
                   } else if (_select_value == "가득") {
                     Navigator.push(
                         context,
@@ -171,11 +167,16 @@ class _Home_pageState extends State<Home_page> {
                             builder: (context) =>
                                 Filling(user_name: user_name, liter: "가득")));
                   } else if (_select_value == "리터") {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Filling(user_name: user_name, liter: inputController.text)));
+                    if (!inputController.text.isEmpty) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Filling(
+                                  user_name: user_name,
+                                  liter: inputController.text)));
+                    } else {
+                      showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
+                    }
                   }
                 },
                 child: Container(

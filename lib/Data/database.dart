@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:soultec/Data/toast.dart';
 
 class DatabaseService {
   final String? uid;
@@ -33,11 +31,6 @@ class DatabaseService {
     return await carCollection.doc(number).set({'car_number': number});
   }
 
-  // await userCollection.doc(uid).collection("cars").get().then((querySnapshot){
-  // querySnapshot.docs.forEach((element) {
-  // print(element.data());
-  // });
-  // } )
 
   Future readCar(String? number) async {
     var car_data =  await carCollection.doc(number).get().then((value) {
@@ -50,16 +43,6 @@ class DatabaseService {
     return car_data;
   }
 
-
-  // Future readname(String? uid) async{
-  //   print("howwww");
-  //   var name = await carCollection.doc(uid).get().then((value){
-  //     value;
-  //     print(value.get());
-  //     print("how");
-  //     return null;
-  //   });
-  // }
 
 
   Future readCarData(String number,) async {

@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:soultec/App/widgets/drawer.dart';
-
 import '../../../constants.dart';
 import 'fill_stop.dart';
 
@@ -22,7 +19,6 @@ class _FillingState extends State<Filling> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        drawer: My_Drawer(context),
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           elevation: 0,
@@ -40,7 +36,7 @@ class _FillingState extends State<Filling> {
             style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
           ),
           SizedBox(
-            height: size.height * 0.08,
+            height: size.height * 0.05,
           ),
           Text(
             widget.user_name +"님",
@@ -63,14 +59,14 @@ class _FillingState extends State<Filling> {
           SizedBox(
             height: size.height * 0.09,
           ),
-          Text("리터 [0] L", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("리터 [0] L", style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.013,
+            height: size.height * 0.1,
           ),
           Text("주입 중입니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text("잠시만 기다려 주시기 바랍니다.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           SizedBox(
-            height: size.height * 0.013,
+            height: size.height * 0.04,
           ),
           InkWell(
             onTap: () {

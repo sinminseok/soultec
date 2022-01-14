@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:soultec/constants.dart';
-import 'package:soultec/wrapper.dart';
-
-import 'BluetoothDeviceListEntry.dart';
+import 'blue_device.dart';
 
 
 class DiscoveryPage extends StatefulWidget {
@@ -22,17 +19,20 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
   List<BluetoothDiscoveryResult> results =
   List<BluetoothDiscoveryResult>.empty(growable: true);
+  List<String> result_data = [];
   bool isDiscovering = false;
 
   _DiscoveryPage();
 
   @override
   void initState() {
+
     super.initState();
     isDiscovering = widget.start;
     if (isDiscovering) {
       _startDiscovery();
     }
+
   }
 
   void _restartDiscovery() {
@@ -40,7 +40,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       results.clear();
       isDiscovering = true;
     });
-
     _startDiscovery();
   }
 
@@ -64,7 +63,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     });
   }
 
-  // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
 
   @override
   void dispose() {
@@ -99,28 +97,9 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       ),
       body: Column(
         children: [
-          Container(height: size.height*0.2,
-            child: Stack(
-              children: [
-                Container(
-                  height: size.height * 0.2 - 27,
-                  decoration: BoxDecoration(color: kPrimaryColor,borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  )),
-                ),
-                Center(
-                  child: Image(
-                    image: AssetImage('assets/images/cartoonimg.png'),
-                    width: 140,
-                  ),
-                ),
-              ],
-
-            ),
-          ),
-          Text("블루투스와 연결할 기기를 선택해주세요",style: TextStyle(fontWeight: FontWeight.bold),),
-          SizedBox(height: size.height*0.05,),
+          SizedBox(height: size.height*0.02,),
+          Text("블루투스와 연결할 기기를 선택해주세요",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+          SizedBox(height: size.height*0.03,),
           Expanded(
             child: ListView.builder(
               itemCount: results.length,

@@ -10,7 +10,7 @@ import 'App/start_page.dart';
 import 'Data/database.dart';
 import 'auth.dart';
 import 'constants.dart';
-import 'package:provider/provider.dart';
+
 
 void main () async{
   //firebase를 사용 하기 위해선 main 메소드에 알려줘야한다.

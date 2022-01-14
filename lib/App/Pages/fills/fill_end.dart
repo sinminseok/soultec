@@ -39,7 +39,7 @@ class _FillEndState extends State<FillEnd> {
                 children: [
                   Text(
                     "주 입 완 료",
-                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: size.height * 0.08,
@@ -63,8 +63,8 @@ class _FillEndState extends State<FillEnd> {
                   Padding(
                     padding: const EdgeInsets.only(left: 30.0),
                     child: Image(
-                      image: AssetImage('assets/images/cartoonimg.png'),
-                      width: 140,
+                      image: AssetImage('assets/images/mainimg.png'),
+                      width: 120,
                     ),
                   ),
                   SizedBox(

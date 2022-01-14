@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/widgets/drawer.dart';
-
 import '../../../constants.dart';
 import 'fill_end.dart';
 
@@ -21,7 +20,6 @@ class _FillStopState extends State<FillStop> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        drawer: My_Drawer(context),
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           elevation: 0,
@@ -64,7 +62,6 @@ class _FillStopState extends State<FillStop> {
           InkWell(
             onTap: () {
               //data push
-
               Navigator.push(context, MaterialPageRoute(builder: (context) => FillEnd(user_name : widget.user_name,liter: widget.liter)));
             },
             child: Container(

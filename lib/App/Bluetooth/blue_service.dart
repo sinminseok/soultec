@@ -19,6 +19,7 @@ class _BluetoothState extends State<Bluetooth> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
 
+
   void blue_scan()async{
     await flutterBlue.startScan(timeout: Duration(seconds: 4));
     _addDeviceTolist(final BluetoothDevice device) {

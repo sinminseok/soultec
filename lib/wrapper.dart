@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/App/home_page.dart';
-
-import 'Account/login_main.dart';
+import 'Account/login_page.dart';
 import 'App/Pages/cars/car_number.dart';
 import 'Data/database.dart';
 
@@ -21,7 +17,7 @@ class Wrapper extends StatelessWidget {
     //return either Home or Authenticate widget
     if (providerUserModel == null) {
       return LoginScreen();
-          //Sign_Page();
+
     } else {
       //uid: providerUserModel.uid
       return CarNumberPage(uid: providerUserModel.uid);
