@@ -41,12 +41,14 @@ class _Home_pageState extends State<Home_page> {
         }
         Map<String?, dynamic>? data =
             snapshot.data!.data() as Map<String?, dynamic>;
-        return Scaffold(
-            appBar: AppBar(
-              backgroundColor: kPrimaryColor,
-              elevation: 0,
-            ),
-            body: getBody(data["name"], size));
+        return SafeArea(
+          child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: kPrimaryColor,
+                elevation: 0,
+              ),
+              body: getBody(data["name"], size)),
+        );
       },
     );
   }

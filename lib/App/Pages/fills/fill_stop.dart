@@ -19,12 +19,14 @@ class _FillStopState extends State<FillStop> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: kPrimaryColor,
-          elevation: 0,
-        ),
-        body: getBody(size));
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+            elevation: 0,
+          ),
+          body: getBody(size)),
+    );
   }
 
   getBody(Size size) {
