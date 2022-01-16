@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/Data/toast.dart';
@@ -62,6 +63,16 @@ class _Start_pageState extends State<Start_page> {
       });
     });
   }
+
+   Future<List<String>> check_device()async{
+     final device_address = await SharedPreferences.getInstance();
+     var len = device_address.getKeys().toList();
+     print(device_address.getKeys().toList());
+     for(var i  in len){
+       print(i);
+     }
+     return len;
+   }
 
 
   @override
@@ -142,7 +153,10 @@ class _Start_pageState extends State<Start_page> {
 
                           if (selectedDevice != null){
                             print('Discovddery -> selected ' + selectedDevice.address);
-                            provider.connect_device(selectedDevice.address);
+                            print('sex');
+                            provider.remember_device(selectedDevice.address);
+                             provider.connect_device(selectedDevice.address);
+
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
 
                           } else {

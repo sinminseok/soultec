@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/Data/database.dart';
 import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
@@ -19,11 +20,11 @@ class CarNumberPage extends StatefulWidget {
 
 class _CarNumberPageState extends State<CarNumberPage> {
   final firestoreInstance = FirebaseFirestore.instance;
-
   TextEditingController _carnumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<Bluetooth_Service>(context);
     Size size = MediaQuery
         .of(context)
         .size;
@@ -78,18 +79,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
               Text("관리자에게 문의하세요", style: TextStyle(fontSize: 20),),
 
 
-              // FlatButton(
-              //   onPressed: (){
-              //     Navigator.push(context, MaterialPageRoute(builder: (context) => CarRegister(uid: widget.uid,)));
-              //   },
-              //   child: Container(
-              //       child: Text(
-              //           "아직 차량 등록을 하지 않았으면 등록해주세요.",
-              //           style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 12)
-              //       )
-              //   ),
-              // ),
-
               SizedBox(
                 height: size.height * 0.05,
               ),
@@ -106,7 +95,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   controller: _carnumber,
 
                   decoration: InputDecoration(
-
                       hintText: '자동차 번호를 입력해주세요 ex)00가 0000',
                       border: InputBorder.none),
                 ),

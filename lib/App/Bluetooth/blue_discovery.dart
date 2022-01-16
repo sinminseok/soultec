@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
+import '../../wrapper.dart';
 import 'blue_device.dart';
 
 
@@ -19,20 +24,20 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
   List<BluetoothDiscoveryResult> results =
   List<BluetoothDiscoveryResult>.empty(growable: true);
-  List<String> result_data = [];
-  bool isDiscovering = false;
+  Future<List<String>>? check_result = null;
 
+  bool isDiscovering = false;
   _DiscoveryPage();
 
   @override
   void initState() {
-
     super.initState();
     isDiscovering = widget.start;
     if (isDiscovering) {
+      print("SSTART");
+      print(check_result);
       _startDiscovery();
     }
-
   }
 
   void _restartDiscovery() {
@@ -43,16 +48,56 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     _startDiscovery();
   }
 
-  void _startDiscovery() {
+  Future<void> connect_device(String address) async{
+// Some simplest connection :F
+    try {
+      BluetoothConnection connection = await BluetoothConnection.toAddress(address);
+      print('Connected to the device');
+      connection.input!.listen((Uint8List data) {
+        print('Data incoming: ${ascii.decode(data)}');
+        connection.output.add(data); // Sending data
+
+        if (ascii.decode(data).contains('!')) {
+          connection.finish(); // Closing connection
+          print('Disconnecting by local host');
+        }
+      }).onDone(() {
+        print('Disconnected by remote request');
+      });
+    }
+    catch (exception) {
+      print('Cannot connect, exception occured');
+      print(exception);
+    }
+
+  }
+
+  void _startDiscovery() async{
+    final device_address = await SharedPreferences.getInstance();
+    var len = device_address.getKeys().toList();
+    print(len.runtimeType);
+    print("h");
+    print(len);
     _streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
           setState(() {
             final existingIndex = results.indexWhere(
                     (element) => element.device.address == r.device.address);
             if (existingIndex >= 0)
+
               results[existingIndex] = r;
             else
-              results.add(r);
+              if(len.contains(r.device.address)){
+                connect_device(r.device.address);
+                String device_adddresss=r.device.address;
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+                showAlertDialog(context,"이전에 접속한 주유기로 페어링 되었습니다.","$device_adddresss");
+                results.add(r);
+                //connect
+              }else{
+                results.add(r);
+              }
+
           });
         });
 
@@ -76,6 +121,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
+
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -113,7 +159,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                     rssi: result.rssi,
                     onTap: () {
                       Navigator.of(context).pop(result.device);
-
                     },
                     onLongPress: () async {
                       try {
@@ -165,7 +210,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   );
                 },
               ),
-            ),
+            )
           ],
         ),
       ),
