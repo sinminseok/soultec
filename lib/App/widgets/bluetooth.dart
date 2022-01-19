@@ -1,17 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-
 class Bluetooth_Service with ChangeNotifier{
   String? device_address;
-
-
   //bluetooth device 디스크 기억 함수
+
   Future<void> remember_device(String address)  async{
     final remember_address = await SharedPreferences.getInstance();
     remember_address.setString(address, address);

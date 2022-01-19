@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:soultec/Account/login_page.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
-
 import '../auth.dart';
+import 'package:http/http.dart' as http;
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -25,8 +26,9 @@ class _RegisterScreen extends State<RegisterScreen>
   final TextEditingController _nameController = TextEditingController();
   Duration animationDuration = Duration(microseconds: 270);
 
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
     SystemChrome.setEnabledSystemUIOverlays([]);
     animationController =
@@ -34,23 +36,16 @@ class _RegisterScreen extends State<RegisterScreen>
   }
 
   @override
-  void dispose() {
+  void dispose(){
     animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
-    double viewInset = MediaQuery.of(context).viewInsets.bottom;
-    double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
-    containerSize = Tween<double>(
-            begin: size.height * 0.1, end: defaultRegisterSize)
-        .animate(
-            CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return SafeArea(
       child: Scaffold(

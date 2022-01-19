@@ -5,6 +5,8 @@ import 'package:soultec/Account/register_page.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:soultec/wrapper.dart';
+import 'package:http/http.dart' as http;
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,8 +18,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool isLogin = true;
-  late Animation<double> containerSize;
-  late AnimationController animationController;
+  // late Animation<double> containerSize;
+  // late AnimationController animationController;
   Duration animationDuration = Duration(microseconds: 270);
   final formkey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
@@ -25,19 +27,34 @@ class _LoginScreenState extends State<LoginScreen>
   final formKey = GlobalKey<FormState>();
   bool _isChecked =false;
 
+  _postRequest() async {
+    //요청 url 가져오기
+    String url = 'http://example.com/login';
+
+    http.Response response = await http.post(
+      Uri(),
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: <String, String> {
+        'user_id': 'user_id_value',
+        'user_pwd': 'user_pwd_value'
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIOverlays([]);
-    animationController =
-        AnimationController(vsync: this, duration: animationDuration);
+    // animationController =
+    //     AnimationController(vsync: this, duration: animationDuration);
   }
 
 
   @override
   void dispose() {
-    animationController.dispose();
+    // animationController.dispose();
     super.dispose();
   }
 
@@ -49,10 +66,10 @@ class _LoginScreenState extends State<LoginScreen>
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
 
-    containerSize = Tween<double>(
-            begin: size.height * 0.1, end: defaultRegisterSize)
-        .animate(
-            CurvedAnimation(parent: animationController, curve: Curves.linear));
+    // containerSize = Tween<double>(
+    //         begin: size.height * 0.1, end: defaultRegisterSize)
+    //     .animate(
+    //         CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return SafeArea(
       child: Scaffold(
@@ -74,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen>
                         color: Colors.grey,
                       )),
                   onTap: () {
-                    animationController.reverse();
+                    // animationController.reverse();
                     setState(() {
                       isLogin != isLogin;
                     });

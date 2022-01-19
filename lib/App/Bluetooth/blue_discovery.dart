@@ -26,6 +26,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   List<BluetoothDiscoveryResult>.empty(growable: true);
   Future<List<String>>? check_result = null;
 
+
   bool isDiscovering = false;
   _DiscoveryPage();
 
@@ -34,8 +35,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     super.initState();
     isDiscovering = widget.start;
     if (isDiscovering) {
-      print("SSTART");
-      print(check_result);
       _startDiscovery();
     }
   }
@@ -49,7 +48,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   Future<void> connect_device(String address) async{
-// Some simplest connection :F
     try {
       BluetoothConnection connection = await BluetoothConnection.toAddress(address);
       print('Connected to the device');
@@ -69,15 +67,11 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       print('Cannot connect, exception occured');
       print(exception);
     }
-
   }
 
   void _startDiscovery() async{
     final device_address = await SharedPreferences.getInstance();
     var len = device_address.getKeys().toList();
-    print(len.runtimeType);
-    print("h");
-    print(len);
     _streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
           setState(() {
