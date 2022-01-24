@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Bluetooth_Service with ChangeNotifier{
+
   String? device_address;
   //bluetooth device 디스크 기억 함수
 
@@ -14,6 +15,7 @@ class Bluetooth_Service with ChangeNotifier{
     remember_address.setString(address, address);
     print('ggg');
     print(remember_address.getString(address));
+    notifyListeners();
   }
 
   //디바이스 기억 블루투스 장치 조회 함수
@@ -25,6 +27,7 @@ class Bluetooth_Service with ChangeNotifier{
       print(i);
     }
     return len;
+    notifyListeners();
   }
 
 

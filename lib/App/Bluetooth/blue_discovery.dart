@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import '../../wrapper.dart';
@@ -20,7 +22,6 @@ class DiscoveryPage extends StatefulWidget {
 }
 
 class _DiscoveryPage extends State<DiscoveryPage> {
-
   StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
   List<BluetoothDiscoveryResult> results =
   List<BluetoothDiscoveryResult>.empty(growable: true);
@@ -67,9 +68,11 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       print('Cannot connect, exception occured');
       print(exception);
     }
+
   }
 
   void _startDiscovery() async{
+
     final device_address = await SharedPreferences.getInstance();
     var len = device_address.getKeys().toList();
     _streamSubscription =
@@ -78,19 +81,22 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             final existingIndex = results.indexWhere(
                     (element) => element.device.address == r.device.address);
             if (existingIndex >= 0)
-
               results[existingIndex] = r;
-            else
+            else{
               if(len.contains(r.device.address)){
-                connect_device(r.device.address);
-                String device_adddresss=r.device.address;
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+                // connect_device(r.device.address);
+                print("asdasdasd");
+                print(connect_device(r.device.address));
+                var device_adddresss=r.device.address;
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
                 showAlertDialog(context,"이전에 접속한 주유기로 페어링 되었습니다.","$device_adddresss");
                 results.add(r);
                 //connect
               }else{
                 results.add(r);
               }
+            }
+
 
           });
         });
@@ -113,9 +119,9 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<Bluetooth_Service>(context);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,

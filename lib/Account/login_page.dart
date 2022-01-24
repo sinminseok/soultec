@@ -7,7 +7,6 @@ import 'package:soultec/constants.dart';
 import 'package:soultec/wrapper.dart';
 import 'package:http/http.dart' as http;
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -18,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool isLogin = true;
+
   // late Animation<double> containerSize;
   // late AnimationController animationController;
   Duration animationDuration = Duration(microseconds: 270);
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  bool _isChecked =false;
+  bool _isChecked = false;
 
   _postRequest() async {
     //요청 url 가져오기
@@ -33,10 +33,10 @@ class _LoginScreenState extends State<LoginScreen>
 
     http.Response response = await http.post(
       Uri(),
-      headers: <String, String> {
+      headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: <String, String> {
+      body: <String, String>{
         'user_id': 'user_id_value',
         'user_pwd': 'user_pwd_value'
       },
@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen>
     //     AnimationController(vsync: this, duration: animationDuration);
   }
 
-
   @override
   void dispose() {
     // animationController.dispose();
@@ -61,15 +60,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double viewInset = MediaQuery.of(context).viewInsets.bottom;
-    double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
-
-
-    // containerSize = Tween<double>(
-    //         begin: size.height * 0.1, end: defaultRegisterSize)
-    //     .animate(
-    //         CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return SafeArea(
       child: Scaffold(
@@ -111,41 +102,54 @@ class _LoginScreenState extends State<LoginScreen>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: size.height*0.02,),
-
-
-                        Text(
-                          '충전관리솔루션_스마트필',
-                          style:
-                          TextStyle( fontSize: 19,fontWeight: FontWeight.bold,color:Colors.white),
+                        SizedBox(
+                          height: size.height * 0.02,
                         ),
-                        SizedBox(height: size.height*0.04,),
                         Row(
-                          mainAxisAlignment:MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("SMART",style: TextStyle(fontSize: 38,color: Colors.white),),
-                            SizedBox(width: size.width*0.03,),
-                            Text("fill",style: TextStyle(fontSize: 38,color: Colors.yellow),)
+                            Column(
+                              children: [
+                                Text(
+                                  "충전 관리 솔루션",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  width: size.width * 0.03,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "SMART",
+                                      style: TextStyle(
+                                          fontSize: 38, color: Colors.white),
+                                    ),
+                                    Text(
+                                      "fill",
+                                      style: TextStyle(
+                                          fontSize: 38, color: Colors.yellow),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30.0),
+                              child: Image(
+                                image: AssetImage('assets/images/mainimg.png'),
+                                width: 80,
+                              ),
+                            ),
                           ],
                         ),
-                        Text(
-                          '환영합니다.',
-                          style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 24,color:Colors.white),
-                        ),
+
                         SizedBox(
-                          height: 10,
+                          height: size.height * 0.25,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30.0),
-                          child: Image(
-                            image: AssetImage('assets/images/mainimg.png'),
-                            width: 110,
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height*0.03,
-                        ),
+
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
                           padding:
@@ -181,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                         ),
                         Container(
-                          width: size.width*0.8,
+                          width: size.width * 0.8,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -189,47 +193,59 @@ class _LoginScreenState extends State<LoginScreen>
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Checkbox(
-                                        value: _isChecked,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isChecked = value!;
-                                          });
-                                        }),
-
-                                  Text("로그인상태 유지",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                                      value: _isChecked,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _isChecked = value!;
+                                        });
+                                      }),
+                                  Text(
+                                    "로그인상태 유지",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ],
                               ),
                               FlatButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegisterScreen()));
                                 },
                                 child: Container(
-                                    child: Text(
-                                        "회원가입",
-                                        style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 12)
-                                    )
-                                ),
+                                    child: Text("회원가입",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12))),
                               ),
                             ],
                           ),
                         ),
                         SizedBox(
-                          height: size.height*0.03,
+                          height: size.height * 0.03,
                         ),
                         InkWell(
-                          onTap: ()async{
-                            try{
-                              print('userlogin');
-                              UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-                              print("...");
+                          onTap: () async {
+                            try {
+                              UserCredential userCredential = await FirebaseAuth
+                                  .instance
+                                  .signInWithEmailAndPassword(
+                                      email: _emailController.text,
+                                      password: _passwordController.text);
                               User? user = userCredential.user;
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Wrapper()));
                               return showtoast("Login!");
-
-                            }on FirebaseAuthException catch(e){
-                              print('login error');
+                            } on FirebaseAuthException catch (e) {
                               print(e.toString());
-                              if(e.toString() == "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred."){
+                              if (e.toString() ==
+                                  "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
                                 return showtoast("네트워크 연결을 확인하세요.");
                               }
 
@@ -246,8 +262,8 @@ class _LoginScreenState extends State<LoginScreen>
                             padding: EdgeInsets.symmetric(vertical: 20),
                             alignment: Alignment.center,
                             child: Text('로그인',
-                                style:
-                                    TextStyle(color: Colors.black, fontSize: 16)),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16)),
                           ),
                         ),
                       ],
@@ -256,7 +272,6 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -1,7 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:soultec/App/widgets/bluetooth.dart';
@@ -11,13 +11,13 @@ import 'Data/database.dart';
 import 'auth.dart';
 import 'constants.dart';
 
-
-void main () async{
+void main() async {
   //firebase를 사용 하기 위해선 main 메소드에 알려줘야한다.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(
-     child: MyApp(), providers: [ChangeNotifierProvider(create: (_) => Bluetooth_Service())]));
+      child: MyApp(),
+      providers: [ChangeNotifierProvider(create: (_) => Bluetooth_Service())]));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,12 +29,20 @@ class MyApp extends StatelessWidget {
       value: AuthService().userState,
       initialData: null,
       child: MaterialApp(
-        theme: ThemeData(
-          primaryColor: kPrimaryColor,
-          // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
-        ),
-        home: Start_page()
-      ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('ko', 'KO'),
+            const Locale('en', 'US'),
+          ],
+          theme: ThemeData(
+            primaryColor: kPrimaryColor,
+            // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
+          ),
+          home: Start_page()),
     );
   }
 }

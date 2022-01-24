@@ -1,6 +1,7 @@
   import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/Data/database.dart';
@@ -33,54 +34,44 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: kPrimaryColor,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            ],),
-          elevation: 0,
-        ),
+        backgroundColor: kPrimaryColor,
         body: SingleChildScrollView(
 
           child: Column(
             children: <Widget>[
-              SizedBox(
-                height: size.height * 0.04,
-              ),
-              Text("차량조회",
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),),
-              SizedBox(
-                height: size.height * 0.04,
-              ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Image(
-                  //   image: AssetImage('assets/images/gtbimg.png'),
-                  //   width: 100,
-                  // ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text("충전관리 솔루션",
+                        style: TextStyle(fontSize: 12,),),
+                      SizedBox(width: 2,),
+                      Text("스마트필",
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Image(
                       image: AssetImage('assets/images/mainimg.png'),
-                      width: 130,
+                      width: 60,
                     ),
                   ),
-
-
                 ],
               ),
-              SizedBox(height: size.height * 0.02,),
-              Text("아직 차량을 등록하지 않았으면 ", style: TextStyle(fontSize: 20),),
-              Text("관리자에게 문의하세요", style: TextStyle(fontSize: 20),),
-
 
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.3,
+              ),
+
+              Text("직접 입력",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: size.height * 0.01,
               ),
 
               Container(
@@ -90,12 +81,11 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 width: size.width * 0.8,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    color: kPrimaryColor.withAlpha(30)),
+                    color: Colors.white),
                 child: TextFormField(
                   controller: _carnumber,
-
                   decoration: InputDecoration(
-                      hintText: '자동차 번호를 입력해주세요 ex)00가 0000',
+                      hintText: '차량 번호 4자리 입력',
                       border: InputBorder.none),
                 ),
               ),
@@ -106,7 +96,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 child: Text(
                   "확인을 누르면 조회를 시작합니다.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: kPrimaryColor,
+                  style: TextStyle(color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
@@ -140,11 +130,11 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   height: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: kPrimaryColor),
+                      color: Colors.white),
                   padding: EdgeInsets.symmetric(vertical: 20),
                   alignment: Alignment.center,
                   child: Text(
-                      "확인", style: TextStyle(color: Colors.white, fontSize: 14)),
+                      "확인", style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ),
             ],

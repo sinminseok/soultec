@@ -138,10 +138,8 @@ class _Start_pageState extends State<Start_page> {
                             borderRadius: BorderRadius.all(Radius.circular(16.0))),
                         onPressed: () async {
                           print("HOw");
-
                           //블루투스 장치 스캔 요청 코드
                           print(await FlutterBluetoothSerial.instance.requestEnable());
-
                           //device를 가져온다.
                           final BluetoothDevice? selectedDevice = await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -150,13 +148,14 @@ class _Start_pageState extends State<Start_page> {
                               },
                             ),
                           );
+                          print("hihihi");
+                          print(selectedDevice);
 
                           if (selectedDevice != null){
                             print('Discovddery -> selected ' + selectedDevice.address);
                             print('sex');
                             provider.remember_device(selectedDevice.address);
-                             provider.connect_device(selectedDevice.address);
-
+                            provider.connect_device(selectedDevice.address);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
 
                           } else {

@@ -7,6 +7,7 @@ class ChangeSign with ChangeNotifier{
   var _index = 0;
 
 
+
   //login or sign up 상태관리 함수(bool 값울 알려주는 함수이다.)
   bool getStandardSign() => _StandardSign;
   bool getCurrent() => _current;
