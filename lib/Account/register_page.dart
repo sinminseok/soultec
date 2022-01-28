@@ -157,29 +157,29 @@ class _RegisterScreen extends State<RegisterScreen>
                         ),
                         InkWell(
                           onTap: () async {
-                            // if(_passwordController.text != _checkpasswordController){
-                            //   showtoast("password is not confirm");
+                            // // if(_passwordController.text != _checkpasswordController){
+                            // //   showtoast("password is not confirm");
+                            // // }
+                            // try {
+                            //   await AuthService().register(_emailController.text,
+                            //       _passwordController.text, _nameController.text);
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => LoginScreen()));
+                            //   if(_passwordController != _checkpasswordController) {
+                            //     return showtoast("입력한 비밀번호가 다릅니다.");
+                            //   }else{
+                            //     if(_nameController == null){
+                            //       showtoast("이름을 입력하세요");
+                            //     }else{
+                            //       return showtoast("기사번호를 입력하세요");
+                            //     }
+                            //   }
+                            //   return showtoast("회원가입이 완료 되었습니다 로그인 페이지로 이동합니다!");
+                            // } catch (e) {
+                            //   print(e.toString());
                             // }
-                            try {
-                              await AuthService().register(_emailController.text,
-                                  _passwordController.text, _nameController.text);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
-                              if(_passwordController != _checkpasswordController) {
-                                return showtoast("입력한 비밀번호가 다릅니다.");
-                              }else{
-                                if(_nameController == null){
-                                  showtoast("이름을 입력하세요");
-                                }else{
-                                  return showtoast("기사번호를 입력하세요");
-                                }
-                              }
-                              return showtoast("회원가입이 완료 되었습니다 로그인 페이지로 이동합니다!");
-                            } catch (e) {
-                              print(e.toString());
-                            }
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(

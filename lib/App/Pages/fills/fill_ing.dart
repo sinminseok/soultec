@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/receipt/receipt.dart';
 import '../../../constants.dart';
-import 'fill_stop.dart';
+
 
 class Filling extends StatefulWidget {
   final String liter;
+  final String car_number;
   final String user_name;
 
-  Filling({required this.user_name, required this.liter});
+  Filling({required this.user_name, required this.liter,required this.car_number});
 
   @override
   _FillingState createState() => _FillingState();
@@ -99,19 +100,13 @@ class _FillingState extends State<Filling> {
                       MaterialPageRoute(
                           builder: (context) => Recepit(
                               user_name: widget.user_name,
-                              liter: widget.liter)));
+                              liter: widget.liter , car_number: widget.car_number)));
                 },
-                child: Container(
-                  width: size.width * 0.8,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text('다음',
-                      style: TextStyle(color: Colors.black, fontSize: 16)),
-                ),
+                  child:Container(
+                  width: size.width*0.7,
+                  height: size.height*0.1,
+                  child: Image.asset("assets/images/play_button.png")
+              )
               ),
             ]),
       ),

@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:soultec/Account/register_page.dart';
-import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
-import 'package:soultec/wrapper.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
@@ -230,27 +228,27 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         InkWell(
                           onTap: () async {
-                            try {
-                              UserCredential userCredential = await FirebaseAuth
-                                  .instance
-                                  .signInWithEmailAndPassword(
-                                      email: _emailController.text,
-                                      password: _passwordController.text);
-                              User? user = userCredential.user;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Wrapper()));
-                              return showtoast("Login!");
-                            } on FirebaseAuthException catch (e) {
-                              print(e.toString());
-                              if (e.toString() ==
-                                  "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
-                                return showtoast("네트워크 연결을 확인하세요.");
-                              }
-
-                              return showtoast("등록된 직원이 아닙니다.관리자에게 문의 하십시오.");
-                            }
+                            // try {
+                            //   UserCredential userCredential = await FirebaseAuth
+                            //       .instance
+                            //       .signInWithEmailAndPassword(
+                            //           email: _emailController.text,
+                            //           password: _passwordController.text);
+                            //   User? user = userCredential.user;
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => Wrapper()));
+                            //   return showtoast("Login!");
+                            // } on FirebaseAuthException catch (e) {
+                            //   print(e.toString());
+                            //   if (e.toString() ==
+                            //       "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+                            //     return showtoast("네트워크 연결을 확인하세요.");
+                            //   }
+                            //
+                            //   return showtoast("등록된 직원이 아닙니다.관리자에게 문의 하십시오.");
+                            // }
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
