@@ -32,12 +32,14 @@ class _CarNumberPageState extends State<CarNumberPage> {
     bool check_connected = await widget.peripheral!.isConnected();
     print("minseopkdkasdbhjk");
     print(check_connected);
+
   }
+
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var test = widget.peripheral;
+    // var test = widget.peripheral;
     var test_i = widget.peripheral!.identifier;
 
     return SafeArea(
@@ -85,28 +87,38 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   'assets/gifs/car_number.gif',
                 )),
               ),
+              SizedBox(height: size.height*0.03,),
               Text(
                 "직접 입력",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,fontFamily: "numberfont"),
               ),
               SizedBox(
-                height: size.height * 0.01,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                width: size.width * 0.8,
+                height: size.height * 0.04,
+              ),Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                width: size.width * 0.7,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: Colors.white),
-                child: TextFormField(
-                  controller: _carnumber,
-                  decoration: InputDecoration(
-                      hintText: '차량 번호 4자리 입력', border: InputBorder.none),
+                    border: Border.all(
+                        color: Colors.black,
+                        style: BorderStyle.solid,
+                        width: 1
+                    ),
+                    color: kPrimaryColor),
+                child: Center(
+                  child: TextFormField(
+                    style: TextStyle(fontFamily: "numberfont",fontSize: 21,),
+                    controller: _carnumber,
+                    decoration: InputDecoration(
+
+                      hintText: '차량번호 4 자리 입력',
+                    ),
+                  ),
                 ),
               ),
+
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.001,
               ),
               Center(
                 child: Text(
@@ -121,69 +133,70 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 ),
               ),
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.1,
               ),
-              InkWell(
-                onTap: () async {
-                  //추후 차량 번호http 인증 해야댐
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Home_page(
-                              uid: widget.uid, car_number: _carnumber.text)));
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  width: size.width * 0.6,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text("확인",
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ),
               InkWell(
-                onTap: () async {
-                  widget.peripheral!.disconnectOrCancelConnection();
-                  print("after disconnectinggg");
-                  bool test_check = await widget.peripheral!.isConnected();
-                  print(test_check);
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  width: size.width * 0.6,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text("페어링 취소",
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
+                  onTap: (){
+                    //data push
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home_page(
+                                uid: widget.uid, car_number: _carnumber.text)));
+                  },
+                  child:Container(
+                      width: size.width*0.7,
+                      height: size.height*0.1,
+                      child: Image.asset("assets/images/play_button.png")
+                  )
               ),
-              InkWell(
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.remove("$test_i");
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  width: size.width * 0.6,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text("디스크 초기화",
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ),
+
+
+
+              //페어링된 해당 디바이 스페어링 취소
+              // InkWell(
+              //   onTap: () async {
+              //     widget.peripheral!.disconnectOrCancelConnection();
+              //     print("after disconnectinggg");
+              //     bool test_check = await widget.peripheral!.isConnected();
+              //     print(test_check);
+              //   },
+              //   borderRadius: BorderRadius.circular(20),
+              //   child: Container(
+              //     width: size.width * 0.6,
+              //     height: 60,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         color: Colors.white),
+              //     padding: EdgeInsets.symmetric(vertical: 20),
+              //     alignment: Alignment.center,
+              //     child: Text("페어링 취소",
+              //         style: TextStyle(color: Colors.black, fontSize: 14)),
+              //   ),
+              // ),
+              //
+              // //디스크 디바이스 초기화
+              // InkWell(
+              //   onTap: () async {
+              //     final prefs = await SharedPreferences.getInstance();
+              //
+              //      prefs.remove("79:72:18:30:C7:D3");
+              //   },
+              //   borderRadius: BorderRadius.circular(20),
+              //   child: Container(
+              //     width: size.width * 0.6,
+              //     height: 60,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         color: Colors.white),
+              //     padding: EdgeInsets.symmetric(vertical: 20),
+              //     alignment: Alignment.center,
+              //     child: Text("디스크 초기화",
+              //         style: TextStyle(color: Colors.black, fontSize: 14)),
+              //   ),
+              // ),
             ],
           ),
         ),

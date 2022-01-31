@@ -38,7 +38,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   void dispose() {
     //dispose 안해주면 충돌할수 있음
     _curPeripheral = null;
-    deviceList.clear();
     _isScanning = false;
     _connected = false;
     _bleManager.destroyClient();
@@ -86,7 +85,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               connect(index);
               print("before remember_device");
 
-              remember_device(deviceList[index].peripheral.identifier);
+
             });
       },
     );
@@ -94,9 +93,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
   //scan 함수
   void scan() async {
+    //디스크 저장 변수
     final device_address = await SharedPreferences.getInstance();
     var remember_device_disk = device_address.getKeys().toList();
-
+    print("ase");
+    print(remember_device_disk);
+    print("ase");
     if (!_isScanning) {
       deviceList.clear(); //기존 장치 리스트 초기화
       //SCAN 시작
@@ -110,17 +112,15 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         var findDevice = deviceList.any((element) {
           if (element.peripheral.identifier ==
               scanResult.peripheral.identifier) {
+            print(element.peripheral.identifier);
+
             if (remember_device_disk.contains(element.peripheral.identifier)) {
+              var scan_liet =remember_device_disk.where((e) => e == element.peripheral.identifier);
+
               // connect(element.peripheral.identifier);
               print("device contain");
 
-              element.peripheral = scanResult.peripheral;
-              element.advertisementData = scanResult.advertisementData;
-              element.rssi = scanResult.rssi;
-
-              print("start connect remebeer");
-
-              connect_rember(element.peripheral.identifier);
+              connect_rember(scan_liet.single);
 
               print("finish connect_remember");
 
@@ -131,8 +131,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                 _isScanning = true;
                 setBLEState('Stop Scan');
               });
-
-              var con_device = element.peripheral.name;
 
               return true;
 
@@ -146,6 +144,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           }
           return false;
         });
+
         // 새로 발견된 장치면 추가
         if (!findDevice) {
           deviceList.add(BleDeviceItem(name, scanResult.rssi,
@@ -207,18 +206,26 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     //해당 장치와의 연결상태를 관촬하는 리스너 실행
     peripheral
         .observeConnectionState(
-            emitCurrentValue: true, completeOnDisconnect: true)
+        emitCurrentValue: true, completeOnDisconnect: true)
         .listen((connectionState) {
       print(
           "Peripheral ${peripheral.identifier} connection state is $connectionState");
     });
 
     _runWithErrorHandling(() async {
+      print("_runWithErrorHandling");
+      var peripheral_name = peripheral.name;
       //해당 장치와 이미 연결되어 있는지 확인
       bool isConnected = await peripheral.isConnected();
       if (isConnected) {
         print('device is already connected');
-        //이미 연결되어 있기때문에 무시하고 종료..
+        showtoast("이미 $peripheral_name 과 연결되어있습니다.");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CarNumberPage(uid: null, peripheral: peripheral)));
+
         return;
       }
 
@@ -234,9 +241,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           for (var service in services) {
             print("Found service ${service.uuid}");
             List<Characteristic> characteristics =
-                await service.characteristics();
+            await service.characteristics();
+            int index = 0;
             for (var characteristic in characteristics) {
+              print(index);
               print("${characteristic.uuid}");
+              index++;
             }
           }
           //모든 과정이 마무리되면 연결되었다고 표시
@@ -244,7 +254,9 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           setState(() {
             _connected = true;
           });
+          _bleManager.stopPeripheralScan();
           print("${peripheral.name} has CONNECTED");
+          remember_device(deviceList[index].peripheral.identifier);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -256,6 +268,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   connect_rember(identifier) async {
+    print("please.....");
 
     if (_connected) {
       //이미 연결상태면 연결 해제후 종료
@@ -265,74 +278,101 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         _connected = false;
       });
       return;
-    }
-
-    for (var i in deviceList) {
+    } else {
+      print("asdasd");
+      //hihih for문
       int index = 0;
-      if (deviceList[index].peripheral.identifier == identifier) {
-        print("for in love");
-        Peripheral peripheral = deviceList[index].peripheral;
 
-        //해당 장치와의 연결상태를 관촬하는 리스너 실행
-        peripheral
-            .observeConnectionState(
-                emitCurrentValue: true, completeOnDisconnect: true)
-            .listen((connectionState) {
-          print(
-              "Peripheral ${peripheral.identifier} connection state is $connectionState");
-        });
 
-        _runWithErrorHandling(() async {
-          //해당 장치와 이미 연결되어 있는지 확인
-          bool isConnected = await peripheral.isConnected();
-          if (isConnected) {
-            print('device is already connected');
-            //이미 연결되어 있기때문에 무시하고 종료..
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        CarNumberPage(uid: null, peripheral: peripheral)));
-            return;
-          }
+      for (var i in deviceList) {
+        if(deviceList[index].peripheral.identifier == identifier){
+          //선택한 장치의 peripheral 값을 가져온다.
+          Peripheral peripheral = deviceList[index].peripheral;
 
-          //연결 시작!
-          await peripheral.connect().then((_) {
-            //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
-            peripheral
-                .discoverAllServicesAndCharacteristics()
-                .then((_) => peripheral.services())
-                .then((services) async {
-              print("PRINTING SERVICES for ${peripheral.name}");
-              //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
-              for (var service in services) {
-                print("Found service ${service.uuid}");
-                List<Characteristic> characteristics =
-                    await service.characteristics();
-                for (var characteristic in characteristics) {
-                  print("${characteristic.uuid}");
-                }
-              }
-              //모든 과정이 마무리되면 연결되었다고 표시
+          //해당 장치와의 연결상태를 관촬하는 리스너 실행
+          peripheral
+              .observeConnectionState(
+              emitCurrentValue: true, completeOnDisconnect: true)
+              .listen((connectionState) {
+            print(
+                "Peripheral ${peripheral.identifier} connection state is $connectionState");
+          });
 
-              setState(() {
-                _connected = true;
-              });
-              print("${peripheral.name} has CONNECTED");
-
+          _runWithErrorHandling(() async {
+            print("_runWithErrorHandling");
+            var peripheral_name = peripheral.name;
+            //해당 장치와 이미 연결되어 있는지 확인
+            bool isConnected = await peripheral.isConnected();
+            if (isConnected) {
+              print('device is already connected');
+              showtoast("이미 $peripheral_name 과 연결되어있습니다.");
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           CarNumberPage(uid: null, peripheral: peripheral)));
+
+              return;
+            }
+
+            //연결 시작!
+            await peripheral.connect().then((_) {
+              //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
+              peripheral
+                  .discoverAllServicesAndCharacteristics()
+                  .then((_) => peripheral.services())
+                  .then((services) async {
+                print("PRINTING SERVICES for ${peripheral.name}");
+                //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
+                for (var service in services) {
+                  print("Found service ${service.uuid}");
+                  List<Characteristic> characteristics =
+                  await service.characteristics();
+                  int index = 0;
+                  for (var characteristic in characteristics) {
+                    print(index);
+                    print("${characteristic.uuid}");
+                    index++;
+                  }
+                }
+                //모든 과정이 마무리되면 연결되었다고 표시
+
+                setState(() {
+                  _connected = true;
+                });
+                _bleManager.stopPeripheralScan();
+                print("${peripheral.name} has CONNECTED");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CarNumberPage(
+                            uid: null, peripheral: deviceList[index].peripheral)));
+              });
             });
           });
-        });
-      } else {
-        index++;
+
+        }else{
+          print(index);
+          index++;
+        }
+
       }
+
+
+      print("hoowowo");
     }
   }
+
+
+
+
+
+
+
+
+
+
+
 
   Future<void> remember_device(String address) async {
     final remember_address = await SharedPreferences.getInstance();

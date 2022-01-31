@@ -69,6 +69,7 @@ class _Home_pageState extends State<Home_page> {
                             width: size.width*0.8,
                             height: size.height*0.4,
                             child: Image.asset(
+
                               'assets/gifs/main_img.gif',
                             )),
                       ),
