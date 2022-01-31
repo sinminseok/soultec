@@ -15,6 +15,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //로그인 상태 유지했을땐 빠아로 DiscoveryPage()
+    //아닌경우 login
 
       return CarNumberPage(uid: null,peripheral : peripheral);
     }

@@ -5,7 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
-import '../../wrapper.dart';
 import 'blue_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,8 +83,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               // 리스트중 한개를 탭(터치) 하면 해당 디바이스와 연결을 시도한다.
               connect(index);
               print("before remember_device");
-
-
             });
       },
     );
@@ -96,9 +93,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     //디스크 저장 변수
     final device_address = await SharedPreferences.getInstance();
     var remember_device_disk = device_address.getKeys().toList();
-    print("ase");
     print(remember_device_disk);
-    print("ase");
     if (!_isScanning) {
       deviceList.clear(); //기존 장치 리스트 초기화
       //SCAN 시작
@@ -115,7 +110,8 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             print(element.peripheral.identifier);
 
             if (remember_device_disk.contains(element.peripheral.identifier)) {
-              var scan_liet =remember_device_disk.where((e) => e == element.peripheral.identifier);
+              var scan_liet = remember_device_disk
+                  .where((e) => e == element.peripheral.identifier);
 
               // connect(element.peripheral.identifier);
               print("device contain");
@@ -189,11 +185,13 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   connect(index) async {
-    print("startin");
+
+    Peripheral peripheral = deviceList[index].peripheral;
+
     if (_connected) {
       //이미 연 결상태면 연결 해제후 종료
       print("already connecting");
-      await _curPeripheral?.disconnectOrCancelConnection();
+      await peripheral.disconnectOrCancelConnection();
       setState(() {
         _connected = false;
       });
@@ -201,12 +199,11 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     }
 
     //선택한 장치의 peripheral 값을 가져온다.
-    Peripheral peripheral = deviceList[index].peripheral;
 
     //해당 장치와의 연결상태를 관촬하는 리스너 실행
     peripheral
         .observeConnectionState(
-        emitCurrentValue: true, completeOnDisconnect: true)
+            emitCurrentValue: true, completeOnDisconnect: true)
         .listen((connectionState) {
       print(
           "Peripheral ${peripheral.identifier} connection state is $connectionState");
@@ -241,7 +238,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           for (var service in services) {
             print("Found service ${service.uuid}");
             List<Characteristic> characteristics =
-            await service.characteristics();
+                await service.characteristics();
             int index = 0;
             for (var characteristic in characteristics) {
               print(index);
@@ -262,14 +259,15 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               MaterialPageRoute(
                   builder: (context) => CarNumberPage(
                       uid: null, peripheral: deviceList[index].peripheral)));
+
+          showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
         });
       });
     });
   }
 
   connect_rember(identifier) async {
-    print("please.....");
-
+    print("start_remeber");
     if (_connected) {
       //이미 연결상태면 연결 해제후 종료
       print("already connecting");
@@ -279,38 +277,33 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       });
       return;
     } else {
-      print("asdasd");
       //hihih for문
       int index = 0;
 
-
       for (var i in deviceList) {
-        if(deviceList[index].peripheral.identifier == identifier){
+        if (deviceList[index].peripheral.identifier == identifier) {
           //선택한 장치의 peripheral 값을 가져온다.
           Peripheral peripheral = deviceList[index].peripheral;
 
           //해당 장치와의 연결상태를 관촬하는 리스너 실행
           peripheral
               .observeConnectionState(
-              emitCurrentValue: true, completeOnDisconnect: true)
+                  emitCurrentValue: true, completeOnDisconnect: true)
               .listen((connectionState) {
             print(
                 "Peripheral ${peripheral.identifier} connection state is $connectionState");
           });
 
           _runWithErrorHandling(() async {
-            print("_runWithErrorHandling");
-            var peripheral_name = peripheral.name;
             //해당 장치와 이미 연결되어 있는지 확인
             bool isConnected = await peripheral.isConnected();
             if (isConnected) {
-              print('device is already connected');
-              showtoast("이미 $peripheral_name 과 연결되어있습니다.");
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           CarNumberPage(uid: null, peripheral: peripheral)));
+              showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
 
               return;
             }
@@ -327,7 +320,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                 for (var service in services) {
                   print("Found service ${service.uuid}");
                   List<Characteristic> characteristics =
-                  await service.characteristics();
+                      await service.characteristics();
                   int index = 0;
                   for (var characteristic in characteristics) {
                     print(index);
@@ -346,39 +339,24 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CarNumberPage(
-                            uid: null, peripheral: deviceList[index].peripheral)));
+                            uid: null,
+                            peripheral: deviceList[index].peripheral)));
+                showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
               });
             });
           });
-
-        }else{
+        } else {
           print(index);
           index++;
         }
-
       }
-
-
-      print("hoowowo");
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 
   Future<void> remember_device(String address) async {
     final remember_address = await SharedPreferences.getInstance();
     remember_address.setString(address, address);
-    print('remember this device');
-    print(remember_address.getString(address));
+    return;
   }
 
   //페이지 구성

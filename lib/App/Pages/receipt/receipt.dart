@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/receipt/receipt_list.dart';
-import 'package:soultec/App/widgets/bluetooth.dart';
 import 'package:soultec/App/widgets/receipt_content.dart';
 import '../../../constants.dart';
 

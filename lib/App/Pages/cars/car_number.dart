@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/App/Pages/fills/fill_start.dart';
 import '../../../constants.dart';
-import '../fills/fill_start.dart';
+import '../fills/fill_setting.dart';
 
 
 class CarNumberPage extends StatefulWidget {
@@ -23,15 +24,18 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
   @override
   void initState() {
-
     check_connected_fun();
     super.initState();
   }
 
   void check_connected_fun() async {
     bool check_connected = await widget.peripheral!.isConnected();
-    print("minseopkdkasdbhjk");
     print(check_connected);
+
+  }
+
+  @override
+  void dispose(){
 
   }
 
@@ -39,8 +43,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // var test = widget.peripheral;
-    var test_i = widget.peripheral!.identifier;
 
     return SafeArea(
       child: Scaffold(
@@ -143,7 +145,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Home_page(
+                            builder: (context) => Fill_start(
                                 uid: widget.uid, car_number: _carnumber.text)));
                   },
                   child:Container(

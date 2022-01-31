@@ -7,17 +7,17 @@ import 'fill_ing.dart';
 
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
-class Home_page extends StatefulWidget {
+class Fill_setting extends StatefulWidget {
   String? uid;
   final String car_number;
 
-  Home_page({required this.uid,required this.car_number});
+  Fill_setting({required this.uid,required this.car_number});
 
   @override
-  _Home_pageState createState() => _Home_pageState();
+  _Fill_setting createState() => _Fill_setting();
 }
 
-class _Home_pageState extends State<Home_page> {
+class _Fill_setting extends State<Fill_setting> {
   int pageIndex = 0;
   TextEditingController inputController = TextEditingController();
 
@@ -73,10 +73,10 @@ class _Home_pageState extends State<Home_page> {
                               'assets/gifs/main_img.gif',
                             )),
                       ),
+
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 5),
-                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        width: size.width * 0.7,
+
+                        width: size.width * 0.6,
                         decoration: BoxDecoration(
                             border: Border.all(
                                 color: Colors.black,
@@ -84,16 +84,16 @@ class _Home_pageState extends State<Home_page> {
                                 width: 1
                             ),
                             color: kPrimaryColor),
-                        child: Center(
                           child: TextFormField(
-                            style: TextStyle(fontFamily: "numberfont",fontSize: 29,),
-                            controller: inputController,
-                            decoration: InputDecoration(
+                            textAlign: TextAlign.center,
+                              style: TextStyle(fontFamily: "numberfont",fontSize: 29,),
+                              controller: inputController,
+                              decoration: InputDecoration(
 
-                              hintText: '',
+                                hintText: '리터량 입력',
+                              ),
                             ),
-                          ),
-                        ),
+
                       ),
                       SizedBox(height: size.height*0.03,),
                       Row(
