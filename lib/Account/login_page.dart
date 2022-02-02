@@ -1,7 +1,15 @@
 
+import 'dart:core';
+import 'dart:convert';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Account/register_page.dart';
+import 'package:soultec/App/Bluetooth/blue_discovery.dart';
+import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,20 +33,42 @@ class _LoginScreenState extends State<LoginScreen>
   final formKey = GlobalKey<FormState>();
   bool _isChecked = false;
 
-  _postRequest() async {
-    //요청 url 가져오기
-    String url = 'http://example.com/login';
+  void save_user(user_id) async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('user_id', user_id);
+    return;
 
-    http.Response response = await http.post(
-      Uri(),
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: <String, String>{
-        'user_id': 'user_id_value',
-        'user_pwd': 'user_pwd_value'
-      },
-    );
+
+  }
+
+  //spring url 입력
+  String url = "http://localhost:8080/login";
+
+  Future save() async {
+    var res = await http.post(Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'email': _emailController.text, 'password': _passwordController.text}));
+    print(res.body);
+
+    if (res.body != null) {
+      if(_isChecked==false){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DiscoveryPage()
+            ));
+      }else{
+        //디스크에 해당 user id,pw 저장후 로그인
+        save_user(_emailController.text);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DiscoveryPage()
+            ));
+      }
+    }else{
+      showAlertDialog(context,"로그인 실패","존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
+    }
   }
 
   @override
@@ -228,27 +258,8 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         InkWell(
                           onTap: () async {
-                            // try {
-                            //   UserCredential userCredential = await FirebaseAuth
-                            //       .instance
-                            //       .signInWithEmailAndPassword(
-                            //           email: _emailController.text,
-                            //           password: _passwordController.text);
-                            //   User? user = userCredential.user;
-                            //   Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //           builder: (context) => Wrapper()));
-                            //   return showtoast("Login!");
-                            // } on FirebaseAuthException catch (e) {
-                            //   print(e.toString());
-                            //   if (e.toString() ==
-                            //       "[firebase_auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
-                            //     return showtoast("네트워크 연결을 확인하세요.");
-                            //   }
-                            //
-                            //   return showtoast("등록된 직원이 아닙니다.관리자에게 문의 하십시오.");
-                            // }
+                            save();
+
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(

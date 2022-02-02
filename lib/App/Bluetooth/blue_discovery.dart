@@ -44,6 +44,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     super.dispose();
   }
 
+
   // BLE 초기화 함수
   void init() async {
     //ble 매니저 생성

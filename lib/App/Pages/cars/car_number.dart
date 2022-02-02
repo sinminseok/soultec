@@ -157,48 +157,48 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
 
 
-              //페어링된 해당 디바이 스페어링 취소
-              // InkWell(
-              //   onTap: () async {
-              //     widget.peripheral!.disconnectOrCancelConnection();
-              //     print("after disconnectinggg");
-              //     bool test_check = await widget.peripheral!.isConnected();
-              //     print(test_check);
-              //   },
-              //   borderRadius: BorderRadius.circular(20),
-              //   child: Container(
-              //     width: size.width * 0.6,
-              //     height: 60,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: Colors.white),
-              //     padding: EdgeInsets.symmetric(vertical: 20),
-              //     alignment: Alignment.center,
-              //     child: Text("페어링 취소",
-              //         style: TextStyle(color: Colors.black, fontSize: 14)),
-              //   ),
-              // ),
+              // 페어링된 해당 디바이 스페어링 취소
+              InkWell(
+                onTap: () async {
+                  widget.peripheral!.disconnectOrCancelConnection();
+                  print("after disconnectinggg");
+                  bool test_check = await widget.peripheral!.isConnected();
+                  print(test_check);
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: size.width * 0.6,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  alignment: Alignment.center,
+                  child: Text("페어링 취소",
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ),
               //
               // //디스크 디바이스 초기화
-              // InkWell(
-              //   onTap: () async {
-              //     final prefs = await SharedPreferences.getInstance();
-              //
-              //      prefs.remove("79:72:18:30:C7:D3");
-              //   },
-              //   borderRadius: BorderRadius.circular(20),
-              //   child: Container(
-              //     width: size.width * 0.6,
-              //     height: 60,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: Colors.white),
-              //     padding: EdgeInsets.symmetric(vertical: 20),
-              //     alignment: Alignment.center,
-              //     child: Text("디스크 초기화",
-              //         style: TextStyle(color: Colors.black, fontSize: 14)),
-              //   ),
-              // ),
+              InkWell(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+
+                   prefs.remove("63:83:A4:59:38:1B");
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: size.width * 0.6,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  alignment: Alignment.center,
+                  child: Text("디스크 초기화",
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ),
             ],
           ),
         ),
