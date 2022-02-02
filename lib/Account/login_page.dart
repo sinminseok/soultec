@@ -1,14 +1,13 @@
-
 import 'dart:core';
 import 'dart:convert';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Account/register_page.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
-import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:http/http.dart' as http;
@@ -23,51 +22,46 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   bool isLogin = true;
-
-  // late Animation<double> containerSize;
-  // late AnimationController animationController;
   Duration animationDuration = Duration(microseconds: 270);
   final formkey = GlobalKey<FormState>();
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _isChecked = false;
 
-  void save_user(user_id) async{
+  void save_user(user_id) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('user_id', user_id);
+    prefs.setInt('login', user_id);
     return;
-
-
   }
 
   //spring url 입력
   String url = "http://localhost:8080/login";
 
   Future save() async {
+    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'email': _emailController.text, 'password': _passwordController.text}));
+        body: json.encode({
+          'email': _emailController.text,
+          'password': _passwordController.text
+        }));
     print(res.body);
 
     if (res.body != null) {
-      if(_isChecked==false){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DiscoveryPage()
-            ));
-      }else{
-        //디스크에 해당 user id,pw 저장후 로그인
+      if (_isChecked) {
         save_user(_emailController.text);
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DiscoveryPage()
-            ));
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage()));
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage()));
+        //디스크에 해당 user id,pw 저장후 로그인
+
       }
-    }else{
-      showAlertDialog(context,"로그인 실패","존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
+    } else {
+      showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
     }
   }
 
@@ -173,11 +167,9 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ],
                         ),
-
                         SizedBox(
                           height: size.height * 0.25,
                         ),
-
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
                           padding:
@@ -259,7 +251,6 @@ class _LoginScreenState extends State<LoginScreen>
                         InkWell(
                           onTap: () async {
                             save();
-
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
