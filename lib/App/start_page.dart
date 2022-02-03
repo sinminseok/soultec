@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 
+import '../wrapper.dart';
+
 
 class Start_page extends StatefulWidget {
   @override
@@ -70,7 +72,7 @@ class _Start_pageState extends State<Start_page> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DiscoveryPage()));
+                                builder: (context) => Wrapper()));
                       },
                       //Text("연결",style: TextStyle(fontWeight: FontWeight.bold),),
                       child: Icon(Icons.bluetooth),

@@ -9,6 +9,9 @@ import 'blue_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoveryPage extends StatefulWidget {
+  String? user;
+  DiscoveryPage({required this.user});
+
   @override
   _DiscoveryPage createState() => new _DiscoveryPage();
 }
@@ -222,7 +225,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    CarNumberPage(uid: null, peripheral: peripheral)));
+                    CarNumberPage(user: widget.user, peripheral: peripheral)));
 
         return;
       }
@@ -259,7 +262,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => CarNumberPage(
-                      uid: null, peripheral: deviceList[index].peripheral)));
+                      user: widget.user, peripheral: deviceList[index].peripheral)));
 
           showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
         });
@@ -303,7 +306,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CarNumberPage(uid: null, peripheral: peripheral)));
+                          CarNumberPage(user: widget.user, peripheral: peripheral)));
               showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
 
               return;
@@ -340,7 +343,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CarNumberPage(
-                            uid: null,
+                            user: widget.user,
                             peripheral: deviceList[index].peripheral)));
                 showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
               });

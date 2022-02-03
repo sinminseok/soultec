@@ -1,18 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/fills/fill_start.dart';
+import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
-import '../fills/fill_setting.dart';
-
+import 'package:http/http.dart' as http;
 
 class CarNumberPage extends StatefulWidget {
-  final String? uid;
+  final String? user;
   final Peripheral? peripheral;
 
-  CarNumberPage({required this.uid, required this.peripheral});
+  CarNumberPage({required this.user, required this.peripheral});
 
   @override
   State<CarNumberPage> createState() => _CarNumberPageState();
@@ -20,6 +21,30 @@ class CarNumberPage extends StatefulWidget {
 
 class _CarNumberPageState extends State<CarNumberPage> {
   TextEditingController _carnumber = TextEditingController();
+
+
+  String url = "http://localhost:8080/carnumber";
+
+  Future post_carnumber() async {
+    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
+    var res = await http.post(Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'car-number': _carnumber.text,
+        }));
+    print(res.body);
+
+    if(res.body == null){
+      showAlertDialog(context,"등록된 차량이 아닙니다.","관리자에게 문의하세요");
+    }else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Fill_start(
+                      uid: widget.user, car_number: _carnumber.text)));
+    }
+  }
 
 
   @override
@@ -31,8 +56,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
   void check_connected_fun() async {
     bool check_connected = await widget.peripheral!.isConnected();
     print(check_connected);
-
   }
+
 
   @override
   void dispose(){
@@ -40,10 +65,10 @@ class _CarNumberPageState extends State<CarNumberPage> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: kPrimaryColor,
@@ -140,13 +165,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
               InkWell(
                   onTap: (){
-                    //data push
+                    post_carnumber();
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Fill_start(
-                                uid: widget.uid, car_number: _carnumber.text)));
                   },
                   child:Container(
                       width: size.width*0.7,

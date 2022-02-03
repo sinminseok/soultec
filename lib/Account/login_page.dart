@@ -4,10 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Account/register_page.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:http/http.dart' as http;
@@ -25,14 +22,14 @@ class _LoginScreenState extends State<LoginScreen>
   Duration animationDuration = Duration(microseconds: 270);
   final formkey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _isChecked = false;
 
   void save_user(user_id) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('login', user_id);
+    prefs.setString('login', user_id);
     return;
   }
 
@@ -44,19 +41,19 @@ class _LoginScreenState extends State<LoginScreen>
     var res = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'email': _emailController.text,
+          'user-id': _userIDController.text,
           'password': _passwordController.text
         }));
     print(res.body);
 
     if (res.body != null) {
       if (_isChecked) {
-        save_user(_emailController.text);
+        save_user(_userIDController.text);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage()));
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:_userIDController.text)));
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage()));
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:_userIDController.text)));
         //디스크에 해당 user id,pw 저장후 로그인
 
       }
@@ -179,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white),
                           child: TextFormField(
-                            controller: _emailController,
+                            controller: _userIDController,
                             decoration: InputDecoration(
                                 icon: Icon(Icons.person, color: Colors.black),
                                 hintText: '기사번호 입력',
@@ -226,21 +223,6 @@ class _LoginScreenState extends State<LoginScreen>
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
-                              ),
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegisterScreen()));
-                                },
-                                child: Container(
-                                    child: Text("회원가입",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12))),
                               ),
                             ],
                           ),
