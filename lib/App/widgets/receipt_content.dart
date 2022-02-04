@@ -6,11 +6,12 @@ import 'package:intl/intl.dart';
 import 'date_widget.dart';
 
 class Recepit_content extends StatelessWidget {
-  final String car_number;
-  final String litter;
+  final String? user_id;
+  final String? car_number;
+  final String? litter;
 
 
-  Recepit_content(this.car_number , this.litter);
+  Recepit_content(this.user_id ,this.car_number , this.litter);
 
 
   @override
@@ -54,7 +55,7 @@ class Recepit_content extends StatelessWidget {
             children: [
               Text("요소수"),
               Text("$litter"),
-              Text("0941"),
+              Text("$user_id"),
               Text("$car_number"),
             ],
           ),

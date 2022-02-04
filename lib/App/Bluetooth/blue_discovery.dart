@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'blue_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoveryPage extends StatefulWidget {
-  String? user;
+  User? user;
   DiscoveryPage({required this.user});
 
   @override
@@ -91,6 +92,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       },
     );
   }
+
 
   //scan 함수
   void scan() async {

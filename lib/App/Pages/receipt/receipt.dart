@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/App/widgets/receipt_content.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import '../../../constants.dart';
 
 class Recepit extends StatefulWidget {
-  final String liter;
-  final String user_name;
-  final String car_number;
+  final String? liter;
+  final User? user;
+  final String? car_number;
 
-  Recepit({required this.user_name, required this.liter,required this.car_number});
+  Recepit({required this.user, required this.liter,required this.car_number});
 
   @override
   _Recepit createState() => _Recepit();
@@ -18,9 +19,10 @@ class Recepit extends StatefulWidget {
 class _Recepit extends State<Recepit> {
   @override
   Widget build(BuildContext context) {
-     String liter = widget.liter;
-     String user_name = widget.user_name;
-     String car_number = widget.car_number;
+     String? liter = widget.liter;
+     String? user_id = widget.user!.id;
+     String? user_name = widget.user!.name;
+     String? car_number = widget.car_number;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -71,7 +73,7 @@ class _Recepit extends State<Recepit> {
                 height: size.height * 0.05,
               ),
 
-              Recepit_content(car_number , liter),
+              Recepit_content(user_id ,car_number , liter),
               //Text(liter),
               SizedBox(
                 height: size.height * 0.05,

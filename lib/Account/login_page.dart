@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'package:http/http.dart' as http;
@@ -22,19 +23,52 @@ class _LoginScreenState extends State<LoginScreen>
   Duration animationDuration = Duration(microseconds: 270);
   final formkey = GlobalKey<FormState>();
 
+  //Form controller
   final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+
+  //User 객체 생성, http get 이후 json을 데이터를 User 객체로 대입
+  User? user;
+
+  //디스크에 저장된 id,pw 저장 변수
+  String? checkbox_state;
+  String? user_id;
+  String? user_pw;
   bool _isChecked = false;
 
-  void save_user(user_id) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('login', user_id);
-    return;
-  }
 
   //spring url 입력
   String url = "http://localhost:8080/login";
+
+
+  void save_user(user_id ,user_pw) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('check_login', "true");
+    prefs.setString('id', user_id);
+    prefs.setString('pw', user_pw);
+    return;
+  }
+
+  //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
+  Future<String?> get_userinfo() async {
+    final prefs = await SharedPreferences.getInstance();
+// counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
+     user_id = prefs.getString('id');
+     user_pw = prefs.getString('pw');
+     return null;
+  }
+
+  //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
+  void check_box()async{
+    final prefs = await SharedPreferences.getInstance();
+    checkbox_state = prefs.getString("check_login");
+
+  }
+
+
+
 
   Future save() async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
@@ -44,16 +78,44 @@ class _LoginScreenState extends State<LoginScreen>
           'user-id': _userIDController.text,
           'password': _passwordController.text
         }));
+
     print(res.body);
 
-    if (res.body != null) {
+    //res body 를 User 로 형변환
+    user = res as User?;
+
+    if (user != null) {
       if (_isChecked) {
-        save_user(_userIDController.text);
+        save_user(_userIDController.text , _passwordController.text);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:_userIDController.text)));
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:user)));
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:_userIDController.text)));
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:user)));
+        //디스크에 해당 user id,pw 저장후 로그인
+
+      }
+    } else {
+      showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
+    }
+  }
+
+  Future auto_login(user_id,user_pw) async {
+    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
+    var res = await http.post(Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'user-id': user_id,
+          'password': user_pw
+        }));
+    print(res.body);
+
+    user = res as User?;
+
+    if (user != null) {
+    {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user: user)));
         //디스크에 해당 user id,pw 저장후 로그인
 
       }
@@ -65,9 +127,15 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    // animationController =
-    //     AnimationController(vsync: this, duration: animationDuration);
+      check_box();
+      if(checkbox_state != null){
+        get_userinfo();
+        auto_login(user_id,user_pw);
+        SystemChrome.setEnabledSystemUIOverlays([]);
+      }
+      //이 코드 뭐임?ㅋㅋ
+      SystemChrome.setEnabledSystemUIOverlays([]);
+
   }
 
   @override

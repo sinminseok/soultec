@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/receipt/receipt.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import '../../../constants.dart';
 
 
 class Filling extends StatefulWidget {
-  final String liter;
-  final String car_number;
-  final String user_name;
+  final String? liter;
+  final String? car_number;
+  final User? user;
 
-  Filling({required this.user_name, required this.liter,required this.car_number});
+  Filling({required this.user, required this.liter,required this.car_number});
 
   @override
   _FillingState createState() => _FillingState();
@@ -23,7 +24,7 @@ class _FillingState extends State<Filling> {
         backgroundColor: kPrimaryColor, body: getBody(size, widget.liter));
   }
 
-  getBody(Size size, String v) {
+  getBody(Size size, String? v) {
     var liter = v;
     return SafeArea(
       child: SingleChildScrollView(
@@ -99,7 +100,7 @@ class _FillingState extends State<Filling> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Recepit(
-                              user_name: widget.user_name,
+                              user: widget.user,
                               liter: widget.liter , car_number: widget.car_number)));
                 },
                   child:Container(

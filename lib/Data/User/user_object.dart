@@ -1,6 +1,7 @@
 
 class User {
   String id;
-  String password;
-  User(this.id, this.password);
+  String token;
+  String name;
+  User(this.id, this.token , this.name);
 }

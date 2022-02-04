@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/fills/fill_setting.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
 import 'fill_ing.dart';
@@ -9,10 +10,10 @@ import 'fill_ing.dart';
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_start extends StatefulWidget {
-  String? uid;
+  User? user;
   final String car_number;
 
-  Fill_start({required this.uid,required this.car_number});
+  Fill_start({required this.user,required this.car_number});
 
   @override
   _Fill_start createState() => _Fill_start();
@@ -26,7 +27,7 @@ class _Fill_start extends State<Fill_start> {
   Widget build(BuildContext context) {
     String car_number = widget.car_number;
     Size size = MediaQuery.of(context).size;
-    String user_name;
+    User? user = widget.user;
 
     return SafeArea(
       child: Scaffold(
@@ -80,7 +81,7 @@ class _Fill_start extends State<Fill_start> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    Fill_setting(uid: null,car_number: widget.car_number,)));
+                                    Fill_setting(user: user,car_number: widget.car_number,)));
                       },
                       child:Container(
                           width: size.width*2,

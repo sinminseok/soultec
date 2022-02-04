@@ -5,12 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/fills/fill_start.dart';
+import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
 import 'package:http/http.dart' as http;
 
 class CarNumberPage extends StatefulWidget {
-  final String? user;
+  final User? user;
   final Peripheral? peripheral;
 
   CarNumberPage({required this.user, required this.peripheral});
@@ -42,7 +43,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
           MaterialPageRoute(
               builder: (context) =>
                   Fill_start(
-                      uid: widget.user, car_number: _carnumber.text)));
+                    user: widget.user, car_number: _carnumber.text,)));
     }
   }
 
