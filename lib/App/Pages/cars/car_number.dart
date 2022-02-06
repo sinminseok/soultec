@@ -24,6 +24,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
   TextEditingController _carnumber = TextEditingController();
 
 
+  //여기서도 user token 값 받아옴
   String url = "http://localhost:8080/carnumber";
 
   Future post_carnumber() async {
@@ -33,17 +34,17 @@ class _CarNumberPageState extends State<CarNumberPage> {
         body: json.encode({
           'car-number': _carnumber.text,
         }));
-    print(res.body);
 
-    if(res.body == null){
-      showAlertDialog(context,"등록된 차량이 아닙니다.","관리자에게 문의하세요");
-    }else {
+    if(res.statusCode == 200){
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   Fill_start(
                     user: widget.user, car_number: _carnumber.text,)));
+
+    }else {
+      showAlertDialog(context,"등록된 차량이 아닙니다.","관리자에게 문의하세요");
     }
   }
 
@@ -166,7 +167,13 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
               InkWell(
                   onTap: (){
-                    post_carnumber();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Fill_start(
+                                  user: widget.user, car_number: _carnumber.text,)));
+                    // post_carnumber();
 
                   },
                   child:Container(
@@ -182,11 +189,11 @@ class _CarNumberPageState extends State<CarNumberPage> {
               InkWell(
                 onTap: () async {
                   widget.peripheral!.disconnectOrCancelConnection();
-                  print("after disconnectinggg");
                   bool test_check = await widget.peripheral!.isConnected();
-                  print(test_check);
                 },
+
                 borderRadius: BorderRadius.circular(20),
+
                 child: Container(
                   width: size.width * 0.6,
                   height: 60,

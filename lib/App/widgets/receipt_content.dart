@@ -9,17 +9,16 @@ class Recepit_content extends StatelessWidget {
   final String? user_id;
   final String? car_number;
   final String? litter;
+  final String? date;
 
 
-  Recepit_content(this.user_id ,this.car_number , this.litter);
+  Recepit_content(this.user_id ,this.car_number , this.litter ,this.date);
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var date = getToday();
 
-    print(date);
     return Container(
 
       color: Colors.white,

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:soultec/App/Pages/receipt/receip_http.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'package:http/http.dart' as http;
 
@@ -17,6 +20,30 @@ class _Receipt_list extends State<Receipt_list> {
 
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
+  String url = "http:해당유저의 이용내역 가져오기";
+
+  var _text = "Http Example";
+  List<Receipt_object> _datas = [];
+
+  void _fetchPosts() async{
+    final response = await http.get(Uri.parse(url)),
+    _text = utf8.decode(response.bodyBytes);
+    var dataObjsJson = jsonDecode(_text)['data'] as List;
+    final List<Receipt_object> parsedResponse =  dataObjsJson.map((e) => Receipt_object.fromJson(e)).toList();
+    setState(() {
+      _datas.clear();
+      _datas.addAll(parsedResponse);
+    });
+    print(parsedResponse);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchPosts();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,19 +135,6 @@ class _Receipt_list extends State<Receipt_list> {
             SizedBox(
               height: size.height*0.05,
             ),
-            // Container(
-            //   color: Colors.white,
-            //   width: size.width*0.8,
-            //   height: size.height*0.4,
-            //   child: ListView.builder(
-            //     padding: const EdgeInsets.all(8),
-            //     itemCount: people.length + 1,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       if (index == 0) return HeaderTile();
-            //       return PersonTile(people[index-1]);
-            //     },
-            //   );
-            // ),
           ],
         ),
 

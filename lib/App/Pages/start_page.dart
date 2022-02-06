@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 
-import '../wrapper.dart';
+import '../../wrapper.dart';
 
 
 class Start_page extends StatefulWidget {

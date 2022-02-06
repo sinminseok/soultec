@@ -67,9 +67,6 @@ class _LoginScreenState extends State<LoginScreen>
 
   }
 
-
-
-
   Future save() async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(url),
@@ -79,12 +76,10 @@ class _LoginScreenState extends State<LoginScreen>
           'password': _passwordController.text
         }));
 
-    print(res.body);
 
-    //res body 를 User 로 형변환
-    user = res as User?;
-
-    if (user != null) {
+  //statusCode 확인해볼것
+    if (res.statusCode == 200) {
+      user =User.fromJson(jsonDecode(res.body));
       if (_isChecked) {
         save_user(_userIDController.text , _passwordController.text);
         Navigator.push(
@@ -116,11 +111,12 @@ class _LoginScreenState extends State<LoginScreen>
     {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => DiscoveryPage(user: user)));
+        return;
         //디스크에 해당 user id,pw 저장후 로그인
 
       }
     } else {
-      showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
+      return showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
     }
   }
 
@@ -197,6 +193,7 @@ class _LoginScreenState extends State<LoginScreen>
                           children: [
                             Column(
                               children: [
+                                SizedBox(height: size.height*0.1,),
                                 Text(
                                   "충전 관리 솔루션",
                                   style: TextStyle(
@@ -224,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen>
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 30.0),
+                              padding: const EdgeInsets.only(left: 30.0,top: 60),
                               child: Image(
                                 image: AssetImage('assets/images/mainimg.png'),
                                 width: 80,
@@ -233,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen>
                           ],
                         ),
                         SizedBox(
-                          height: size.height * 0.25,
+                          height: size.height * 0.15,
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
@@ -244,6 +241,7 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white),
                           child: TextFormField(
+                            style: TextStyle(fontFamily: "numberfont",fontSize: 23),
                             controller: _userIDController,
                             decoration: InputDecoration(
                                 icon: Icon(Icons.person, color: Colors.black),
@@ -260,12 +258,14 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white),
                           child: TextFormField(
+                            style: TextStyle(fontFamily: "numberfont",fontSize: 23),
                             controller: _passwordController,
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword, //inp
                             decoration: InputDecoration(
                                 icon: Icon(Icons.lock, color: Colors.black),
                                 hintText: '비밀번호',
+
                                 border: InputBorder.none),
                           ),
                         ),
@@ -287,34 +287,32 @@ class _LoginScreenState extends State<LoginScreen>
                                   Text(
                                     "로그인상태 유지",
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                      fontSize: 19,
+                                        color: Colors.black,
+                                        fontFamily: "numberfont"),
                                   ),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: size.height * 0.03,
-                        ),
+
                         InkWell(
                           onTap: () async {
-                            save();
+                              // save();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DiscoveryPage(user: null,)));
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
-                            width: size.width * 0.8,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.white),
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            alignment: Alignment.center,
-                            child: Text('로그인',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                          ),
+                              width: size.width*0.7,
+                              height: size.height*0.2,
+                              child: Image.asset(
+                                'assets/images/button_login.png',
+                              )),
                         ),
                       ],
                     ),

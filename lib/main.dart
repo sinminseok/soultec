@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 import 'package:soultec/wrapper.dart';
-import 'App/start_page.dart';
+import 'App/Pages/start_page.dart';
 import 'constants.dart';
 
 void main() async {

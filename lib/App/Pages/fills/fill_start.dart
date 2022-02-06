@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/fills/fill_setting.dart';
 import 'package:soultec/Data/User/user_object.dart';
-import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
-import 'fill_ing.dart';
+
 
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
@@ -66,7 +65,6 @@ class _Fill_start extends State<Fill_start> {
                         width: size.width*0.8,
                         height: size.height*0.3,
                         child: Image.asset(
-
                           'assets/gifs/main_img.gif',
                         )),
                   ),
