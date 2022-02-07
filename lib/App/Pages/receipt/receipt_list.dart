@@ -20,6 +20,7 @@ class _Receipt_list extends State<Receipt_list> {
 
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
+
   String url = "http:해당유저의 이용내역 가져오기";
 
   var _text = "Http Example";
@@ -38,6 +39,12 @@ class _Receipt_list extends State<Receipt_list> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    _datas=[];
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -47,7 +54,9 @@ class _Receipt_list extends State<Receipt_list> {
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: kPrimaryColor,
       body: Column(
@@ -86,11 +95,13 @@ class _Receipt_list extends State<Receipt_list> {
             SizedBox(
               height: size.height * 0.05,
             ),
+
             Text(
               "0123-45gj6789",
               style: TextStyle(
                   color: Colors.red, fontSize: 29, fontFamily: "numberfont"),
             ),
+
             SizedBox(
               height: size.height * 0.05,
             ),
@@ -188,6 +199,8 @@ class _Receipt_list extends State<Receipt_list> {
                     onDateTimeChanged: (DateTime dateTime) {
                       tempPickedDate = dateTime;
                     },
+
+
                   ),
                 ),
               ),

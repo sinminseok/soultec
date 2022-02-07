@@ -54,12 +54,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     //ble 매니저 생성
     await _bleManager
         .createClient(
-            restoreStateIdentifier: "example-restore-state-identifier",
-            restoreStateAction: (peripherals) {
-              peripherals.forEach((peripheral) {
-                print("Restored peripheral: ${peripheral.name}");
-              });
-            })
+        restoreStateIdentifier: "example-restore-state-identifier",
+        restoreStateAction: (peripherals) {
+          peripherals.forEach((peripheral) {
+            print("Restored peripheral: ${peripheral.name}");
+          });
+        })
         .catchError((e) => print("Couldn't create BLE client  $e"))
         .then((_) => _checkPermissions()) //매니저 생성되면 권한 확인
         .catchError((e) => print("Permission check error $e"));
@@ -70,7 +70,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     if (Platform.isAndroid) {
       if (await Permission.contacts.request().isGranted) {}
       Map<Permission, PermissionStatus> statuses =
-          await [Permission.location].request();
+      await [Permission.location].request();
       print(statuses[Permission.location]);
     }
   }
@@ -172,10 +172,58 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   //BLE 연결시 예외 처리를 위한 래핑 함수
-  _runWithErrorHandling(runFunction) async {
+  _runWithErrorHandling(runFunction ,peripheral) async {
     try {
       await runFunction();
     } on BleError catch (e) {
+      print("dfgh");
+      String test = e.reason;
+      print(e.reason);
+      String filiter_string =test.substring(0,7);
+      print(filiter_string);
+      if( filiter_string =="Already"){
+        print("success");
+        //연결 시작!
+        await peripheral.connect().then((_) {
+          //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
+          peripheral
+              .discoverAllServicesAndCharacteristics()
+              .then((_) => peripheral.services())
+              .then((services) async {
+            print("PRINTING SERVICES for ${peripheral.name}");
+            //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
+            for (var service in services) {
+              print("Found service ${service.uuid}");
+              List<Characteristic> characteristics =
+              await service.characteristics();
+              int index = 0;
+              for (var characteristic in characteristics) {
+                print(index);
+                print("${characteristic.uuid}");
+                index++;
+              }
+            }
+            //모든 과정이 마무리되면 연결되었다고 표시
+
+            setState(() {
+              _connected = true;
+            });
+            _bleManager.stopPeripheralScan();
+            print("${peripheral.name   } has CONNECTED");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CarNumberPage(
+                        user: widget.user,
+                        peripheral: peripheral)));
+            showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
+          });
+        });
+        return;
+      }
+
+
+
       print("BleError caught: ${e.errorCode.value} ${e.reason}");
     } catch (e) {
       if (e is Error) {
@@ -209,7 +257,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     //해당 장치와의 연결상태를 관촬하는 리스너 실행
     peripheral
         .observeConnectionState(
-            emitCurrentValue: true, completeOnDisconnect: true)
+        emitCurrentValue: true, completeOnDisconnect: true)
         .listen((connectionState) {
       print(
           "Peripheral ${peripheral.identifier} connection state is $connectionState");
@@ -244,7 +292,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           for (var service in services) {
             print("Found service ${service.uuid}");
             List<Characteristic> characteristics =
-                await service.characteristics();
+            await service.characteristics();
             int index = 0;
             for (var characteristic in characteristics) {
               print(index);
@@ -269,11 +317,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
         });
       });
-    });
+    },peripheral);
   }
 
   connect_rember(identifier) async {
     print("start_remeber");
+
     if (_connected) {
       //이미 연결상태면 연결 해제후 종료
       print("already connecting");
@@ -290,15 +339,19 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         if (deviceList[index].peripheral.identifier == identifier) {
           //선택한 장치의 peripheral 값을 가져온다.
           Peripheral peripheral = deviceList[index].peripheral;
+          print("ssssssss");
+          bool isConnected = await peripheral.isConnected();
+          print("dasddasdfasfasfa   $isConnected");
 
           //해당 장치와의 연결상태를 관촬하는 리스너 실행
           peripheral
               .observeConnectionState(
-                  emitCurrentValue: true, completeOnDisconnect: true)
+              emitCurrentValue: true, completeOnDisconnect: true)
               .listen((connectionState) {
             print(
                 "Peripheral ${peripheral.identifier} connection state is $connectionState");
           });
+
 
           _runWithErrorHandling(() async {
             //해당 장치와 이미 연결되어 있는지 확인
@@ -326,7 +379,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                 for (var service in services) {
                   print("Found service ${service.uuid}");
                   List<Characteristic> characteristics =
-                      await service.characteristics();
+                  await service.characteristics();
                   int index = 0;
                   for (var characteristic in characteristics) {
                     print(index);
@@ -350,7 +403,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                 showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
               });
             });
-          });
+          } , peripheral);
         } else {
           print(index);
           index++;

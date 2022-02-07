@@ -23,7 +23,7 @@ class CarNumberPage extends StatefulWidget {
 class _CarNumberPageState extends State<CarNumberPage> {
   TextEditingController _carnumber = TextEditingController();
 
-
+  bool check_connected=false;
   //여기서도 user token 값 받아옴
   String url = "http://localhost:8080/carnumber";
 
@@ -52,18 +52,15 @@ class _CarNumberPageState extends State<CarNumberPage> {
   @override
   void initState() {
     check_connected_fun();
+    print(widget.peripheral!.identifier);
     super.initState();
   }
 
   void check_connected_fun() async {
-    bool check_connected = await widget.peripheral!.isConnected();
+
+    check_connected = await widget.peripheral!.isConnected();
+    print("msmsmsm");
     print(check_connected);
-  }
-
-
-  @override
-  void dispose(){
-
   }
 
 
@@ -188,8 +185,13 @@ class _CarNumberPageState extends State<CarNumberPage> {
               // 페어링된 해당 디바이 스페어링 취소
               InkWell(
                 onTap: () async {
-                  widget.peripheral!.disconnectOrCancelConnection();
                   bool test_check = await widget.peripheral!.isConnected();
+                  print("before $test_check");
+                  widget.peripheral!.disconnectOrCancelConnection();
+                  print("after$test_check");
+
+                  check_connected_fun();
+                  print("gdsfg");
                 },
 
                 borderRadius: BorderRadius.circular(20),
@@ -212,7 +214,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
 
-                   prefs.remove("63:83:A4:59:38:1B");
+                   prefs.remove("65:1B:CA:9A:D0:80");
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(

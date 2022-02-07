@@ -1,14 +1,14 @@
 
 
 class Receipt_object{
-  final String? Point;
+  final String? Point; //지점
   final String? representative;
-  final String? address;
-  final DateTime? date;
-  final int? Litter;
-  final String? car_number;
-  final String? bus_driver;
-  final String? total_litter;
+  final String? address; //주소
+  final DateTime? date;//날짜
+  final int? Litter; //사용리터(해당 날짜)
+  final String? car_number; //자동차번호
+  final String? user_number; //기사번호
+  final String? total_litter; //전체 사용 리터
 
   Receipt_object(
       {this.Point,
@@ -17,7 +17,7 @@ class Receipt_object{
       this.date,
       this.Litter,
       this.car_number,
-      this.bus_driver,
+      this.user_number,
       this.total_litter});
 
   factory Receipt_object.fromJson(Map<String, dynamic> json) {
@@ -28,7 +28,7 @@ class Receipt_object{
       date: json['date'],
       Litter: json['Litter'],
       car_number: json['car_number'],
-      bus_driver: json['bus_driver'],
+      user_number: json['bus_driver'],
       total_litter: json['total_litter'],
     );
   }
