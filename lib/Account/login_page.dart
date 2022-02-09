@@ -19,14 +19,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
+
   bool isLogin = true;
   Duration animationDuration = Duration(microseconds: 270);
-  final formkey = GlobalKey<FormState>();
+
 
   //Form controller
   final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
 
 
   //User 객체 생성, http get 이후 json을 데이터를 User 객체로 대입
@@ -51,15 +51,6 @@ class _LoginScreenState extends State<LoginScreen>
     return;
   }
 
-  //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
-  Future<String?> get_userinfo() async {
-    final prefs = await SharedPreferences.getInstance();
-// counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
-     user_id = prefs.getString('id');
-     user_pw = prefs.getString('pw');
-     return null;
-  }
-
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box()async{
     final prefs = await SharedPreferences.getInstance();
@@ -67,7 +58,18 @@ class _LoginScreenState extends State<LoginScreen>
 
   }
 
-  Future save() async {
+  //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
+  Future<String?> get_userinfo() async {
+    final prefs = await SharedPreferences.getInstance();
+// counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
+    user_id = prefs.getString('id');
+    user_pw = prefs.getString('pw');
+    return null;
+  }
+
+
+
+  Future login() async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -77,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen>
         }));
 
 
-  //statusCode 확인해볼것
+    //statusCode 확인해볼것
     if (res.statusCode == 200) {
       user =User.fromJson(jsonDecode(res.body));
       if (_isChecked) {
@@ -108,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen>
     user = res as User?;
 
     if (user != null) {
-    {
+      {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => DiscoveryPage(user: user)));
         return;
@@ -123,14 +125,14 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-      check_box();
-      if(checkbox_state != null){
-        get_userinfo();
-        auto_login(user_id,user_pw);
-        SystemChrome.setEnabledSystemUIOverlays([]);
-      }
-      //이 코드 뭐임?ㅋㅋ
+    check_box();
+    if(checkbox_state != null){
+      get_userinfo();
+      auto_login(user_id,user_pw);
       SystemChrome.setEnabledSystemUIOverlays([]);
+    }
+    //이 코드 뭐임?ㅋㅋ
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
   }
 
@@ -235,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
                           padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           width: size.width * 0.8,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
@@ -252,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
                           padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           width: size.width * 0.8,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
@@ -287,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   Text(
                                     "로그인상태 유지",
                                     style: TextStyle(
-                                      fontSize: 19,
+                                        fontSize: 19,
                                         color: Colors.black,
                                         fontFamily: "numberfont"),
                                   ),
@@ -299,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen>
 
                         InkWell(
                           onTap: () async {
-                              // save();
+                            // save();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

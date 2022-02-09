@@ -1,6 +1,9 @@
 
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import '../../../constants.dart';
@@ -8,11 +11,13 @@ import 'fill_ing.dart';
 
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
+
 class Fill_setting extends StatefulWidget {
   final User? user;
   final String car_number;
+  final Peripheral? peripheral;
 
-  Fill_setting({required this.user,required this.car_number});
+  Fill_setting({required this.user,required this.car_number,required this.peripheral});
 
   @override
   _Fill_setting createState() => _Fill_setting();
@@ -23,11 +28,55 @@ class _Fill_setting extends State<Fill_setting> {
   TextEditingController inputController = TextEditingController();
 
 
+  String BLE_SERVICE_UUID = "";
+  String BLE_RX_CHARACTERISTIC ="";
+
+  post_ble(peripheral_,LITTER){
+    //보낼때
+    peripheral_!.writeCharacteristic(
+        BLE_SERVICE_UUID,
+        BLE_RX_CHARACTERISTIC,
+        Uint8List.fromList(LITTER.codeUnits),
+        false);
+  }
+
+  scan_uuids()async{
+
+    Peripheral? peripheral = widget.peripheral;
+
+    await peripheral!.connect().then((_) {
+      //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
+      peripheral
+          .discoverAllServicesAndCharacteristics()
+          .then((_) => peripheral.services())
+          .then((services) async {
+        print("PRINTING SERVICES for ${peripheral.name}");
+        //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
+        for (var service in services) {
+          print("Found service ${service.uuid}");
+          List<Characteristic> characteristics =
+          await service.characteristics();
+          int index = 0;
+          for (var characteristic in characteristics) {
+            print(index);
+            print("${characteristic.uuid}");
+            index++;
+          }
+        }
+        //모든 과정이 마무리되면 연결되었다고 표시
+
+      });
+    });
+  }
+
+
+
   final values = ["가득", "리터"];
   String? _select_value;
 
   @override
   Widget build(BuildContext context) {
+    Peripheral? peripheral = widget.peripheral;
     String car_number = widget.car_number;
     Size size = MediaQuery.of(context).size;
     User? user = widget.user;
@@ -160,7 +209,7 @@ class _Fill_setting extends State<Fill_setting> {
                                     MaterialPageRoute(
                                         builder: (context) => Filling(
                                           user: user,
-                                          liter: inputController.text,car_number: widget.car_number,)));
+                                          liter: inputController.text,car_number: widget.car_number,peripheral : widget.peripheral)));
                               } else {
                                 showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
                               }
@@ -169,7 +218,7 @@ class _Fill_setting extends State<Fill_setting> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          Filling(user: user, liter: "가득",car_number:widget.car_number)));
+                                          Filling(user: user, liter: "가득",car_number:widget.car_number,peripheral:widget.peripheral)));
                             } else if (_select_value == "리터") {
                               if (!inputController.text.isEmpty) {
                                 Navigator.push(
@@ -177,7 +226,7 @@ class _Fill_setting extends State<Fill_setting> {
                                     MaterialPageRoute(
                                         builder: (context) => Filling(
                                             user: user,
-                                            liter: inputController.text,car_number : widget.car_number)));
+                                            liter: inputController.text,car_number : widget.car_number ,peripheral:widget.peripheral)));
                               } else {
                                 showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
                               }

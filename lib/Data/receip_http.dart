@@ -1,5 +1,3 @@
-
-
 class Receipt_object{
   final String? Point; //지점
   final String? representative;

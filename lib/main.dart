@@ -9,6 +9,7 @@ import 'constants.dart';
 void main() async {
   //firebase를 사용 하기 위해선 main 메소드에 알려줘야한다.
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MyApp(),
   );

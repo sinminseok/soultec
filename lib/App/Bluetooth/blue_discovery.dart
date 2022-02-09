@@ -29,6 +29,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   List<BleDeviceItem> deviceList = []; // BLE 장치 리스트 변수
   String _statusText = '';
 
+
   @override
   void initState() {
     init();
@@ -36,7 +37,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     super.initState();
   }
 
-  //
+
   @override
   void dispose() {
     //dispose 안해주면 충돌할수 있음
@@ -44,7 +45,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     _isScanning = false;
     _connected = false;
     _bleManager.destroyClient();
-
     super.dispose();
   }
 
@@ -87,7 +87,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             onTap: () {
               // 리스트중 한개를 탭(터치) 하면 해당 디바이스와 연결을 시도한다.
               connect(index);
-              print("before remember_device");
+
             });
       },
     );
@@ -119,12 +119,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               var scan_liet = remember_device_disk
                   .where((e) => e == element.peripheral.identifier);
 
-              // connect(element.peripheral.identifier);
-              print("device contain");
-
               connect_rember(scan_liet.single);
-
-              print("finish connect_remember");
 
               _bleManager.stopPeripheralScan();
 
@@ -172,19 +167,17 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   }
 
   //BLE 연결시 예외 처리를 위한 래핑 함수
-  _runWithErrorHandling(runFunction ,peripheral) async {
+  _runWithErrorHandling(runFunction,peripheral) async {
     try {
       await runFunction();
     } on BleError catch (e) {
-      print("dfgh");
       String test = e.reason;
-      print(e.reason);
       String filiter_string =test.substring(0,7);
-      print(filiter_string);
       if( filiter_string =="Already"){
         print("success");
         //연결 시작!
-        await peripheral.connect().then((_) {
+
+        await peripheral.connect().then((_){
           //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
           peripheral
               .discoverAllServicesAndCharacteristics()
@@ -205,27 +198,26 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             }
             //모든 과정이 마무리되면 연결되었다고 표시
 
-            setState(() {
+            setState((){
               _connected = true;
             });
+
             _bleManager.stopPeripheralScan();
-            print("${peripheral.name   } has CONNECTED");
+            print("${peripheral.name} has CONNECTED");
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CarNumberPage(
                         user: widget.user,
                         peripheral: peripheral)));
-            showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
+            showAlertDialog(context,"이미 페어링 된 기기가 있습니다.","${peripheral.name}");
           });
         });
         return;
       }
-
-
-
       print("BleError caught: ${e.errorCode.value} ${e.reason}");
     } catch (e) {
+
       if (e is Error) {
         debugPrintStack(stackTrace: e.stackTrace);
       }
@@ -252,9 +244,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       return;
     }
 
-    //선택한 장치의 peripheral 값을 가져온다.
-
-    //해당 장치와의 연결상태를 관촬하는 리스너 실행
     peripheral
         .observeConnectionState(
         emitCurrentValue: true, completeOnDisconnect: true)
@@ -264,12 +253,10 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     });
 
     _runWithErrorHandling(() async {
-      print("_runWithErrorHandling");
       var peripheral_name = peripheral.name;
       //해당 장치와 이미 연결되어 있는지 확인
       bool isConnected = await peripheral.isConnected();
       if (isConnected) {
-        print('device is already connected');
         showtoast("이미 $peripheral_name 과 연결되어있습니다.");
         Navigator.push(
             context,
@@ -305,6 +292,8 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           setState(() {
             _connected = true;
           });
+
+
           _bleManager.stopPeripheralScan();
           print("${peripheral.name} has CONNECTED");
           remember_device(deviceList[index].peripheral.identifier);

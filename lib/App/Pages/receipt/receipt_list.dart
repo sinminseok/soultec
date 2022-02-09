@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:soultec/App/Pages/receipt/receip_http.dart';
+import 'package:soultec/Data/receip_http.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'package:http/http.dart' as http;
 
@@ -26,7 +26,8 @@ class _Receipt_list extends State<Receipt_list> {
   var _text = "Http Example";
   List<Receipt_object> _datas = [];
 
-  void _fetchPosts() async{
+  void load_receipt_list() async{
+
     final response = await http.get(Uri.parse(url)),
     _text = utf8.decode(response.bodyBytes);
     var dataObjsJson = jsonDecode(_text)['data'] as List;
@@ -35,7 +36,9 @@ class _Receipt_list extends State<Receipt_list> {
       _datas.clear();
       _datas.addAll(parsedResponse);
     });
+
     print(parsedResponse);
+
   }
 
   @override
@@ -48,7 +51,7 @@ class _Receipt_list extends State<Receipt_list> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchPosts();
+    load_receipt_list();
   }
 
 

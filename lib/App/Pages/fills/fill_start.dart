@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+
 import 'package:soultec/App/Pages/fills/fill_setting.dart';
 import 'package:soultec/Data/User/user_object.dart';
 import '../../../constants.dart';
@@ -10,9 +12,10 @@ import '../../../constants.dart';
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_start extends StatefulWidget {
   User? user;
+  Peripheral? peripheral;
   final String car_number;
 
-  Fill_start({required this.user,required this.car_number});
+  Fill_start({required this.user,required this.car_number,required this.peripheral});
 
   @override
   _Fill_start createState() => _Fill_start();
@@ -74,13 +77,15 @@ class _Fill_start extends State<Fill_start> {
 
 
                   InkWell(
+
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    Fill_setting(user: user,car_number: widget.car_number,)));
+                                    Fill_setting(user: user,car_number: widget.car_number,peripheral:widget.peripheral)));
                       },
+
                       child:Container(
                           width: size.width*2,
                           height: size.height*0.2,

@@ -24,7 +24,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
   TextEditingController _carnumber = TextEditingController();
 
   bool check_connected=false;
+
   //여기서도 user token 값 받아옴
+
   String url = "http://localhost:8080/carnumber";
 
   Future post_carnumber() async {
@@ -41,7 +43,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
           MaterialPageRoute(
               builder: (context) =>
                   Fill_start(
-                    user: widget.user, car_number: _carnumber.text,)));
+                    user: widget.user, car_number: _carnumber.text, peripheral:widget.peripheral)));
 
     }else {
       showAlertDialog(context,"등록된 차량이 아닙니다.","관리자에게 문의하세요");
@@ -53,6 +55,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
   void initState() {
     check_connected_fun();
     print(widget.peripheral!.identifier);
+    scan_uuids();
     super.initState();
   }
 
@@ -61,6 +64,35 @@ class _CarNumberPageState extends State<CarNumberPage> {
     check_connected = await widget.peripheral!.isConnected();
     print("msmsmsm");
     print(check_connected);
+  }
+
+  scan_uuids()async{
+
+      Peripheral? peripheral = widget.peripheral;
+
+    await peripheral!.connect().then((_) {
+      //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
+      peripheral
+          .discoverAllServicesAndCharacteristics()
+          .then((_) => peripheral.services())
+          .then((services) async {
+        print("PRINTING SERVICES for ${peripheral.name}");
+        //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
+        for (var service in services) {
+          print("Found service ${service.uuid}");
+          List<Characteristic> characteristics =
+          await service.characteristics();
+          int index = 0;
+          for (var characteristic in characteristics) {
+            print(index);
+            print("${characteristic.uuid}");
+            index++;
+          }
+        }
+        //모든 과정이 마무리되면 연결되었다고 표시
+
+      });
+    });
   }
 
 
@@ -136,7 +168,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     style: TextStyle(fontFamily: "numberfont",fontSize: 21,),
                     controller: _carnumber,
                     decoration: InputDecoration(
-
                       hintText: '차량번호 4 자리 입력',
                     ),
                   ),
@@ -169,7 +200,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 Fill_start(
-                                  user: widget.user, car_number: _carnumber.text,)));
+                                  user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
                     // post_carnumber();
 
                   },
@@ -185,13 +216,14 @@ class _CarNumberPageState extends State<CarNumberPage> {
               // 페어링된 해당 디바이 스페어링 취소
               InkWell(
                 onTap: () async {
+
                   bool test_check = await widget.peripheral!.isConnected();
                   print("before $test_check");
                   widget.peripheral!.disconnectOrCancelConnection();
                   print("after$test_check");
 
                   check_connected_fun();
-                  print("gdsfg");
+
                 },
 
                 borderRadius: BorderRadius.circular(20),
@@ -207,6 +239,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   child: Text("페어링 취소",
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
+
+
               ),
               //
               // //디스크 디바이스 초기화
