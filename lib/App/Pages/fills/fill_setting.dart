@@ -27,6 +27,11 @@ class _Fill_setting extends State<Fill_setting> {
   int pageIndex = 0;
   TextEditingController inputController = TextEditingController();
 
+  @override
+  initState(){
+    super.initState();
+    scan_uuids();
+  }
 
   String BLE_SERVICE_UUID = "";
   String BLE_RX_CHARACTERISTIC ="";
@@ -69,14 +74,14 @@ class _Fill_setting extends State<Fill_setting> {
     });
   }
 
-
-
   final values = ["가득", "리터"];
   String? _select_value;
 
   @override
   Widget build(BuildContext context) {
+
     Peripheral? peripheral = widget.peripheral;
+
     String car_number = widget.car_number;
     Size size = MediaQuery.of(context).size;
     User? user = widget.user;

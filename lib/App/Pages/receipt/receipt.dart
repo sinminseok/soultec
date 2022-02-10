@@ -26,20 +26,6 @@ class _Recepit extends State<Recepit> {
   String post_url = "http:local/8080'";
   var todate = getToday();
 
-//http post
-  Future post_receipt(liter,date,car_number,user_id,) async {
-    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(post_url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'liter': liter,
-          'date': date,
-          'car_number':car_number,
-          'user_id':user_id,
-        }));
-    print(res.body);
-
-  }
 
 
 

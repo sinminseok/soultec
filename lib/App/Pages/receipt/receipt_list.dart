@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:soultec/Data/receip_http.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'package:http/http.dart' as http;
 
@@ -21,37 +22,28 @@ class _Receipt_list extends State<Receipt_list> {
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
 
-  String url = "http:해당유저의 이용내역 가져오기";
+  var user_use_data = [];
 
-  var _text = "Http Example";
-  List<Receipt_object> _datas = [];
 
-  void load_receipt_list() async{
+  //검색후 필터링된 itembuilder로 list 화
+  var filter_use_data = [];
 
-    final response = await http.get(Uri.parse(url)),
-    _text = utf8.decode(response.bodyBytes);
-    var dataObjsJson = jsonDecode(_text)['data'] as List;
-    final List<Receipt_object> parsedResponse =  dataObjsJson.map((e) => Receipt_object.fromJson(e)).toList();
-    setState(() {
-      _datas.clear();
-      _datas.addAll(parsedResponse);
-    });
-
-    print(parsedResponse);
-
+  scan_day_filiter(date){
+    //user_use_data for 문으로 돌려 해당 날짜 필터링
   }
+
 
   @override
   void dispose(){
     super.dispose();
-    _datas=[];
+
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    load_receipt_list();
+    //Http_services().load_receipt_list();
   }
 
 

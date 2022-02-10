@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:soultec/App/Pages/receipt/receipt.dart';
 import 'package:soultec/Data/User/user_object.dart';
+import 'package:loading_gifs/loading_gifs.dart';
 import '../../../constants.dart';
 
 
@@ -20,31 +21,49 @@ class Filling extends StatefulWidget {
 }
 
 class _FillingState extends State<Filling> {
+  //노르딕 디바이스 연결
   String BLE_SERVICE_UUID = "";
   String BLE_TX_CHARACTERISTIC="";
+
+  // 스트림 사용법
+  // var streamIter = Stream.fromIterable([10,20,30,40,50]);
+  // StreamSubscription subscription = streamIter.listen((int number) => print(number));
+  // subscription.cancel() // 연결 해제
+  //
 
   Stream<int>? stream;
 
   StreamSubscription? monitoringStreamSubscription;
 
-  post_ble(peripheral,LITTER)async{
+  @override
+  initState(){
+    super.initState();
+    get_ble(widget.peripheral, widget.liter);
+  }
+
+  get_ble(peripheral,litter)async{
+    print("fasf");
+
+    //리터값이 가득일떄랑 선택한 리터값 각각의 보내는 데이터 필터링 해주는 코드 작성해야함ㅋ
     //보낼때
-//받는 캐리터리스틱 모니터링 ON 함수, 보통 Notification Enable 정도로 생각하면될 것 같다.
+    //해당 서비스, 캐릭터 리스틱 uuid 와 연결해 데이터를 받아오는 var 생성 여
     var characteristicUpdates = peripheral.monitorCharacteristic(
         BLE_SERVICE_UUID,
         BLE_TX_CHARACTERISTIC);
 
-//데이터 받는 리스너 핸들 변수
+    //데이터 받는 리스너 핸들 변수
 
-
-//이미 리스너가 있다면 취소
+    //이미 리스너가 있다면 취소
     await monitoringStreamSubscription!.cancel(); // ?. = 해당객체가 null이면 무시하고 넘어감.
 
-    stream = characteristicUpdates.listen((value) {
-    print("read data : ${value.value}");  //데이터 출력
+    //스트림 리스너 생성
+    monitoringStreamSubscription = characteristicUpdates.listen((value) {
+    print("read data : ${value.value}");
+    stream = value.value;//데이터 출력
     },
     onError: (error) {
     print("Error while monitoring characteristic \n$error"); //실패시
+      stream = null;
     },
     cancelOnError: true, //에러 발생시 자동으로 listen 취소
     );
@@ -64,7 +83,9 @@ class _FillingState extends State<Filling> {
     return SafeArea(
       child: StreamBuilder(
         stream: stream,
-        builder: (context, snapshot) {
+
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          //if(snapshot.hasError) VV
           return SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,10 +147,20 @@ class _FillingState extends State<Filling> {
                       SizedBox(width: size.width * 0.4),
                       Text("LITTER",style: TextStyle(fontFamily: "numberfont",fontWeight: FontWeight.bold,fontSize: 24,color: Colors.red),),
 
+
+
+
                     ],
                   ),
-                  SizedBox(height: size.height*0.4,),
+                  SizedBox(height: size.height*0.07,),
+                  Container(
+                      width: size.width*0.6,
+                      child: Image.asset(
+                        'assets/gifs/load2.GIF',
+                      )),
+                  SizedBox(height: size.height*0.15,),
                   //Text(liter),
+
 
                   InkWell(
                     onTap: () {
@@ -149,6 +180,7 @@ class _FillingState extends State<Filling> {
                   ),
                 ]),
           );
+          //if(if (snapshot.connectionState == ConnectionState.active)
         }
       ),
     );

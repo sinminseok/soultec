@@ -44,6 +44,7 @@ dependencies:
   flutter_svg: ^1.0.0
   animations: ^2.0.2
   table_calendar: ^3.0.3
+  loading_gifs: ^0.3.0
 
   shared_preferences: ^2.0.12
   http: ^0.13.4
@@ -54,7 +55,6 @@ dependencies:
 
   intl: ^0.17.0
   syncfusion_flutter_datepicker: ^19.4.43
-
   permission_handler: ^8.3.0
   flutter_ble_lib: ^2.3.2
 
@@ -94,6 +94,7 @@ flutter:
     - assets/images/nfc.png
     - assets/images/gtbimg.png
     - assets/gifs/car_number.gif
+    - assets/gifs/load2.GIF
     - assets/gifs/main_img.gif
     - assets/images/button_login.png
     - assets/images/play_button.png

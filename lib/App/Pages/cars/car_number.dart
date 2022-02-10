@@ -25,30 +25,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
   bool check_connected=false;
 
-  //여기서도 user token 값 받아옴
-
-  String url = "http://localhost:8080/carnumber";
-
-  Future post_carnumber() async {
-    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'car-number': _carnumber.text,
-        }));
-
-    if(res.statusCode == 200){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  Fill_start(
-                    user: widget.user, car_number: _carnumber.text, peripheral:widget.peripheral)));
-
-    }else {
-      showAlertDialog(context,"등록된 차량이 아닙니다.","관리자에게 문의하세요");
-    }
-  }
 
 
   @override
@@ -72,8 +48,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
     await peripheral!.connect().then((_) {
       //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
-      peripheral
-          .discoverAllServicesAndCharacteristics()
+      peripheral.discoverAllServicesAndCharacteristics()
           .then((_) => peripheral.services())
           .then((services) async {
         print("PRINTING SERVICES for ${peripheral.name}");

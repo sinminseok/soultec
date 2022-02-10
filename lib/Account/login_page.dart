@@ -1,14 +1,15 @@
 import 'dart:core';
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 import 'package:soultec/Data/User/user_object.dart';
 import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart';
-import 'package:http/http.dart' as http;
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,105 +32,48 @@ class _LoginScreenState extends State<LoginScreen>
 
   //User 객체 생성, http get 이후 json을 데이터를 User 객체로 대입
   User? user;
+  //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
+  var disk_user_info = [];
 
   //디스크에 저장된 id,pw 저장 변수
   String? checkbox_state;
-  String? user_id;
-  String? user_pw;
+  String? user_id_disk;
+  String? user_pw_disk;
   bool _isChecked = false;
+  bool auth_login = false;
+
+  bool? http_return;
 
 
   //spring url 입력
   String url = "http://localhost:8080/login";
 
 
-  void save_user(user_id ,user_pw) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('check_login', "true");
-    prefs.setString('id', user_id);
-    prefs.setString('pw', user_pw);
-    return;
-  }
+
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box()async{
     final prefs = await SharedPreferences.getInstance();
     checkbox_state = prefs.getString("check_login");
-
-  }
-
-  //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
-  Future<String?> get_userinfo() async {
-    final prefs = await SharedPreferences.getInstance();
-// counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
-    user_id = prefs.getString('id');
-    user_pw = prefs.getString('pw');
-    return null;
   }
 
 
 
-  Future login() async {
-    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user-id': _userIDController.text,
-          'password': _passwordController.text
-        }));
-
-
-    //statusCode 확인해볼것
-    if (res.statusCode == 200) {
-      user =User.fromJson(jsonDecode(res.body));
-      if (_isChecked) {
-        save_user(_userIDController.text , _passwordController.text);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:user)));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user:user)));
-        //디스크에 해당 user id,pw 저장후 로그인
-
-      }
-    } else {
-      showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
-    }
-  }
-
-  Future auto_login(user_id,user_pw) async {
-    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user-id': user_id,
-          'password': user_pw
-        }));
-    print(res.body);
-
-    user = res as User?;
-
-    if (user != null) {
-      {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DiscoveryPage(user: user)));
-        return;
-        //디스크에 해당 user id,pw 저장후 로그인
-
-      }
-    } else {
-      return showAlertDialog(context, "로그인 실패", "존재하지 않은 계정입니다. \n 관리자에게 문의하세요");
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     check_box();
     if(checkbox_state != null){
-      get_userinfo();
-      auto_login(user_id,user_pw);
+      disk_user_info =Http_services().get_userinfo() as List;
+      user_id_disk = disk_user_info[0];
+      user_pw_disk == disk_user_info[1];
+      //initState 에서 비동기로 반환한 객체 가져와지나? 나주엥 연동후ㅜ 테스트
+      user =Http_services().auto_login(user_id_disk, user_pw_disk) as User?;
+      auth_login = true;
       SystemChrome.setEnabledSystemUIOverlays([]);
+    }else{
+      auth_login= false;
     }
     //이 코드 뭐임?ㅋㅋ
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -138,7 +82,11 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
+    auth_login = false;
     // animationController.dispose();
+    user = null;
+    disk_user_info=[];
+    _isChecked = false;
     super.dispose();
   }
 
@@ -148,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen>
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
     return SafeArea(
-      child: Scaffold(
+      child: auth_login ? DiscoveryPage(user: user) :Scaffold(
         backgroundColor: kPrimaryColor,
         body: Stack(
           children: <Widget>[
@@ -301,12 +249,24 @@ class _LoginScreenState extends State<LoginScreen>
 
                         InkWell(
                           onTap: () async {
-                            // save();
+
+                            // user = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
+                            // if(http_return != null){
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) =>
+                            //               DiscoveryPage(user: user,)));
+                            // }else{
+                            //   return showAlertDialog(context, "로그인 실패", " 관리자에게 문의 하세요");
+                            // }
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         DiscoveryPage(user: null,)));
+
                           },
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
