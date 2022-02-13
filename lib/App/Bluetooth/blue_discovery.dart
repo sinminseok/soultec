@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
-import 'package:soultec/Data/User/user_object.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/constants.dart';
 import 'blue_item.dart';
@@ -168,13 +168,13 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
   //BLE 연결시 예외 처리를 위한 래핑 함수
   _runWithErrorHandling(runFunction,peripheral) async {
+
     try {
       await runFunction();
     } on BleError catch (e) {
       String test = e.reason;
       String filiter_string =test.substring(0,7);
       if( filiter_string =="Already"){
-        print("success");
         //연결 시작!
 
         await peripheral.connect().then((_){
@@ -204,6 +204,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
             _bleManager.stopPeripheralScan();
             print("${peripheral.name} has CONNECTED");
+            print("vvvv");
             Navigator.push(
                 context,
                 MaterialPageRoute(

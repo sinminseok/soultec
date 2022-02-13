@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/App/widgets/date_widget.dart';
 import 'package:soultec/App/widgets/receipt_content.dart';
-import 'package:soultec/Data/User/user_object.dart';
+import 'package:soultec/Data/Object/user_object.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
-import 'package:http/http.dart' as http;
 
 
 class Recepit extends StatefulWidget {
@@ -27,16 +25,16 @@ class _Recepit extends State<Recepit> {
   var todate = getToday();
 
 
+  @override
+  void initState(){
+    super.initState();
+     // Http_services().post_receipt(widget.liter, date, widget.car_number, widget.user!.userID);
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    print(todate.runtimeType);
-    String? liter = widget.liter;
-    // String? user_id = widget.user!.id;
-    // String? user_name = widget.user!.name;
-    String? user_id = "1786";
-    String? car_number = widget.car_number;
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -87,7 +85,7 @@ class _Recepit extends State<Recepit> {
                 height: size.height * 0.05,
               ),
 
-              Recepit_content(user_id ,car_number , liter ,todate),
+              // Recepit_content( , ,  ,todate),
               //Text(liter),
               SizedBox(
                 height: size.height * 0.05,
@@ -95,12 +93,13 @@ class _Recepit extends State<Recepit> {
 
               InkWell(
                 onTap: (){
+
                   // post_receipt(widget.liter,date,,,);
                   //http post 이용내역
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Receipt_list()));
+                          builder: (context) => Receipt_list(user: widget.user,)));
                 },
                 child: Container(
                   width: size.width * 0.8,

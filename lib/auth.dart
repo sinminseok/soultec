@@ -11,14 +11,14 @@
 //     return _auth.authStateChanges().map(userFromFirebase);
 //   }
 //
-//   DatabaseService? userFromFirebase(User? user){
+//   DatabaseService? userFromFirebase(Object? user){
 //     return user != null ? DatabaseService(uid: user.uid) : null;
 //   }
 //   Future register(String email,String password,String name) async{
 //     try{
 //       print('register...');
 //       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-//       User? user = userCredential.user;
+//       Object? user = userCredential.user;
 //       DatabaseService(uid: user!.uid).updateUserData(email,password,name);
 //       return userFromFirebase(user);
 //     }catch(e){

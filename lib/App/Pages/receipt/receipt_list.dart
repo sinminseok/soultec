@@ -4,20 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:soultec/Data/receip_http.dart';
+import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
+import 'package:soultec/Data/Object/receipt_object.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'package:http/http.dart' as http;
 
 
 class Receipt_list extends StatefulWidget {
+  User? user;
+
+  Receipt_list({required this.user});
   @override
   State<Receipt_list> createState() => _Receipt_list();
 }
 
 class _Receipt_list extends State<Receipt_list> {
   TextEditingController _BirthdayController =
-      TextEditingController(text: '시간 / 날짜');
+      TextEditingController(text: '시간 / 날짜' ,);
 
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
@@ -25,11 +30,28 @@ class _Receipt_list extends State<Receipt_list> {
   var user_use_data = [];
 
 
-  //검색후 필터링된 itembuilder로 list 화
-  var filter_use_data = [];
+
 
   scan_day_filiter(date){
+    var filter_use_data = [];
     //user_use_data for 문으로 돌려 해당 날짜 필터링
+      for(var i=0;i<user_use_data.length;i++){
+        user_use_data[i].date == date;
+        filter_use_data.add(user_use_data[i]);
+
+      }
+      return filter_use_data;
+
+  }
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // user_use_data = Http_services().load_receipt_list() as List;
   }
 
 
@@ -37,13 +59,6 @@ class _Receipt_list extends State<Receipt_list> {
   void dispose(){
     super.dispose();
 
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //Http_services().load_receipt_list();
   }
 
 
@@ -123,7 +138,9 @@ class _Receipt_list extends State<Receipt_list> {
                   width: 10,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    scan_day_filiter(_BirthdayController.text);
+                  },
                   child: Container(
                     color: Colors.redAccent,
                     width: size.width * 0.15,
@@ -132,7 +149,8 @@ class _Receipt_list extends State<Receipt_list> {
                         child: Text(
                       "조회",
                       style:
-                          TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+
+                          TextStyle(fontSize: 19, fontWeight: FontWeight.bold , fontFamily: "numberfont"),
                     )),
                   ),
                 ),
@@ -140,6 +158,37 @@ class _Receipt_list extends State<Receipt_list> {
             ),
             SizedBox(
               height: size.height*0.05,
+            ),
+            Expanded(
+              child: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: user_use_data.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 50,right: 50,bottom: 10),
+            child: Container(
+              color: Colors.white,
+              width: size.width*0.8,
+              height: size.height*0.07,
+              child: InkWell(
+                  onTap: (){
+                    //user_use_data[index].litter
+                    Recepit_detail(liter: "12",user:widget.user, car_number: "1234");
+                    //receipt detail
+                  },
+
+                        child: ListTile(
+
+                          title: Center(child: Text('2021-10-31 ---- 35리터', style: TextStyle(fontFamily: "numberfont"),)),
+
+
+                  ),
+
+              ),
+            ),
+          );
+        },
+      ),
             ),
           ],
         ),

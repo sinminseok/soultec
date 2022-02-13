@@ -5,8 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/fills/fill_start.dart';
-import 'package:soultec/Data/User/user_object.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
+
 import '../../../constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -170,13 +172,25 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
               InkWell(
                   onTap: (){
+                    // var return_carnumber = Http_services().post_carnumber(_carnumber.text);
+                    // if(return_carnumber == null){
+                    //   showAlertDialog(context , "등록되지 않은 차량입니다", "차량 번호를 다시 확인해주세요");
+                    // }else{
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) =>
+                    //               Fill_start(
+                    //                 user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
+                    //
+                    // }
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 Fill_start(
                                   user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
-                    // post_carnumber();
+
 
                   },
                   child:Container(
@@ -223,7 +237,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
 
-                   prefs.remove("65:1B:CA:9A:D0:80");
+                   prefs.remove("66:4E:55:E5:AE:E6");
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(

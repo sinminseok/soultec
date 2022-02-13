@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:soultec/App/Pages/receipt/receipt.dart';
-import 'package:soultec/Data/User/user_object.dart';
-import 'package:loading_gifs/loading_gifs.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import '../../../constants.dart';
 
 
@@ -25,16 +24,12 @@ class _FillingState extends State<Filling> {
   String BLE_SERVICE_UUID = "";
   String BLE_TX_CHARACTERISTIC="";
 
-  // 스트림 사용법
-  // var streamIter = Stream.fromIterable([10,20,30,40,50]);
-  // StreamSubscription subscription = streamIter.listen((int number) => print(number));
-  // subscription.cancel() // 연결 해제
-  //
 
-  Stream<int>? stream;
+  late Stream<List<int>> stream;
 
   StreamSubscription? monitoringStreamSubscription;
 
+  
   @override
   initState(){
     super.initState();
@@ -42,7 +37,6 @@ class _FillingState extends State<Filling> {
   }
 
   get_ble(peripheral,litter)async{
-    print("fasf");
 
     //리터값이 가득일떄랑 선택한 리터값 각각의 보내는 데이터 필터링 해주는 코드 작성해야함ㅋ
     //보낼때
@@ -56,14 +50,15 @@ class _FillingState extends State<Filling> {
     //이미 리스너가 있다면 취소
     await monitoringStreamSubscription!.cancel(); // ?. = 해당객체가 null이면 무시하고 넘어감.
 
+
     //스트림 리스너 생성
     monitoringStreamSubscription = characteristicUpdates.listen((value) {
     print("read data : ${value.value}");
-    stream = value.value;//데이터 출력
+    stream = value.value;
+
     },
     onError: (error) {
     print("Error while monitoring characteristic \n$error"); //실패시
-      stream = null;
     },
     cancelOnError: true, //에러 발생시 자동으로 listen 취소
     );
@@ -78,13 +73,13 @@ class _FillingState extends State<Filling> {
   }
 
   getBody(Size size, String? v) {
-    Peripheral? peripheral = widget.peripheral;
+
     var liter = v;
     return SafeArea(
-      child: StreamBuilder(
+      child: StreamBuilder<List<int>>(
         stream: stream,
-
-        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<int>> snapshot) {
           //if(snapshot.hasError) VV
           return SingleChildScrollView(
             child: Column(

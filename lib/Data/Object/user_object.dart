@@ -12,7 +12,7 @@ class User {
     return User(
       userID: json['userId'],
       token: json['title'],
-      title: json['body'],
+      title: json['token'],
     );
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
 import 'Account/login_page.dart';
-import 'Data/User/user_object.dart';
+import 'Data/Object/user_object.dart';
 
 
 class Wrapper extends StatefulWidget {

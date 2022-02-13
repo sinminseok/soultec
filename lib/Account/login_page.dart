@@ -1,14 +1,16 @@
+import 'dart:async';
 import 'dart:core';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_discovery.dart';
-import 'package:soultec/Data/User/user_object.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart';
+
+import 'dart:developer' as developer;
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _passwordController = TextEditingController();
 
 
-  //User 객체 생성, http get 이후 json을 데이터를 User 객체로 대입
+  //Object 객체 생성, http get 이후 json을 데이터를 Object 객체로 대입
   User? user;
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
   var disk_user_info = [];
@@ -41,12 +43,12 @@ class _LoginScreenState extends State<LoginScreen>
   String? user_pw_disk;
   bool _isChecked = false;
   bool auth_login = false;
-
   bool? http_return;
 
 
-  //spring url 입력
-  String url = "http://localhost:8080/login";
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
 
 
@@ -57,12 +59,32 @@ class _LoginScreenState extends State<LoginScreen>
     checkbox_state = prefs.getString("check_login");
   }
 
+  Future<void> initConnectivity() async {
+    print("start ");
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      print("mobile data");
+      // I am connected to a mobile network.
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      // I am connected to a wifi network.
+      print("wifi");
+    }
+    else if( connectivityResult.toString() == "ConnectivityResult.none"){
+      showAlertDialog(context,"네트워크 오류","와이파이나 데이터를 켜주세요");
+    }
+  }
 
 
+  
 
   @override
   void initState() {
     super.initState();
+    initConnectivity();
+
+
+
     check_box();
     if(checkbox_state != null){
       disk_user_info =Http_services().get_userinfo() as List;
