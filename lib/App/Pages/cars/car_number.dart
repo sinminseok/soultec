@@ -25,54 +25,43 @@ class CarNumberPage extends StatefulWidget {
 class _CarNumberPageState extends State<CarNumberPage> {
   TextEditingController _carnumber = TextEditingController();
 
-  bool check_connected=false;
-
-
+  bool check_connected = false;
 
   @override
   void initState() {
     check_connected_fun();
-    print(widget.peripheral!.identifier);
     scan_uuids();
     super.initState();
   }
 
+  //ble connection 확인 함수
   void check_connected_fun() async {
-
     check_connected = await widget.peripheral!.isConnected();
-    print("msmsmsm");
     print(check_connected);
   }
 
-  scan_uuids()async{
+  scan_uuids() async {
+    Peripheral? peripheral = widget.peripheral;
 
-      Peripheral? peripheral = widget.peripheral;
-
-    await peripheral!.connect().then((_) {
-      //연결이 되면 장치의 모든 서비스와 캐릭터리스틱을 검색한다.
-      peripheral.discoverAllServicesAndCharacteristics()
-          .then((_) => peripheral.services())
-          .then((services) async {
-        print("PRINTING SERVICES for ${peripheral.name}");
-        //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
-        for (var service in services) {
-          print("Found service ${service.uuid}");
-          List<Characteristic> characteristics =
-          await service.characteristics();
-          int index = 0;
-          for (var characteristic in characteristics) {
-            print(index);
-            print("${characteristic.uuid}");
-            index++;
-          }
+    await peripheral!
+        .discoverAllServicesAndCharacteristics()
+        .then((_) => peripheral.services())
+        .then((services) async {
+      print("PRINTING SERVICES for ${peripheral.name}");
+      //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
+      for (var service in services) {
+        print("Found service ${service.uuid}");
+        List<Characteristic> characteristics = await service.characteristics();
+        int index = 0;
+        for (var characteristic in characteristics) {
+          print(index);
+          print("${characteristic.uuid}");
+          index++;
         }
-        //모든 과정이 마무리되면 연결되었다고 표시
-
-      });
+      }
+      //모든 과정이 마무리되면 연결되었다고 표시
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,19 +106,25 @@ class _CarNumberPageState extends State<CarNumberPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  width: size.width*0.6,
+                    width: size.width * 0.6,
                     child: Image.asset(
-                  'assets/gifs/car_number.gif',
-                )),
+                      'assets/gifs/car_number.gif',
+                    )),
               ),
-              SizedBox(height: size.height*0.03,),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
               Text(
                 "직접 입력",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,fontFamily: "numberfont"),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "numberfont"),
               ),
               SizedBox(
                 height: size.height * 0.04,
-              ),Container(
+              ),
+              Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 width: size.width * 0.7,
@@ -137,12 +132,14 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     border: Border.all(
                         color: Colors.black,
                         style: BorderStyle.solid,
-                        width: 1
-                    ),
+                        width: 1),
                     color: kPrimaryColor),
                 child: Center(
                   child: TextFormField(
-                    style: TextStyle(fontFamily: "numberfont",fontSize: 21,),
+                    style: TextStyle(
+                      fontFamily: "numberfont",
+                      fontSize: 21,
+                    ),
                     controller: _carnumber,
                     decoration: InputDecoration(
                       hintText: '차량번호 4 자리 입력',
@@ -157,10 +154,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
               Center(
                 child: Text(
                   "확인을 누르면 조회를 시작합니다.",
-
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: "numberfont",
+                      fontFamily: "numberfont",
                       color: Colors.red.shade300,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
@@ -171,7 +167,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
               ),
 
               InkWell(
-                  onTap: (){
+                  onTap: () {
                     // var return_carnumber = Http_services().post_carnumber(_carnumber.text);
                     // if(return_carnumber == null){
                     //   showAlertDialog(context , "등록되지 않은 차량입니다", "차량 번호를 다시 확인해주세요");
@@ -184,39 +180,33 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     //                 user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
                     //
                     // }
+
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                Fill_start(
-                                  user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
-
-
+                            builder: (context) => Fill_start(
+                                  user: widget.user,
+                                  car_number: _carnumber.text,
+                                  peripheral: widget.peripheral,
+                                )));
                   },
-                  child:Container(
-                      width: size.width*0.7,
-                      height: size.height*0.1,
-                      child: Image.asset("assets/images/play_button.png")
-                  )
-              ),
-
-
+                  child: Container(
+                      width: size.width * 0.7,
+                      height: size.height * 0.1,
+                      child: Image.asset("assets/images/play_button.png"))),
 
               // 페어링된 해당 디바이 스페어링 취소
               InkWell(
                 onTap: () async {
-
                   bool test_check = await widget.peripheral!.isConnected();
                   print("before $test_check");
                   widget.peripheral!.disconnectOrCancelConnection();
                   print("after$test_check");
 
                   check_connected_fun();
-
                 },
-
                 borderRadius: BorderRadius.circular(20),
-
                 child: Container(
                   width: size.width * 0.6,
                   height: 60,
@@ -228,8 +218,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   child: Text("페어링 취소",
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
-
-
               ),
               //
               // //디스크 디바이스 초기화
@@ -237,7 +225,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
 
-                   prefs.remove("66:4E:55:E5:AE:E6");
+                  prefs.remove("66:4E:55:E5:AE:E6");
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(

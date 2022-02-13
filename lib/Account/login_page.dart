@@ -20,12 +20,8 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with TickerProviderStateMixin {
-
+class _LoginScreenState extends State<LoginScreen> {
   bool isLogin = true;
-  Duration animationDuration = Duration(microseconds: 270);
-
 
   //Form controller
   final TextEditingController _userIDController = TextEditingController();
@@ -38,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen>
   var disk_user_info = [];
 
   //디스크에 저장된 id,pw 저장 변수
-  String? checkbox_state;
+  String? checkbox_state = null;
   String? user_id_disk;
   String? user_pw_disk;
   bool _isChecked = false;
@@ -46,17 +42,13 @@ class _LoginScreenState extends State<LoginScreen>
   bool? http_return;
 
 
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
-
-
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box()async{
     final prefs = await SharedPreferences.getInstance();
-    checkbox_state = prefs.getString("check_login");
+    setState(() {
+      checkbox_state = prefs.getString("check_login");
+    });
   }
 
   Future<void> initConnectivity() async {
@@ -82,8 +74,6 @@ class _LoginScreenState extends State<LoginScreen>
   void initState() {
     super.initState();
     initConnectivity();
-
-
 
     check_box();
     if(checkbox_state != null){
@@ -117,35 +107,10 @@ class _LoginScreenState extends State<LoginScreen>
     Size size = MediaQuery.of(context).size;
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
-    return SafeArea(
-      child: auth_login ? DiscoveryPage(user: user) :Scaffold(
+    return  auth_login ? DiscoveryPage(user: user) :Scaffold(
         backgroundColor: kPrimaryColor,
         body: Stack(
           children: <Widget>[
-            //close button
-            AnimatedOpacity(
-              opacity: isLogin ? 0.0 : 1.0,
-              duration: animationDuration,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: InkWell(
-                  child: Container(
-                      width: 50,
-                      height: 50,
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.grey,
-                      )),
-                  onTap: () {
-                    // animationController.reverse();
-                    setState(() {
-                      isLogin != isLogin;
-                    });
-                  },
-                ),
-              ),
-            ),
-
             Align(
               alignment: Alignment.center,
               child: SingleChildScrollView(
@@ -273,14 +238,14 @@ class _LoginScreenState extends State<LoginScreen>
                           onTap: () async {
 
                             // user = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
-                            // if(http_return != null){
+                            // if(user != null){
                             //   Navigator.push(
                             //       context,
                             //       MaterialPageRoute(
                             //           builder: (context) =>
                             //               DiscoveryPage(user: user,)));
                             // }else{
-                            //   return showAlertDialog(context, "로그인 실패", " 관리자에게 문의 하세요");
+                            //   return showAlertDialog(context, "로그인 실패", "기사번호와 비밀번호를 다시 한번 \n 확인해주세요.");
                             // }
 
                             Navigator.push(
@@ -306,7 +271,6 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ],
         ),
-      ),
     );
   }
 }

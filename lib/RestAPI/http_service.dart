@@ -54,6 +54,7 @@ class Http_services {
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
+
       user =User.fromJson(jsonDecode(res.body));
       if (ischeck) {
         save_user(id,pw);
@@ -64,7 +65,7 @@ class Http_services {
 
       }
     } else {
-      return user;
+      return null;
     }
   }
 
@@ -80,7 +81,7 @@ class Http_services {
 
     print(res.body);
 
-    user = res as User?;
+    user = User.fromJson(json.decode(res.body));
 
     if (user != null) {
       {
@@ -119,7 +120,9 @@ class Http_services {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(car_url_post),
         //해당 유저의 토큰을 헤더에 담아 넘겨줘야한다.
-        headers: {HttpHeaders.authorizationHeader: "Basic your_api_token_here",'Content-Type': 'application/json'},
+        headers: {
+            HttpHeaders.authorizationHeader: "Basic your_api_token_here",
+            'Content-Type': 'application/json'},
         body: json.encode({
           'car-number': car_number,
         }));
@@ -137,8 +140,6 @@ class Http_services {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(post_url),
         headers: {HttpHeaders.authorizationHeader: "Basic your_api_token_here",'Content-Type': 'application/json'},
-
-
         //인코딩
         body: json.encode({
           'liter': liter,

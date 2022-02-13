@@ -1,9 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:soultec/App/Bluetooth/blue_discovery.dart';
-import 'dart:developer' as developer;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:soultec/Data/toast.dart';
 import '../../wrapper.dart';
@@ -16,10 +12,6 @@ class Start_page extends StatefulWidget {
 
 class _Start_pageState extends State<Start_page> {
 
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-
-
 
   @override
   void initState(){
@@ -31,7 +23,6 @@ class _Start_pageState extends State<Start_page> {
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -59,8 +50,7 @@ class _Start_pageState extends State<Start_page> {
     Size size = MediaQuery.of(context).size;
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         body: Align(
           alignment: Alignment.center,
           child: SingleChildScrollView(
@@ -130,7 +120,6 @@ class _Start_pageState extends State<Start_page> {
             ),
           ),
         ),
-      ),
     );
   }
 }

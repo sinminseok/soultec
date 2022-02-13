@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:soultec/App/Bluetooth/blue_discovery.dart';
-import 'package:soultec/wrapper.dart';
 import 'App/Pages/start_page.dart';
 import 'constants.dart';
 
 void main() async {
-  //firebase를 사용 하기 위해선 main 메소드에 알려줘야한다.
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     MyApp(),
