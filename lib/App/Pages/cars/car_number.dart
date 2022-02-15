@@ -8,9 +8,7 @@ import 'package:soultec/App/Pages/fills/fill_start.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-
 import '../../../constants.dart';
-import 'package:http/http.dart' as http;
 
 class CarNumberPage extends StatefulWidget {
   final User? user;
@@ -41,6 +39,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
   }
 
   scan_uuids() async {
+
     Peripheral? peripheral = widget.peripheral;
 
     await peripheral!
@@ -65,6 +64,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    var user_token= widget.user!.token;
+
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -168,28 +170,29 @@ class _CarNumberPageState extends State<CarNumberPage> {
 
               InkWell(
                   onTap: () {
-                    // var return_carnumber = Http_services().post_carnumber(_carnumber.text);
-                    // if(return_carnumber == null){
-                    //   showAlertDialog(context , "등록되지 않은 차량입니다", "차량 번호를 다시 확인해주세요");
-                    // }else{
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               Fill_start(
-                    //                 user: widget.user, car_number: _carnumber.text, peripheral: widget.peripheral,)));
-                    //
-                    // }
+                    var return_carnumber = Http_services().post_carnumber(_carnumber.text,user_token);
+                    if(return_carnumber == null){
+                      showAlertDialog(context , "등록되지 않은 차량입니다", "차량 번호를 다시 확인해주세요");
+                    }else{
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Fill_start(
+                                    user: widget.user,car_number: _carnumber.text, peripheral: widget.peripheral,)));
+
+                    }
 
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Fill_start(
-                                  user: widget.user,
-                                  car_number: _carnumber.text,
-                                  peripheral: widget.peripheral,
-                                )));
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => Fill_start(
+                    //               user: widget.user,
+                    //               car_number: _carnumber.text,
+                    //               peripheral: widget.peripheral,
+                    //             )));
                   },
                   child: Container(
                       width: size.width * 0.7,

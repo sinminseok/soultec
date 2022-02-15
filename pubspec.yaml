@@ -97,6 +97,7 @@ flutter:
     - assets/gifs/car_number.gif
     - assets/gifs/load2.GIF
     - assets/gifs/main_img.gif
+    - assets/gifs/login_loading.gif
     - assets/images/button_login.png
     - assets/images/play_button.png
     - assets/images/start_button.png

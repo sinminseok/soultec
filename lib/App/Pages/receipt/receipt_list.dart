@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 class Receipt_list extends StatefulWidget {
   User? user;
 
-  Receipt_list({required this.user});
+  Receipt_list({required this.user });
   @override
   State<Receipt_list> createState() => _Receipt_list();
 }

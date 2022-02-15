@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoveryPage extends StatefulWidget {
   User? user;
-  DiscoveryPage({required this.user});
+  DiscoveryPage({required this.user ,});
 
   @override
   _DiscoveryPage createState() => new _DiscoveryPage();
@@ -32,6 +32,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
   @override
   void initState() {
+    print("ijnt");
     init();
     scan();
     super.initState();
@@ -263,7 +264,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    CarNumberPage(user: widget.user, peripheral: peripheral)));
+                    CarNumberPage(user: widget.user , peripheral: peripheral)));
 
         return;
       }
@@ -302,7 +303,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => CarNumberPage(
-                      user: widget.user, peripheral: deviceList[index].peripheral)));
+                      user: widget.user,peripheral: deviceList[index].peripheral)));
 
           showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
         });

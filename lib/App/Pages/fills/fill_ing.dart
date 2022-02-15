@@ -27,13 +27,11 @@ class _FillingState extends State<Filling> {
   String BLE_SERVICE_UUID = "";
   String BLE_TX_CHARACTERISTIC = "";
 
-
   @override
   initState() {
     super.initState();
     get_ble(widget.peripheral, widget.liter);
   }
-
 
   //Stream 오브젴 생성 추후 전달 받은 데이터 이동 통로가 될 것이당.!
   Stream? characteristicUpdates;
@@ -44,14 +42,12 @@ class _FillingState extends State<Filling> {
     //해당 서비스, 캐릭터 리스틱 uuid 와 연결해 데이터를 받아오는 var 생성 여
 
     //monitorCharacteristic 의 리턴 타입이 Stream 이다
-     characteristicUpdates = peripheral.monitorCharacteristic(
+    characteristicUpdates = peripheral.monitorCharacteristic(
         BLE_SERVICE_UUID, BLE_TX_CHARACTERISTIC);
-
 
     characteristicUpdates!.listen(
       (value) {
         print("read data : ${value.value}");
-
       },
       onError: (error) {
         print("Error while monitoring characteristic \n$error"); //실패시
@@ -72,7 +68,7 @@ class _FillingState extends State<Filling> {
     return SafeArea(
       child: StreamBuilder(
           stream: characteristicUpdates,
-          builder: (BuildContext context, AsyncSnapshot  snapshot) {
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
             //if(snapshot.hasError)
             return SingleChildScrollView(
               child: Column(

@@ -14,7 +14,7 @@ class Fill_start extends StatefulWidget {
   Peripheral? peripheral;
   final String car_number;
 
-  Fill_start({required this.user,required this.car_number,required this.peripheral});
+  Fill_start({required this.user ,required this.car_number,required this.peripheral});
 
   @override
   _Fill_start createState() => _Fill_start();
@@ -79,7 +79,7 @@ class _Fill_start extends State<Fill_start> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    Fill_setting(user: user,car_number: widget.car_number,peripheral:widget.peripheral)));
+                                    Fill_setting(user: user, car_number: widget.car_number,peripheral:widget.peripheral)));
                       },
 
                       child:Container(

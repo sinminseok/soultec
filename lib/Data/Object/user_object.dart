@@ -1,19 +1,15 @@
 
 class User {
-  final int? userID;
   final String? token;
-  final String? title;
 
-
-  User({this.userID, this.token, this.title});
+  User({this.token});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userID: json['userId'],
-      token: json['title'],
-      title: json['token'],
+      token: json['token'],
     );
   }
+
 }
 
 

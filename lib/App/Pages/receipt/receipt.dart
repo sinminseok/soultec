@@ -13,7 +13,7 @@ class Recepit extends StatefulWidget {
   final User? user;
   final String? car_number;
 
-  Recepit({required this.user , required this.liter , required this.car_number});
+  Recepit({required this.user ,required this.liter , required this.car_number});
 
   @override
   _Recepit createState() => _Recepit();
@@ -28,7 +28,7 @@ class _Recepit extends State<Recepit> {
   @override
   void initState(){
     super.initState();
-     // Http_services().post_receipt(widget.liter, date, widget.car_number, widget.user!.userID);
+      //Http_services().post_receipt(widget.liter, date , widget.car_number ,  , widget.user!.token);
   }
 
 
@@ -96,10 +96,7 @@ class _Recepit extends State<Recepit> {
 
                   // post_receipt(widget.liter,date,,,);
                   //http post 이용내역
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Receipt_list(user: widget.user,)));
+
                 },
                 child: Container(
                   width: size.width * 0.8,

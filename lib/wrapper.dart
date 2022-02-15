@@ -40,7 +40,5 @@ class _WrapperState extends State<Wrapper> {
     //아닌경우 login
       return LoginScreen();
 
-      return DiscoveryPage(user: user);
-
   }
 }
