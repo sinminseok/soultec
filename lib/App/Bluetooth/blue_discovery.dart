@@ -11,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoveryPage extends StatefulWidget {
   User? user;
-  DiscoveryPage({required this.user ,});
+  String? user_id;
+  DiscoveryPage({required this.user,required this.user_id});
 
   @override
   _DiscoveryPage createState() => new _DiscoveryPage();
@@ -59,6 +60,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         restoreStateAction: (peripherals) {
           peripherals.forEach((peripheral) {
             print("Restored peripheral: ${peripheral.name}");
+
           });
         })
         .catchError((e) => print("Couldn't create BLE client  $e"))
@@ -100,7 +102,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
     //디스크 저장 변수
     final device_address = await SharedPreferences.getInstance();
     var remember_device_disk = device_address.getKeys().toList();
-    print(remember_device_disk);
+
     if (!_isScanning) {
       deviceList.clear(); //기존 장치 리스트 초기화
       //SCAN 시작
@@ -114,7 +116,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         var findDevice = deviceList.any((element) {
           if (element.peripheral.identifier ==
               scanResult.peripheral.identifier) {
-            print(element.peripheral.identifier);
+
 
             if (remember_device_disk.contains(element.peripheral.identifier)) {
               var scan_liet = remember_device_disk
@@ -193,7 +195,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               int index = 0;
               for (var characteristic in characteristics) {
                 print(index);
-                print("${characteristic.uuid}");
+
                 index++;
               }
             }
@@ -211,6 +213,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                 MaterialPageRoute(
                     builder: (context) => CarNumberPage(
                         user: widget.user,
+                        user_id:widget.user_id,
                         peripheral: peripheral)));
             showAlertDialog(context,"이미 페어링 된 기기가 있습니다.","${peripheral.name}");
           });
@@ -238,7 +241,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
     if (_connected) {
       //이미 연 결상태면 연결 해제후 종료
-      print("already connecting");
       await peripheral.disconnectOrCancelConnection();
       setState(() {
         _connected = false;
@@ -264,7 +266,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    CarNumberPage(user: widget.user , peripheral: peripheral)));
+                    CarNumberPage(user: widget.user , user_id:widget.user_id, peripheral: peripheral)));
 
         return;
       }
@@ -285,7 +287,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             int index = 0;
             for (var characteristic in characteristics) {
               print(index);
-              print("${characteristic.uuid}");
               index++;
             }
           }
@@ -295,18 +296,19 @@ class _DiscoveryPage extends State<DiscoveryPage> {
             _connected = true;
           });
 
-
           _bleManager.stopPeripheralScan();
+
           print("${peripheral.name} has CONNECTED");
+
           remember_device(deviceList[index].peripheral.identifier);
+
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => CarNumberPage(
-                      user: widget.user,peripheral: deviceList[index].peripheral)));
-
-          showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
-        });
+                      user: widget.user,user_id:widget.user_id ,peripheral: deviceList[index].peripheral)));
+             showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
+            });
       });
     },peripheral);
   }
@@ -352,7 +354,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CarNumberPage(user: widget.user, peripheral: peripheral)));
+                          CarNumberPage(user: widget.user,user_id:widget.user_id, peripheral: peripheral)));
               showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
 
               return;
@@ -374,7 +376,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   int index = 0;
                   for (var characteristic in characteristics) {
                     print(index);
-                    print("${characteristic.uuid}");
+
                     index++;
                   }
                 }
@@ -390,6 +392,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                     MaterialPageRoute(
                         builder: (context) => CarNumberPage(
                             user: widget.user,
+                            user_id:widget.user_id,
                             peripheral: deviceList[index].peripheral)));
                 showAlertDialog(context,"페어링이 완료되었습니다","${peripheral.name}");
               });

@@ -1,21 +1,19 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
-import 'package:soultec/Data/Object/receipt_object.dart';
 import 'package:soultec/Data/Object/user_object.dart';
-import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'package:http/http.dart' as http;
 
 
 class Receipt_list extends StatefulWidget {
   User? user;
+  String? user_id;
 
-  Receipt_list({required this.user });
+  Receipt_list({required this.user , required this.user_id});
   @override
   State<Receipt_list> createState() => _Receipt_list();
 }
@@ -26,7 +24,6 @@ class _Receipt_list extends State<Receipt_list> {
 
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
-
   var user_use_data = [];
 
 
@@ -38,10 +35,8 @@ class _Receipt_list extends State<Receipt_list> {
       for(var i=0;i<user_use_data.length;i++){
         user_use_data[i].date == date;
         filter_use_data.add(user_use_data[i]);
-
       }
       return filter_use_data;
-
   }
 
 

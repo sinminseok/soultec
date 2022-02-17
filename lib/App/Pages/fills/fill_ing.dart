@@ -8,12 +8,14 @@ import '../../../constants.dart';
 
 class Filling extends StatefulWidget {
   final String? liter;
+  String? user_id;
   final String? car_number;
   final User? user;
   final Peripheral? peripheral;
 
   Filling(
       {required this.user,
+        required this.user_id,
       required this.liter,
       required this.car_number,
       required this.peripheral});
@@ -24,8 +26,7 @@ class Filling extends StatefulWidget {
 
 class _FillingState extends State<Filling> {
   //노르딕 디바이스 연결
-  String BLE_SERVICE_UUID = "";
-  String BLE_TX_CHARACTERISTIC = "";
+
 
   @override
   initState() {
@@ -36,6 +37,7 @@ class _FillingState extends State<Filling> {
   //Stream 오브젴 생성 추후 전달 받은 데이터 이동 통로가 될 것이당.!
   Stream? characteristicUpdates;
 
+
   get_ble(peripheral, litter) async {
     //리터값이 가득일떄랑 선택한 리터값 각각의 보내는 데이터 필터링 해주는 코드 작성해야함ㅋ
     //보낼때
@@ -43,12 +45,12 @@ class _FillingState extends State<Filling> {
 
     //monitorCharacteristic 의 리턴 타입이 Stream 이다
     characteristicUpdates = peripheral.monitorCharacteristic(
-        BLE_SERVICE_UUID, BLE_TX_CHARACTERISTIC);
+        BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC);
 
     characteristicUpdates!.listen(
-      (value) {
-        print("read data : ${value.value}");
-      },
+          (value){
+            print("read data : ${value.value}");
+            },
       onError: (error) {
         print("Error while monitoring characteristic \n$error"); //실패시
       },
@@ -110,11 +112,12 @@ class _FillingState extends State<Filling> {
                       height: size.height * 0.05,
                     ),
                     Text(
-                      "0123-45gj6789",
+                      "${widget.user_id} --${widget.car_number}",
                       style: TextStyle(
                           color: Colors.red,
                           fontSize: 29,
-                          fontFamily: "numberfont"),
+                          fontFamily: "numberfont",
+  ),
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -151,6 +154,7 @@ class _FillingState extends State<Filling> {
                         ),
                       ],
                     ),
+
                     SizedBox(
                       height: size.height * 0.07,
                     ),
@@ -172,6 +176,7 @@ class _FillingState extends State<Filling> {
                               MaterialPageRoute(
                                   builder: (context) => Recepit(
                                       user: widget.user,
+                                      user_id:widget.user_id,
                                       liter: widget.liter,
                                       car_number: widget.car_number)));
                         },

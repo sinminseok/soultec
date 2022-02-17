@@ -10,10 +10,11 @@ import '../../../constants.dart';
 
 class Recepit extends StatefulWidget {
   final String? liter;
+  String? user_id;
   final User? user;
   final String? car_number;
 
-  Recepit({required this.user ,required this.liter , required this.car_number});
+  Recepit({required this.user ,required this.user_id ,required this.liter , required this.car_number});
 
   @override
   _Recepit createState() => _Recepit();
@@ -21,7 +22,6 @@ class Recepit extends StatefulWidget {
 
 class _Recepit extends State<Recepit> {
 
-  String post_url = "http:local/8080'";
   var todate = getToday();
 
 
@@ -85,7 +85,11 @@ class _Recepit extends State<Recepit> {
                 height: size.height * 0.05,
               ),
 
-              // Recepit_content( , ,  ,todate),
+      //     final String? user_id;
+      // final String? car_number;
+      // final String? litter;
+      // final String? date;
+              Recepit_content( widget.user_id,widget.car_number ,widget.liter  ,todate),
               //Text(liter),
               SizedBox(
                 height: size.height * 0.05,
@@ -96,10 +100,18 @@ class _Recepit extends State<Recepit> {
 
                   // post_receipt(widget.liter,date,,,);
                   //http post 이용내역
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Receipt_list(
+                              user: widget.user,
+                              user_id:widget.user_id,
+                              )));
 
                 },
                 child: Container(
-                  width: size.width * 0.8,
+
+                  width: size.width * 0.3,
                   height: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),

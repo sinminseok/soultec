@@ -12,9 +12,10 @@ import '../../../constants.dart';
 
 class CarNumberPage extends StatefulWidget {
   final User? user;
+  String? user_id;
   final Peripheral? peripheral;
 
-  CarNumberPage({required this.user, required this.peripheral});
+  CarNumberPage({required this.user,required this.user_id , required this.peripheral});
 
   @override
   State<CarNumberPage> createState() => _CarNumberPageState();
@@ -179,7 +180,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   Fill_start(
-                                    user: widget.user,car_number: _carnumber.text, peripheral: widget.peripheral,)));
+                                    user: widget.user,user_id:widget.user_id,car_number: _carnumber.text, peripheral: widget.peripheral,)));
 
                     }
 

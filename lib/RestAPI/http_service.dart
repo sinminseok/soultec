@@ -11,8 +11,7 @@ import 'package:soultec/Data/Object/receipt_object.dart';
 
 class Http_services {
   //http 통신 url
-  String login_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
+  String login_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
   String car_url_post = "";
   String post_url = "";
   String user_info_url = "";
@@ -20,40 +19,19 @@ class Http_services {
   //로그인후 반환할 user 객체
   User? user;
 
-  Future<void> initConnectivity() async {
-    print("start ");
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult.toString());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      print("mobile");
-      // I am connected to a mobile network.
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a wifi network.
-      print("wifi");
-    } else if (connectivityResult.toString() == "ConnectivityResult.none") {
-      return null;
-    }
-  }
-
   //http 로그인
   Future<User?> login(id, pw, ischeck) async {
-    print("start");
-    print(id);
-    print(pw);
-    print(ischeck);
-
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
-    print("seddd");
+
     print(res.body);
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
       user = User.fromJson(jsonDecode(res.body));
-      print("300");
       print(user!.token);
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
@@ -86,7 +64,6 @@ class Http_services {
       //디코딩후 res body 를 user 객체로 대입
       //디코딩후 res body 를 user 객체로 대입
       user = User.fromJson(jsonDecode(res.body));
-      print("300");
       print(user!.token);
       return user;
       //디스크에 해당 user id,pw 저장후 로그인
@@ -96,7 +73,7 @@ class Http_services {
     }
   }
 
-  //http 로그인
+  //http 토큰 get ex)receipt list get 기능에서 가져와야댐
   Future test(token) async {
     print("sed");
     final response =
@@ -108,10 +85,8 @@ class Http_services {
 
     print(response.body);
     if (response.statusCode == 200) {
-      print("200");
       return response;
     } else {
-      print("nulll");
       return null;
     }
   }
@@ -135,9 +110,6 @@ class Http_services {
     data.add(user_id_disk);
     var user_pw_disk = prefs.getString('pw');
     data.add(user_pw_disk);
-    print(data[0]);
-    print(data[1]);
-    print("hh");
     return data;
   }
 
@@ -152,11 +124,9 @@ class Http_services {
         'Authorization': 'Bearer $token',
       },
       body: json.encode({
-        'car-number': car_number,
+        'carnumber': car_number,
       }),
     );
-
-    print(res);
 
     if (res.statusCode == 200) {
       return car_number;
@@ -189,16 +159,22 @@ class Http_services {
   }
 
   //user 이용내역 list http get
-  Future<List<dynamic>?> load_receipt_list() async {
+  Future<List<dynamic>?> load_receipt_list(token) async {
     var _datas = [];
     final response = await http.get(
           Uri.parse(user_info_url),
           headers: {
-            HttpHeaders.authorizationHeader: "Basic your_api_token_here"
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
           },
         ),
-        _text = utf8.decode(response.bodyBytes);
-    var dataObjsJson = jsonDecode(_text)['data'] as List;
+
+        res_body = utf8.decode(response.bodyBytes);
+
+    var dataObjsJson = jsonDecode(res_body)['data'] as List;
+
+
     final List<Receipt_object> parsedResponse =
         dataObjsJson.map((e) => Receipt_object.fromJson(e)).toList();
 

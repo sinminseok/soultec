@@ -11,10 +11,11 @@ import '../../../constants.dart';
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_start extends StatefulWidget {
   User? user;
+  String? user_id;
   Peripheral? peripheral;
   final String car_number;
 
-  Fill_start({required this.user ,required this.car_number,required this.peripheral});
+  Fill_start({required this.user ,required this.user_id ,required this.car_number,required this.peripheral});
 
   @override
   _Fill_start createState() => _Fill_start();
@@ -60,6 +61,7 @@ class _Fill_start extends State<Fill_start> {
                   ),
 
 
+
                   Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: Container(
@@ -79,7 +81,7 @@ class _Fill_start extends State<Fill_start> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    Fill_setting(user: user, car_number: widget.car_number,peripheral:widget.peripheral)));
+                                    Fill_setting(user: user,user_id:widget.user_id, car_number: widget.car_number,peripheral:widget.peripheral)));
                       },
 
                       child:Container(

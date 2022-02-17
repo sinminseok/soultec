@@ -47,6 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box()async{
+    print("check_out");
+
     final prefs = await SharedPreferences.getInstance();
       checkbox_state = prefs.getString("check_login");
 
@@ -117,10 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
         future:  Http_services().auto_login(disk_user_info[0], disk_user_info[1]),
         builder: (context, snapshot) {
           if(snapshot.hasError){
-            return Text("error");
+            return Text("server drop");
           }else if(snapshot.hasData){
 
-            return DiscoveryPage(user: snapshot.data);
+            return DiscoveryPage(user: snapshot.data ,user_id:disk_user_info[0]);
           }else{
             return Center(
                 child: Container(
@@ -228,7 +230,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: InputDecoration(
                               icon: Icon(Icons.lock, color: Colors.black),
                               hintText: '비밀번호',
-
                               border: InputBorder.none),
                         ),
                       ),
@@ -262,24 +263,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       InkWell(
                         onTap: () async {
-
                           user = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
                           if(user != null){
+                            String user_id =_userIDController.text;
                             print(user!.token.toString());
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DiscoveryPage(user: user,)));
+                                        DiscoveryPage(user: user,user_id:user_id)));
                           }else{
                             return showAlertDialog(context, "로그인 실패", "기사번호와 비밀번호를 다시 한번 \n 확인해주세요.");
                           }
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DiscoveryPage(user: null)));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             DiscoveryPage(user: null)));
 
                         },
                         borderRadius: BorderRadius.circular(20),

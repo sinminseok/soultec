@@ -11,12 +11,16 @@ import 'fill_ing.dart';
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 
 class Fill_setting extends StatefulWidget {
-  final User? user;
-  final String car_number;
-  final Peripheral? peripheral;
+  User? user;
+  String? user_id;
+  String car_number;
+  Peripheral? peripheral;
 
   Fill_setting(
-      {required this.user, required this.car_number, required this.peripheral});
+      {required this.user,
+      required this.user_id,
+      required this.car_number,
+      required this.peripheral});
 
   @override
   _Fill_setting createState() => _Fill_setting();
@@ -32,20 +36,16 @@ class _Fill_setting extends State<Fill_setting> {
     scan_uuids();
   }
 
-  String BLE_SERVICE_UUID = "";
-  String BLE_RX_CHARACTERISTIC = "";
-
-  post_ble(peripheral_, LITTER) {
-    if(LITTER == "가득"){
+  post_ble(peripheral, LITTER) {
+    if (LITTER == "가득") {
       //보낼때
-      peripheral_!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
+      peripheral!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
           Uint8List.fromList(LITTER.codeUnits), false);
-    }else{
+    } else {
       //보낼때
-      peripheral_!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
+      peripheral!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
           Uint8List.fromList(LITTER.codeUnits), false);
     }
-
   }
 
   scan_uuids() async {
@@ -55,9 +55,9 @@ class _Fill_setting extends State<Fill_setting> {
         .discoverAllServicesAndCharacteristics()
         .then((_) => peripheral.services())
         .then((services) async {
-        print("PRINTING SERVICES for ${peripheral.name}");
+      print("PRINTING SERVICES for ${peripheral.name}");
       //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
-        for (var service in services) {
+      for (var service in services) {
         print("Found service ${service.uuid}");
         List<Characteristic> characteristics = await service.characteristics();
         int index = 0;
@@ -122,15 +122,15 @@ class _Fill_setting extends State<Fill_setting> {
                 height: size.height * 0.05,
               ),
               Text(
-                "$car_number",
+                "${widget.user_id} - ${widget.car_number}",
                 style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 29,
-                    fontFamily: "numberfont",
-                    fontWeight: FontWeight.bold),
+                  color: Colors.red,
+                  fontSize: 29,
+                  fontFamily: "numberfont",
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.all(1.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Container(
                     width: size.width * 0.8,
                     height: size.height * 0.4,
@@ -229,6 +229,7 @@ class _Fill_setting extends State<Fill_setting> {
                             MaterialPageRoute(
                                 builder: (context) => Filling(
                                     user: user,
+                                    user_id: widget.user_id,
                                     liter: inputController.text,
                                     car_number: widget.car_number,
                                     peripheral: widget.peripheral)));
@@ -241,6 +242,7 @@ class _Fill_setting extends State<Fill_setting> {
                           MaterialPageRoute(
                               builder: (context) => Filling(
                                   user: user,
+                                  user_id: widget.user_id,
                                   liter: "가득",
                                   car_number: widget.car_number,
                                   peripheral: widget.peripheral)));
@@ -251,6 +253,7 @@ class _Fill_setting extends State<Fill_setting> {
                             MaterialPageRoute(
                                 builder: (context) => Filling(
                                     user: user,
+                                    user_id: widget.user_id,
                                     liter: inputController.text,
                                     car_number: widget.car_number,
                                     peripheral: widget.peripheral)));

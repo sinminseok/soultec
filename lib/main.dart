@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           primaryColor: kPrimaryColor,
           // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
         ),
+        //Start_page()
         home: Start_page());
   }
 }
