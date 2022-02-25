@@ -9,9 +9,9 @@ import '../../../constants.dart';
 
 
 class Recepit extends StatefulWidget {
-  final String? liter;
+  final int? liter;
   String? user_id;
-  final User? user;
+  final User_token? user;
   final String? car_number;
 
   Recepit({required this.user ,required this.user_id ,required this.liter , required this.car_number});
@@ -28,7 +28,6 @@ class _Recepit extends State<Recepit> {
   @override
   void initState(){
     super.initState();
-      //Http_services().post_receipt(widget.liter, date , widget.car_number ,  , widget.user!.token);
   }
 
 
@@ -77,9 +76,12 @@ class _Recepit extends State<Recepit> {
                 height: size.height * 0.05,
               ),
               Text(
-                "0123-45gj6789",
+                "${widget.user_id} -- ${widget.car_number!}",
                 style: TextStyle(
-                    color: Colors.red, fontSize: 29, fontFamily: "numberfont"),
+                  color: Colors.red,
+                  fontSize: 29,
+                  fontFamily: "numberfont",
+                ),
               ),
               SizedBox(
                 height: size.height * 0.05,
@@ -89,28 +91,28 @@ class _Recepit extends State<Recepit> {
       // final String? car_number;
       // final String? litter;
       // final String? date;
-              Recepit_content( widget.user_id,widget.car_number ,widget.liter  ,todate),
+              Recepit_content(widget.user_id,widget.car_number ,int.parse('${widget.liter}') ,todate),
               //Text(liter),
               SizedBox(
                 height: size.height * 0.05,
               ),
 
               InkWell(
-                onTap: (){
+                onTap: () async{
+                  var data_list = await Http_services().load_receipt_list(widget.user!.token);
 
-                  // post_receipt(widget.liter,date,,,);
                   //http post 이용내역
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => Receipt_list(
+                            data_list:data_list,
                               user: widget.user,
                               user_id:widget.user_id,
+                              car_number:widget.car_number,
                               )));
-
                 },
                 child: Container(
-
                   width: size.width * 0.3,
                   height: 60,
                   decoration: BoxDecoration(

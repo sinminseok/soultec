@@ -1,24 +1,29 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:soultec/App/Pages/receipt/receipt.dart';
+import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/Data/Object/user_object.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
 class Filling extends StatefulWidget {
-  final String? liter;
+  User? user_info;
   String? user_id;
   final String? car_number;
-  final User? user;
-  final Peripheral? peripheral;
+  final int? liter;
+  final User_token? user_token;
+  BluetoothDevice? device;
 
   Filling(
-      {required this.user,
-        required this.user_id,
+      {required this.user_info,
+      required this.user_token,
+      required this.user_id,
       required this.liter,
       required this.car_number,
-      required this.peripheral});
+      required this.device});
 
   @override
   _FillingState createState() => _FillingState();
@@ -26,37 +31,51 @@ class Filling extends StatefulWidget {
 
 class _FillingState extends State<Filling> {
   //노르딕 디바이스 연결
-
+  bool? isReady = false;
+  Stream? stream;
 
   @override
   initState() {
     super.initState();
-    get_ble(widget.peripheral, widget.liter);
   }
 
-  //Stream 오브젴 생성 추후 전달 받은 데이터 이동 통로가 될 것이당.!
-  Stream? characteristicUpdates;
 
+  discoverServices() async {
+    if (widget.device == null) {
+      return;
+    }
 
-  get_ble(peripheral, litter) async {
-    //리터값이 가득일떄랑 선택한 리터값 각각의 보내는 데이터 필터링 해주는 코드 작성해야함ㅋ
-    //보낼때
-    //해당 서비스, 캐릭터 리스틱 uuid 와 연결해 데이터를 받아오는 var 생성 여
+    List<BluetoothService> services = await widget.device!.discoverServices();
 
-    //monitorCharacteristic 의 리턴 타입이 Stream 이다
-    characteristicUpdates = peripheral.monitorCharacteristic(
-        BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC);
+    services.forEach((service) {
+      if (service.uuid.toString() == GET_SERVICE_UUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == GET_CHARACTERISTIC_UUID) {
+            characteristic.setNotifyValue(!characteristic.isNotifying);
+            stream = characteristic.value;
+            setState(() {
+              isReady = true;
+            });
+          }
+        });
+      }
+    });
 
-    characteristicUpdates!.listen(
-          (value){
-            print("read data : ${value.value}");
-            },
-      onError: (error) {
-        print("Error while monitoring characteristic \n$error"); //실패시
-      },
-      cancelOnError: true, //에러 발생시 자동으로 listen 취소
-    );
+    if (!isReady!) {
+      _Pop();
+    }
   }
+
+
+  _Pop() {
+    Navigator.of(context).pop(true);
+  }
+
+  //데이터 utf8로 파싱후 ui로 보여준다.
+  String _dataParser(List<int>? dataFromDevice) {
+    return utf8.decode(dataFromDevice!);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +84,10 @@ class _FillingState extends State<Filling> {
         backgroundColor: kPrimaryColor, body: getBody(size, widget.liter));
   }
 
-  getBody(Size size, String? v) {
-    var liter = v;
+  getBody(Size size, int? liter) {
     return SafeArea(
       child: StreamBuilder(
-          stream: characteristicUpdates,
+          stream: stream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             //if(snapshot.hasError)
             return SingleChildScrollView(
@@ -112,12 +130,12 @@ class _FillingState extends State<Filling> {
                       height: size.height * 0.05,
                     ),
                     Text(
-                      "${widget.user_id} --${widget.car_number}",
+                      "${widget.user_id} -- ${widget.car_number}",
                       style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 29,
-                          fontFamily: "numberfont",
-  ),
+                        color: Colors.red,
+                        fontSize: 29,
+                        fontFamily: "numberfont",
+                      ),
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -169,16 +187,23 @@ class _FillingState extends State<Filling> {
                     //Text(liter),
 
                     InkWell(
-                        onTap: () {
-                          //data push
+                        onTap: () async{
+                          //주석 제거 (해당 receipt 정보 서버로post)
+                         //await Http_services().post_receipt(widget.user_id.toString() , 4 , 5 , 28 ,widget.car_number.toString() , widget.user_token!.token);
+
+
+                          //주유후 해당 디바이스 페어링 disconnect
+                          widget.device!.disconnect();
+
+                          var data_list = await Http_services().load_receipt_list(widget.user_token!.token);
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Recepit(
-                                      user: widget.user,
-                                      user_id:widget.user_id,
-                                      liter: widget.liter,
-                                      car_number: widget.car_number)));
+                                  builder: (context) => Receipt_list(
+                                      user: widget.user_token,
+                                      user_id: widget.user_id,
+                                      car_number: widget.car_number, data_list:data_list,)));
                         },
                         child: Container(
                             width: size.width * 0.7,

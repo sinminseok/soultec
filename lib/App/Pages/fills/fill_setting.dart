@@ -1,26 +1,28 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 import 'fill_ing.dart';
+import 'dart:convert' show utf8;
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
-
 class Fill_setting extends StatefulWidget {
-  User? user;
+  User_token? user_token;
+  User? user_info;
   String? user_id;
   String car_number;
-  Peripheral? peripheral;
+  BluetoothDevice? device;
 
   Fill_setting(
-      {required this.user,
+      {required this.user_token,
       required this.user_id,
       required this.car_number,
-      required this.peripheral});
+      required this.device,
+        required this.user_info,
+      });
 
   @override
   _Fill_setting createState() => _Fill_setting();
@@ -33,54 +35,68 @@ class _Fill_setting extends State<Fill_setting> {
   @override
   initState() {
     super.initState();
-    scan_uuids();
+    connectToDevice();
   }
 
-  post_ble(peripheral, LITTER) {
-    if (LITTER == "가득") {
-      //보낼때
-      peripheral!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
-          Uint8List.fromList(LITTER.codeUnits), false);
-    } else {
-      //보낼때
-      peripheral!.writeCharacteristic(BLE_SERVICE_UUID, BLE_RX_CHARACTERISTIC,
-          Uint8List.fromList(LITTER.codeUnits), false);
-    }
-  }
-
-  scan_uuids() async {
-    Peripheral? peripheral = widget.peripheral;
-
-    await peripheral!
-        .discoverAllServicesAndCharacteristics()
-        .then((_) => peripheral.services())
-        .then((services) async {
-      print("PRINTING SERVICES for ${peripheral.name}");
-      //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
-      for (var service in services) {
-        print("Found service ${service.uuid}");
-        List<Characteristic> characteristics = await service.characteristics();
-        int index = 0;
-        for (var characteristic in characteristics) {
-          print(index);
-          print("${characteristic.uuid}");
-          index++;
-        }
-      }
-      //모든 과정이 마무리되면 연결되었다고 표시
-    });
-  }
-
+  //
   final values = ["가득", "리터"];
   String? _select_value;
 
+  //init에 넣어준뒤 페어링시도
+  String? connectionText = "";
+  BluetoothCharacteristic? targetCharacteristic;
+
+
+  connectToDevice() async {
+    if (widget.device == null) return;
+
+    setState(() {
+      connectionText = "Device Connecting";
+    });
+
+    await widget.device!.connect();
+    print('DEVICE CONNECTED');
+    setState(() {
+      connectionText = "Device Connected";
+    });
+
+    discoverServices();
+  }
+
+  //해당 디바이스의 보낼 서비스 uuid를 를아 데이터 송신하는 함수
+  discoverServices() async {
+    if (widget.device == null) return;
+
+    List<BluetoothService> services = await widget.device!.discoverServices();
+    services.forEach((service) {
+      // do something with service
+      if (service.uuid.toString() == POST_SERVICE_UUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == POST_CHARACTERISTIC_UUID) {
+            targetCharacteristic = characteristic;
+            writeData("해당 리터 량");
+            setState(() {
+              connectionText = "All Ready with ${widget.device!.name}";
+            });
+          }
+        });
+      }
+    });
+  }
+
+  //넘겨줄 string 데이터를 utf8로 인코딩 해서 송신하는 함수
+  writeData(String data) async {
+    if (targetCharacteristic == null) return;
+
+    List<int> bytes = utf8.encode(data);
+    await targetCharacteristic!.write(bytes);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    Peripheral? peripheral = widget.peripheral;
 
-    String car_number = widget.car_number;
     Size size = MediaQuery.of(context).size;
-    User? user = widget.user;
 
     return SafeArea(
       child: Scaffold(
@@ -221,44 +237,52 @@ class _Fill_setting extends State<Fill_setting> {
                 height: size.height * 0.06,
               ),
               InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    User? user =await Http_services().get_user_info(widget.user_id, widget.user_token!.token);
                     if (_select_value == null) {
                       if (!inputController.text.isEmpty) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Filling(
-                                    user: user,
+                                    user_info :user,
+                                    user_token: widget.user_token,
                                     user_id: widget.user_id,
-                                    liter: inputController.text,
+                                    liter: int.parse('${inputController.text}') ,
                                     car_number: widget.car_number,
-                                    peripheral: widget.peripheral)));
+                                    device:widget.device,
+
+                      )));
                       } else {
-                        showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
+                        showtoast("리터량을 설정해주세요!");
                       }
                     } else if (_select_value == "가득") {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Filling(
-                                  user: user,
+                                user_info :user,
+                                user_token: widget.user_token,
                                   user_id: widget.user_id,
-                                  liter: "가득",
-                                  car_number: widget.car_number,
-                                  peripheral: widget.peripheral)));
+                                  liter: 100,
+                                  car_number: widget.car_number, device: widget.device,
+
+                            )));
                     } else if (_select_value == "리터") {
                       if (!inputController.text.isEmpty) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Filling(
-                                    user: user,
+                                  user_info :user,
+                                  user_token: widget.user_token,
                                     user_id: widget.user_id,
-                                    liter: inputController.text,
+                                    liter: int.parse('${inputController.text}'),
                                     car_number: widget.car_number,
-                                    peripheral: widget.peripheral)));
+                                  device: widget.device,
+                            )));
                       } else {
-                        showAlertDialog(context, "입력오류", "리터량을 설정해주세요");
+                        return showtoast("리터량을 설정해주세요!");
                       }
                     }
                   },

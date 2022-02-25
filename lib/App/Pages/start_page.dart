@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:soultec/Account/login_page.dart';
 import 'package:soultec/Data/toast.dart';
-import '../../wrapper.dart';
 
 
 class Start_page extends StatefulWidget {
@@ -17,8 +17,6 @@ class _Start_pageState extends State<Start_page> {
   void initState(){
     super.initState();
     initConnectivity();
-
-
   }
 
   @override
@@ -28,16 +26,14 @@ class _Start_pageState extends State<Start_page> {
 
 
 
-
+//네트워크 연결 확인 함수
   Future<void> initConnectivity() async {
     print("start ");
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult.toString());
     if (connectivityResult == ConnectivityResult.mobile) {
       print("mobile data");
-      // I am connected to a mobile network.
     } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a wifi network.
       print("wifi");
     }
     else if( connectivityResult.toString() == "ConnectivityResult.none"){
@@ -67,7 +63,7 @@ class _Start_pageState extends State<Start_page> {
                       width: 100,
                     ),
                     SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.06,
                     ),
                     Text(
                       '빠르고 편한 주입',
@@ -106,7 +102,7 @@ class _Start_pageState extends State<Start_page> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Wrapper()));
+                                builder: (context) => LoginScreen()));
                       },
                       //Text("연결",style: TextStyle(fontWeight: FontWeight.bold),),
                       child: Icon(Icons.bluetooth),

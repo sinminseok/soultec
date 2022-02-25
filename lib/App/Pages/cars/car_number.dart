@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+// import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/fills/fill_start.dart';
 import 'package:soultec/Data/Object/user_object.dart';
@@ -11,63 +12,53 @@ import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
 class CarNumberPage extends StatefulWidget {
-  final User? user;
+  final User_token? user_token;
   String? user_id;
-  final Peripheral? peripheral;
+  BluetoothDevice? device;
 
-  CarNumberPage({required this.user,required this.user_id , required this.peripheral});
+
+  CarNumberPage({required this.user_token,required this.user_id, required this.device});
 
   @override
   State<CarNumberPage> createState() => _CarNumberPageState();
 }
 
 class _CarNumberPageState extends State<CarNumberPage> {
-  TextEditingController _carnumber = TextEditingController();
-
+  TextEditingController? _carnumber = TextEditingController();
   bool check_connected = false;
 
   @override
   void initState() {
-    check_connected_fun();
-    scan_uuids();
+    remember_device(widget.device!.id);
+    call();
     super.initState();
   }
 
-  //ble connection 확인 함수
-  void check_connected_fun() async {
-    check_connected = await widget.peripheral!.isConnected();
-    print(check_connected);
-  }
-
-  scan_uuids() async {
-
-    Peripheral? peripheral = widget.peripheral;
-
-    await peripheral!
-        .discoverAllServicesAndCharacteristics()
-        .then((_) => peripheral.services())
-        .then((services) async {
-      print("PRINTING SERVICES for ${peripheral.name}");
-      //각각의 서비스의 하위 캐릭터리스틱 정보를 디버깅창에 표시한다.
-      for (var service in services) {
-        print("Found service ${service.uuid}");
-        List<Characteristic> characteristics = await service.characteristics();
-        int index = 0;
-        for (var characteristic in characteristics) {
-          print(index);
-          print("${characteristic.uuid}");
-          index++;
-        }
-      }
-      //모든 과정이 마무리되면 연결되었다고 표시
-    });
+  Future<void> call()async{
+    await widget.device!.connect();
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    _carnumber =null;
+  }
+
+
+  //ble device 기기 id값을 디스크에 저장 추후 자동 페어링 할때 사용
+  void remember_device(device_id)async{
+    String? check_device_id = device_id.toString();
+// shared preferences 얻기
+    final prefs = await SharedPreferences.getInstance();
+// 값 저장하기
+    prefs.setString('$check_device_id',check_device_id);
+    return;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-
-    var user_token= widget.user!.token;
-
+    var user_token= widget.user_token!.token;
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -96,6 +87,12 @@ class _CarNumberPageState extends State<CarNumberPage> {
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                     ],
+                  ),
+                  InkWell(
+                    onTap: ()async{
+                      await call();
+                    },
+                    child: Text("TEET"),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
@@ -170,80 +167,28 @@ class _CarNumberPageState extends State<CarNumberPage> {
               ),
 
               InkWell(
-                  onTap: () {
-                    var return_carnumber = Http_services().post_carnumber(_carnumber.text,user_token);
-                    if(return_carnumber == null){
-                      showAlertDialog(context , "등록되지 않은 차량입니다", "차량 번호를 다시 확인해주세요");
-                    }else{
+                  onTap: () async{
+                    //http get car_number return bool
+                    var return_carnumber =await Http_services().post_carnumber(_carnumber!.text,user_token);
+
+                    if(return_carnumber == true){
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   Fill_start(
-                                    user: widget.user,user_id:widget.user_id,car_number: _carnumber.text, peripheral: widget.peripheral,)));
+                                      user_token: widget.user_token ,user_id:widget.user_id,car_number: _carnumber!.text,device:widget.device)));
 
+                    }else{
+                      showtoast("등록되지 않은 차번호 입니다.");
                     }
 
-
-
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => Fill_start(
-                    //               user: widget.user,
-                    //               car_number: _carnumber.text,
-                    //               peripheral: widget.peripheral,
-                    //             )));
                   },
                   child: Container(
                       width: size.width * 0.7,
                       height: size.height * 0.1,
                       child: Image.asset("assets/images/play_button.png"))),
 
-              // 페어링된 해당 디바이 스페어링 취소
-              InkWell(
-                onTap: () async {
-                  bool test_check = await widget.peripheral!.isConnected();
-                  print("before $test_check");
-                  widget.peripheral!.disconnectOrCancelConnection();
-                  print("after$test_check");
-
-                  check_connected_fun();
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  width: size.width * 0.6,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text("페어링 취소",
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ),
-              //
-              // //디스크 디바이스 초기화
-              InkWell(
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-
-                  prefs.remove("66:4E:55:E5:AE:E6");
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  width: size.width * 0.6,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text("디스크 초기화",
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ),
             ],
           ),
         ),

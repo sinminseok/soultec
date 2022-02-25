@@ -1,26 +1,27 @@
 import 'dart:convert';
 import 'dart:core';
-import 'dart:io';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
 
 class Http_services {
-  //http 통신 url
-  String login_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
-  String car_url_post = "";
-  String post_url = "";
-  String user_info_url = "";
-
   //로그인후 반환할 user 객체
-  User? user;
+  User_token? user_token;
+  User? user_info;
+
+  //http 통신 url
+  String login_url =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
+  String car_url_post =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
+  String post_url =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
 
   //http 로그인
-  Future<User?> login(id, pw, ischeck) async {
+  Future<User_token?> login(id, pw, ischeck) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(login_url),
         headers: {'Content-Type': 'application/json'},
@@ -31,15 +32,15 @@ class Http_services {
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
-      user = User.fromJson(jsonDecode(res.body));
-      print(user!.token);
+      user_token = User_token.fromJson(jsonDecode(res.body));
+      print(user_token!.token);
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
-        save_user(id,pw);
-        return user;
+        save_user(id, pw);
+        return user_token;
       } else {
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
-        return user;
+        return user_token;
         //디스크에 해당 user id,pw 저장후 로그인
 
       }
@@ -48,24 +49,40 @@ class Http_services {
     }
   }
 
+  //http userinformation 가져오기
+  Future<User?> get_user_info(user_id, token) async {
+    var res = await http.get(
+        Uri.parse(
+            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/user"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
+    print(res.body);
+    //statusCode 확인해볼것
+    if (res.statusCode == 200) {
+      user_info = User.fromJson(jsonDecode(res.body));
+      return user_info;
+    } else {
+      return null;
+    }
+  }
 
   //http 자동 로그인
-   Future<User?> auto_login(id, pw) async {
+  Future<User_token?> auto_login(id, pw) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
 
     var res = await http.post(Uri.parse(login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
-
-
     print(res.body);
+    print(res.statusCode);
 
     if (res.statusCode == 200) {
-      //디코딩후 res body 를 user 객체로 대입
-      //디코딩후 res body 를 user 객체로 대입
-      user = User.fromJson(jsonDecode(res.body));
-      print(user!.token);
-      return user;
+      user_token = User_token.fromJson(jsonDecode(res.body));
+
+      return user_token;
       //디스크에 해당 user id,pw 저장후 로그인
 
     } else {
@@ -73,31 +90,13 @@ class Http_services {
     }
   }
 
-  //http 토큰 get ex)receipt list get 기능에서 가져와야댐
-  Future test(token) async {
-    print("sed");
-    final response =
-        await http.get(Uri.parse("http://3.38.104.80:8080/api/user"), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    });
-
-    print(response.body);
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      return null;
-    }
-  }
-
   //user information 저장 함수
-  void save_user(user_id,user_pw) async {
+  void save_user(user_id, user_pw) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
-    prefs.setString('id',user_id);
-    prefs.setString('pw',user_pw);
+    prefs.setString('id', user_id);
+    prefs.setString('pw', user_pw);
     return;
   }
 
@@ -114,31 +113,33 @@ class Http_services {
   }
 
   //http 차량 번호 post함수
-  Future<String?> post_carnumber(car_number, token) async {
+  Future<bool?> post_carnumber(number, token) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(
-      Uri.parse(car_url_post),
+    var res = await http.get(
+      Uri.parse(
+          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/$number"),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: json.encode({
-        'carnumber': car_number,
-      }),
     );
-
+    print(res.body);
+    print(res.statusCode);
     if (res.statusCode == 200) {
-      return car_number;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
   //http post
-  Future post_receipt(liter, date, car_number, user_id, token) async {
+  Future post_receipt(
+      username, pumpId, branchId, amount, carNumber, token) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(post_url),
+    var res = await http.post(
+        Uri.parse(
+            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -146,11 +147,16 @@ class Http_services {
         },
         //인코딩
         body: json.encode({
-          'liter': liter,
-          'date': date,
-          'car_number': car_number,
-          'user_id': user_id,
+          'username': username,
+          'pumpId': pumpId,
+          'branchId': branchId,
+          'amount': amount,
+          'carNumber': carNumber,
         }));
+
+    print(res.body);
+    print(res.bodyBytes);
+
     if (res.statusCode == 200) {
       return res;
     } else {
@@ -160,26 +166,29 @@ class Http_services {
 
   //user 이용내역 list http get
   Future<List<dynamic>?> load_receipt_list(token) async {
-    var _datas = [];
+    var data_list = [];
     final response = await http.get(
-          Uri.parse(user_info_url),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-        ),
+      Uri.parse(
+          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    final decodeData = utf8.decode(response.bodyBytes);
+    final data = jsonDecode(decodeData);
 
-        res_body = utf8.decode(response.bodyBytes);
+    for (int i = 0; i < data.length; i++) {
+      Receipt_object receipt_object;
+      receipt_object = Receipt_object.fromJson(data[i]);
+      data_list.add(receipt_object);
+    }
 
-    var dataObjsJson = jsonDecode(res_body)['data'] as List;
-
-
-    final List<Receipt_object> parsedResponse =
-        dataObjsJson.map((e) => Receipt_object.fromJson(e)).toList();
-
-    _datas.addAll(parsedResponse);
-
-    return _datas;
+    if (response.statusCode == 200) {
+      return data_list;
+    } else {
+      return null;
+    }
   }
 }

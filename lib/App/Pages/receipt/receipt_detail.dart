@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/App/widgets/date_widget.dart';
 import 'package:soultec/App/widgets/receipt_content.dart';
+import 'package:soultec/Data/Object/receipt_object.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
 
 class Recepit_detail extends StatefulWidget {
-  final String? liter;
-  final User? user;
-  final String? car_number;
 
-  Recepit_detail({required this.user , required this.liter , required this.car_number});
+  final Receipt_object list_Data;
+
+  Recepit_detail({required this.list_Data});
 
   @override
   _Recepit_detail createState() => _Recepit_detail();
@@ -32,13 +32,12 @@ class _Recepit_detail extends State<Recepit_detail> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
 
-    String? liter = widget.liter;
     // String? user_id = widget.user!.id;
     // String? user_name = widget.user!.name;
-    String? user_id = "1786";
-    String? car_number = widget.car_number;
-    Size size = MediaQuery.of(context).size;
+
+
 
     return Scaffold(
         backgroundColor: kPrimaryColor, body: SafeArea(
@@ -80,35 +79,85 @@ class _Recepit_detail extends State<Recepit_detail> {
                 height: size.height * 0.05,
               ),
               Text(
-                "0123-45gj6789",
+                "${widget.list_Data.username} -- ${widget.list_Data.carNumber!}",
                 style: TextStyle(
-                    color: Colors.red, fontSize: 29, fontFamily: "numberfont"),
+                  color: Colors.red,
+                  fontSize: 29,
+                  fontFamily: "numberfont",
+                ),
               ),
               SizedBox(
                 height: size.height * 0.05,
               ),
 
-              // Recepit_content(user_id ,car_number , liter ,todate),
+              Container(
+
+                  color: Colors.white,
+                  height: size.height*0.55,
+                  width: size.width*0.7,
+                  child: Column(
+                    children: [
+                      Text("이용 내역",style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                      Text("",style:TextStyle(fontSize: 14),),
+                      Text("${widget.list_Data.branchName}",style:TextStyle(fontSize: 14),),
+                      Text("대표 : ${widget.list_Data.branchCeo}",style:TextStyle(fontSize: 14),),
+                      Text("${widget.list_Data.branchAddress}",style:TextStyle(fontSize: 14),),
+                      Text("담당자 번호 : ${widget.list_Data.branchTEL} ",style:TextStyle(fontSize: 14),),
+                      Text("이용 내역",style:TextStyle(fontSize: 14),),
+                      Text("",style:TextStyle(fontSize: 14),),
+                      Text("사용일시 : ${(widget.list_Data.dateTime)!.substring(0,10)}",style:TextStyle(fontSize: 14),),
+                      Text("승인번호 : ${widget.list_Data.approvalNumber}",style:TextStyle(fontSize: 14),),
+                      Text("주유기 번호: ${widget.list_Data.pumpNumber}",style:TextStyle(fontSize: 14),),
+                      Text("============================",style:TextStyle(fontSize: 14),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("제품명"),
+                          Text("수량"),
+                          Text("기사번호"),
+                          Text("차량 번호"),
+                        ],
+                      ),
+
+                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("요소수"),
+                          Text("${widget.list_Data.amount}"),
+                          Text("${widget.list_Data.username}"),
+                          Text("${widget.list_Data.carNumber}"),
+                        ],
+                      ),
+                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                      Text("총 충전량:312.412",style:TextStyle(fontSize: 14),),
+                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                      Text("soultec 제출",style:TextStyle(fontSize: 14),),
+
+                    ],
+                  )
+
+              ),
               //Text(liter),
               SizedBox(
                 height: size.height * 0.05,
               ),
 
               InkWell(
-                onTap: (){
-                  // post_receipt(widget.liter,date,,,);
-                  //http post 이용내역
-                  Navigator.pop(context);
+                onTap: () async{
+                  Navigator.of(context).pop();
+
                 },
                 child: Container(
-                  width: size.width * 0.8,
+
+                  width: size.width * 0.3,
                   height: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                       color: Colors.white),
                   padding: EdgeInsets.symmetric(vertical: 20),
                   alignment: Alignment.center,
-                  child: Text('제출하기',
+                  child: Text('뒤로가기',
                       style: TextStyle(color: Colors.black, fontSize: 16)),
                 ),
               ),

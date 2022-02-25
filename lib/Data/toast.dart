@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void showtoast(String message) async{
-  print("ddddddd");
   Fluttertoast.showToast(msg: message,
     timeInSecForIosWeb: 3,
+    textColor:Colors.black,
     backgroundColor: Colors.white,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,

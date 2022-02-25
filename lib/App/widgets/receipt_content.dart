@@ -8,7 +8,7 @@ import 'date_widget.dart';
 class Recepit_content extends StatelessWidget {
   final String? user_id;
   final String? car_number;
-  final String? litter;
+  final int? litter;
   final String? date;
 
 

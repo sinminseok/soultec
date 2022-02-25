@@ -1,34 +1,38 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:soultec/App/Pages/fills/fill_setting.dart';
 import 'package:soultec/Data/Object/user_object.dart';
+import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
-
-
-//이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_start extends StatefulWidget {
-  User? user;
+  User_token? user_token;
   String? user_id;
-  Peripheral? peripheral;
   final String car_number;
+  BluetoothDevice? device;
 
-  Fill_start({required this.user ,required this.user_id ,required this.car_number,required this.peripheral});
+  Fill_start({required this.user_token ,required this.user_id ,required this.car_number, required this.device});
 
   @override
   _Fill_start createState() => _Fill_start();
 }
 
 class _Fill_start extends State<Fill_start> {
-  int pageIndex = 0;
+
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    User? user = widget.user;
+    User_token? user_token = widget.user_token;
 
     return SafeArea(
       child: Scaffold(
@@ -76,12 +80,18 @@ class _Fill_start extends State<Fill_start> {
 
                   InkWell(
 
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Fill_setting(user: user,user_id:widget.user_id, car_number: widget.car_number,peripheral:widget.peripheral)));
+                      onTap: () async{
+                        User? user_info =await Http_services().get_user_info(widget.user_id, widget.user_token!.token);
+                        if(user_info == null){
+                          showtoast("사용자 정보 오류 관리자에게 문의하세요");
+                        }else{
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Fill_setting(user_token:user_token,user_id:widget.user_id, car_number: widget.car_number,device:widget.device,user_info:user_info)));
+                        }
+
                       },
 
                       child:Container(
@@ -95,13 +105,5 @@ class _Fill_start extends State<Fill_start> {
           )),
 
     );
-  }
-
-
-
-  selectedTap(index) {
-    setState(() {
-      pageIndex = index;
-    });
   }
 }

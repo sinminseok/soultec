@@ -1,33 +1,52 @@
-class Receipt_object{
-  final String? Point; //지점
-  final String? representative;
-  final String? address; //주소
-  final DateTime? date;//날짜
-  final int? Litter; //사용리터(해당 날짜)
-  final String? car_number; //자동차번호
-  final String? user_number; //기사번호
-  final String? total_litter; //전체 사용 리터
+class Receipt_object {
+  final int? id;
+  final String? dateTime; //
+  final int? pumpId; // 주입기 식별자
+  final String? branchName; // 지점이름
+  final String? branchCeo; // 지점 관리자
+  final String? branchAddress; // 지점 주소
+  final String? branchTEL; // 지점 전회번호
+  final String? approvalNumber; //
+  final int? pumpNumber; // 주입기 번호
+  final String? product; //승인번호
+  final int? amount; // 주입량
+  final String? username; //기사번호
+  final String? nickname;
+  final String? carNumber; // 자동차 번호
 
-  Receipt_object(
-      {this.Point,
-      this.representative,
-      this.address,
-      this.date,
-      this.Litter,
-      this.car_number,
-      this.user_number,
-      this.total_litter});
+  Receipt_object({
+    this.id,
+    this.dateTime,
+    this.pumpId,
+    this.branchName,
+    this.branchCeo,
+    this.branchAddress,
+    this.branchTEL,
+    this.approvalNumber,
+    this.pumpNumber,
+    this.product,
+    this.amount,
+    this.username,
+    this.nickname,
+    this.carNumber,
+  });
 
   factory Receipt_object.fromJson(Map<String, dynamic> json) {
     return Receipt_object(
-      Point: json['Point'],
-      representative: json['representative'],
-      address: json['address'],
-      date: json['date'],
-      Litter: json['Litter'],
-      car_number: json['car_number'],
-      user_number: json['bus_driver'],
-      total_litter: json['total_litter'],
+      id: json['id'],
+      dateTime: json['dateTime'],
+      pumpId: json['pumpId'],
+      branchName: json['branchName'],
+      branchCeo: json['branchCeo'],
+      branchAddress: json['branchAddress'],
+      branchTEL: json['branchTEL'],
+      approvalNumber: json['approvalNumber'],
+      pumpNumber: json['pumpNumber'],
+      product: json['product'],
+      amount: json['amount'],
+      username: json['username'],
+      nickname: json['nickname'],
+      carNumber: json['carNumber'],
     );
   }
 }

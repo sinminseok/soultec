@@ -3,7 +3,8 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Bluetooth/blue_discovery.dart';
+import 'package:soultec/App/Bluetooth/blue_device_tile.dart';
+import 'package:soultec/App/Bluetooth/blue_scan.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   //Object 객체 생성, http get 이후 json을 데이터를 Object 객체로 대입
-  User? user;
+  User_token? user_token;
 
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
   var disk_user_info = [];
@@ -42,12 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool auth_login = false;
   bool? http_return;
 
-
-  late Stream<User?> stream;
+//http get 비동기 control stream
+  late Stream<User_token?> stream;
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box()async{
-    print("check_out");
 
     final prefs = await SharedPreferences.getInstance();
       checkbox_state = prefs.getString("check_login");
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> initConnectivity() async {
-    print("start ");
+
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult.toString());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     auth_login = false;
     checkbox_state = null;
-    user = null;
+    user_token = null;
     disk_user_info=[];
    _isChecked = false;
     super.dispose();
@@ -115,14 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Size size = MediaQuery.of(context).size;
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
-    return auth_login ? FutureBuilder<User?>(
+    return auth_login ? FutureBuilder<User_token?>(
         future:  Http_services().auto_login(disk_user_info[0], disk_user_info[1]),
         builder: (context, snapshot) {
           if(snapshot.hasError){
             return Text("server drop");
           }else if(snapshot.hasData){
-
-            return DiscoveryPage(user: snapshot.data ,user_id:disk_user_info[0]);
+            return Blue_scan(user_token: snapshot.data,user_id:disk_user_info[0],);
+                //DiscoveryPage(user: snapshot.data ,user_id:disk_user_info[0]);
           }else{
             return Center(
                 child: Container(
@@ -263,25 +263,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       InkWell(
                         onTap: () async {
-                          user = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
-                          if(user != null){
+                          user_token = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
+                          if(user_token != null){
                             String user_id =_userIDController.text;
-                            print(user!.token.toString());
+
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DiscoveryPage(user: user,user_id:user_id)));
+                                        Blue_scan(user_token: user_token,user_id:user_id,)));
                           }else{
                             return showAlertDialog(context, "로그인 실패", "기사번호와 비밀번호를 다시 한번 \n 확인해주세요.");
                           }
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //             DiscoveryPage(user: null)));
-
                         },
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
