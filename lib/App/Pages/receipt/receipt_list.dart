@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
+import 'package:soultec/App/widgets/top_widget.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'dart:core';
@@ -147,38 +148,8 @@ class _Receipt_list extends State<Receipt_list> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    "충전관리 솔루션",
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Text(
-                    "스마트필",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Image(
-                  image: AssetImage('assets/images/mainimg.png'),
-                  width: 60,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: size.height * 0.05,
-          ),
+          Top_widget(),
+
           Text(
             "${widget.user_id} -- ${widget.car_number!}",
             style: TextStyle(
@@ -233,7 +204,11 @@ class _Receipt_list extends State<Receipt_list> {
             ],
           ),
           SizedBox(
-            height: size.height * 0.05,
+            height: size.height * 0.03,
+          ),
+          Center(child: Text("이용 내역",style: TextStyle(fontFamily: "numberfont",fontSize: 23),),),
+          SizedBox(
+            height: size.height * 0.02,
           ),
           scan_check
               ?

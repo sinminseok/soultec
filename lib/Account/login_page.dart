@@ -3,14 +3,14 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Bluetooth/blue_device_tile.dart';
 import 'package:soultec/App/Bluetooth/blue_scan.dart';
+import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,11 +23,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLogin = true;
-
   //Form controller
   final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  AudioPlayer player = AudioPlayer();
   //Object 객체 생성, http get 이후 json을 데이터를 Object 객체로 대입
   User_token? user_token;
 
@@ -43,6 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool auth_login = false;
   bool? http_return;
 
+
+
+
 //http get 비동기 control stream
   late Stream<User_token?> stream;
 
@@ -52,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final prefs = await SharedPreferences.getInstance();
       checkbox_state = prefs.getString("check_login");
 
-    if(checkbox_state != true){
+      print(checkbox_state);
+
+    if(checkbox_state != null){
       disk_user_info =await Http_services().get_userinfo();
 
       user_id_disk = disk_user_info[0];
@@ -66,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
       SystemChrome.setEnabledSystemUIOverlays([]);
 
     }else{
+      print("FFF");
       setState((){
         auth_login= false;
       });
@@ -263,6 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       InkWell(
                         onTap: () async {
+                          Sound().play_sound("assets/mp3/click.mp3");
                           user_token = await Http_services().login(_userIDController.text,_passwordController.text,_isChecked);
                           if(user_token != null){
                             String user_id =_userIDController.text;

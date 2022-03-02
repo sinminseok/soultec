@@ -98,7 +98,11 @@ class _Start_pageState extends State<Start_page> {
                       shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(16.0))),
-                      onPressed: () {
+                      onPressed: () async{
+
+                        // final prefs = await SharedPreferences.getInstance();
+                        //
+                        // prefs.remove('check_login');
                         Navigator.push(
                             context,
                             MaterialPageRoute(

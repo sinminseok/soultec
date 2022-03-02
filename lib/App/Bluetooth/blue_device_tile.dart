@@ -29,6 +29,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
   void initState(){
     check_device(widget.result.device);
     super.initState();
+
   }
 
   void check_device(device)async{
@@ -41,18 +42,12 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       return;
       //처음 연결하는 장치 return null
     }else{
-      showtoast("페어링 되었습니다 $device_id");
+
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CarNumberPage(
                   user_token:widget.user,user_id:widget.user_id,device: device)));
-      //   Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) {
-      //   device.connect();
-      //   return CarNumberPage(user_token:widget.user,user_id:widget.user_id,device: device);
-      // }));
-      //이전에 기억된 장치 바로 여거시 커넥ㅌ,
     }
 
   }

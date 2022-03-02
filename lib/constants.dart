@@ -8,3 +8,5 @@ const String GET_CHARACTERISTIC_UUID = "";
 
 const String POST_SERVICE_UUID = "";
 const String POST_CHARACTERISTIC_UUID = "";
+
+String _text="don't back";

@@ -47,21 +47,24 @@ class BluetoothOffScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightBlue,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              Icons.bluetooth_disabled,
-              size: 200.0,
-              color: Colors.white54,
-            ),
-            Text(
-              'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.lightBlue,
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.bluetooth_disabled,
+                size: 200.0,
+                color: Colors.white54,
+              ),
+              Text(
+                'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -118,7 +121,6 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                         onTap: () => Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           r.device.connect();
-                          showtoast("페어링 되었습니다 ${r.device.id}");
                           return CarNumberPage(
                               user_token: widget.user_token,
                               user_id: widget.user_id,
