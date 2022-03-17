@@ -1,14 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'App/Pages/start_page.dart';
+import 'RestAPI/http_service.dart';
 import 'constants.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
 
+  // runApp(
+  //   MyApp(),
+  // );
   runApp(
-    MyApp(),
+
+ChangeNotifierProvider(
+          create: (_) => Http_services(),
+
+          child: MyApp()),
+
   );
 }
 

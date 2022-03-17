@@ -1,16 +1,26 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
 
-class Http_services {
+class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
-  User_token? user_token;
-  User? user_info;
+  User_token? _user_token;
+  User? _user_info;
+  String? _user_id;
+  String? _carnumber;
+
+  User_token? get user_token => _user_token;
+
+  User? get user_info => _user_info;
+
+  String? get user_id => _user_id;
+
+  String? get carnumber => _carnumber;
 
   //http 통신 url
   String login_url =
@@ -27,30 +37,41 @@ class Http_services {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-    print(res.body);
+    print("GDFGDFGDFg");
+    print(res.statusCode);
+
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
-      user_token = User_token.fromJson(jsonDecode(res.body));
-      print(user_token!.token);
+      _user_token = User_token.fromJson(jsonDecode(res.body));
+      _user_id = id;
+      notifyListeners();
+
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
-        return user_token;
+        print(_user_token!.token);
+        return _user_token;
       } else {
+        print(_user_token!.token);
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
-        return user_token;
+        return _user_token;
         //디스크에 해당 user id,pw 저장후 로그인
 
       }
-    } else {
+    }
+    if(res.statusCode == 400){
+      print("gfdgdfgdfgdfgdfg");
+      return User_token.fromJson(jsonDecode("FALSELOGIN"));
+    }
+    else {
       return null;
     }
   }
 
   //http userinformation 가져오기
-  Future<User?> get_user_info(user_id, token) async {
+  Future<User?> get_user_info(token) async {
     var res = await http.get(
         Uri.parse(
             "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/user"),
@@ -59,11 +80,14 @@ class Http_services {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
-    print(res.body);
+
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
-      user_info = User.fromJson(jsonDecode(res.body));
-      return user_info;
+      _user_info = User.fromJson(jsonDecode(res.body));
+      print(_user_info);
+
+      notifyListeners();
+      return _user_info;
     } else {
       return null;
     }
@@ -71,20 +95,22 @@ class Http_services {
 
   //http 자동 로그인
   Future<User_token?> auto_login(id, pw) async {
+    print(id);
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-
     var res = await http.post(Uri.parse(login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
-    print(res.body);
-    print(res.statusCode);
+
 
     if (res.statusCode == 200) {
-      user_token = User_token.fromJson(jsonDecode(res.body));
+      User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
+      this._user_token = userr_token;
+      this._user_id = id;
+      print(_user_token!.token);
 
-      return user_token;
+      notifyListeners();
+      return _user_token;
       //디스크에 해당 user id,pw 저장후 로그인
-
     } else {
       return null;
     }
@@ -95,20 +121,23 @@ class Http_services {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
+
     prefs.setString('id', user_id);
     prefs.setString('pw', user_pw);
+
     return;
   }
 
-  //디스크 저장 user information 가져오는 함수
   get_userinfo() async {
     final prefs = await SharedPreferences.getInstance();
     var data = [];
 // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
     var user_id_disk = prefs.getString('id');
     data.add(user_id_disk);
+
     var user_pw_disk = prefs.getString('pw');
     data.add(user_pw_disk);
+
     return data;
   }
 
@@ -124,9 +153,14 @@ class Http_services {
         'Authorization': 'Bearer $token',
       },
     );
-    print(res.body);
-    print(res.statusCode);
+
+    print(res);
+
+
+
     if (res.statusCode == 200) {
+      _carnumber = number;
+      notifyListeners();
       return true;
     } else {
       return false;
@@ -135,11 +169,13 @@ class Http_services {
 
   //http post
   Future post_receipt(
-      username, pumpId, branchId, amount, carNumber, token) async {
+       pumpId, amount, carNumber, token) async {
+    //pumbId 는 노르딕에서 가져오는 것 (메모리 할당)
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(
         Uri.parse(
-            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs"),
+            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
+        //http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -147,15 +183,11 @@ class Http_services {
         },
         //인코딩
         body: json.encode({
-          'username': username,
-          'pumpId': pumpId,
-          'branchId': branchId,
+          'pumpId': pumpId.toString(),
           'amount': amount,
           'carNumber': carNumber,
         }));
 
-    print(res.body);
-    print(res.bodyBytes);
 
     if (res.statusCode == 200) {
       return res;
@@ -167,15 +199,19 @@ class Http_services {
   //user 이용내역 list http get
   Future<List<dynamic>?> load_receipt_list(token) async {
     var data_list = [];
+
     final response = await http.get(
       Uri.parse(
           "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
+      //
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
+    //한글 깨지는거 인코딩으로 감싸줌
     final decodeData = utf8.decode(response.bodyBytes);
     final data = jsonDecode(decodeData);
 

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Account/login_page.dart';
+import 'package:soultec/App/Pages/fills/fill_stop.dart';
 import 'package:soultec/Data/toast.dart';
 
 
@@ -101,12 +103,13 @@ class _Start_pageState extends State<Start_page> {
                       onPressed: () async{
 
                         // final prefs = await SharedPreferences.getInstance();
-                        //
-                        // prefs.remove('check_login');
+                        // prefs.remove('asdf1234');
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => LoginScreen()));
+
                       },
                       //Text("연결",style: TextStyle(fontWeight: FontWeight.bold),),
                       child: Icon(Icons.bluetooth),

@@ -2,23 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Data/Object/user_object.dart';
+import 'package:soultec/RestAPI/http_service.dart';
+import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'dart:core';
 
 class Receipt_list extends StatefulWidget {
-  User_token? user;
   List? data_list;
-  String? user_id;
   String? car_number;
 
-  Receipt_list(
-      {required this.data_list,
-      required this.user,
-      required this.user_id,
-      required this.car_number});
+  Receipt_list({
+    required this.car_number,
+    required this.data_list, user_id,
+  });
 
   @override
   State<Receipt_list> createState() => _Receipt_list();
@@ -36,11 +35,10 @@ class _Receipt_list extends State<Receipt_list> {
 
   //날짜 검색후 필터링된 정보 담을 list
   var filter_use_data = [];
-
 //최종 리스트
   List? itembuilder_list = [];
 
-  //날짜 String 쪼개는 함수
+  //날짜 String 쪼개는 함수 ,  서버에서 가져온 날짜 가공
   filter_string(dateTime) {
     String? datetime_string;
     datetime_string = dateTime.substring(0, 4) +
@@ -48,11 +46,18 @@ class _Receipt_list extends State<Receipt_list> {
         dateTime.substring(8, 10) +
         dateTime.substring(11, 13) +
         dateTime.substring(14, 16);
+    // datetime_string = dateTime.substring(0, 4) +
+    //     dateTime.substring(5, 7) +
+    //     dateTime.substring(8, 10) +
+    //     dateTime.substring(11, 13) +
+    //     dateTime.substring(14, 16);
     return int.parse(datetime_string!);
+
   }
 
   //이용내역을 최근 날짜부터 정렬해주는 함수
   sort_datetime(data_list) async {
+
     List<int>? datetime_list = [];
     List<String>? datetime_list_string = [];
 
@@ -60,21 +65,37 @@ class _Receipt_list extends State<Receipt_list> {
       datetime_list.add(filter_string(data_list[i].dateTime));
     }
     datetime_list.sort();
+    print("start sort");
+    print(datetime_list);
 
     var reversed_Date = datetime_list.reversed;
+    print("reversed_Date");
+    print(reversed_Date);
+    print(reversed_Date.length);
 
     for (var j = 0; j < reversed_Date.toList().length; j++) {
       datetime_list_string.add(reversed_Date.toList()[j].toString());
     }
+    print("dasd");
+    print(datetime_list_string);
+
+
 
     return datetime_list_string;
   }
 
   //이용내역 리스트 최근날짜 순으로 정렬
   index(data_lsit, filyer__list) async {
+    print("sex");
+    print(data_lsit);
+    print(filyer__list);
+
     var data_reversed = [];
 
     for (var i = filyer__list.length - 1; i >= 0; i--) {
+      print(i);
+      print("i");
+      print(filyer__list[i]);
       for (var j = data_lsit.length - 1; j >= 0; j--) {
         String? datetime_string =
             await data_lsit[j]!.dateTime!.substring(0, 4) +
@@ -82,11 +103,37 @@ class _Receipt_list extends State<Receipt_list> {
                 data_lsit[j]!.dateTime!.substring(8, 10) +
                 data_lsit[j]!.dateTime!.substring(11, 13) +
                 data_lsit[j]!.dateTime!.substring(14, 16);
+        print(datetime_string);
+        print(j);
         if (filyer__list[i] == datetime_string) {
           data_reversed.add(data_lsit![i]);
         }
       }
     }
+
+
+    // for (var i = filyer__list.length - 1; i >= 0; i--) {
+    //   print(i);
+    //   print("i");
+    //   print(filyer__list[i]);
+    //   for (var j = data_lsit.length - 1; j >= 0; j--) {
+    //     String? datetime_string =
+    //         await data_lsit[j]!.dateTime!.substring(0, 4) +
+    //             data_lsit[j]!.dateTime!.substring(5, 7) +
+    //             data_lsit[j]!.dateTime!.substring(8, 10) +
+    //             data_lsit[j]!.dateTime!.substring(11, 13) +
+    //             data_lsit[j]!.dateTime!.substring(14, 16);
+    //     print(datetime_string);
+    //     print(j);
+    //     if (filyer__list[i] == datetime_string) {
+    //       data_reversed.add(data_lsit![i]);
+    //     }
+    //   }
+    // }
+
+    print("data_reversed");
+    print(data_reversed.length);
+    print(data_reversed);
 
     setState(() {
       //최근 날짜부터 정렬된 Receipt 객체 리스트 setState후 widget itembuilder에서 사용
@@ -115,15 +162,16 @@ class _Receipt_list extends State<Receipt_list> {
     return filter_use_data;
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    call();
+     call();
 
-    // index(widget.data_list ,sort_datetime(widget!.data_list));
-    // user_use_data = Http_services().load_receipt_list() as List;
   }
+
+
 
   //initState에서는 비동기 호출이 안되므로 call 함수에서 비동기 작업을 수행한다.
   call() async {
@@ -142,6 +190,7 @@ class _Receipt_list extends State<Receipt_list> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String? user_id = Provider.of<Http_services>(context).user_id;
 
     return Scaffold(
       backgroundColor: kPrimaryColor,
@@ -149,9 +198,8 @@ class _Receipt_list extends State<Receipt_list> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Top_widget(),
-
           Text(
-            "${widget.user_id} -- ${widget.car_number!}",
+            "${user_id}",
             style: TextStyle(
               color: Colors.red,
               fontSize: 29,
@@ -206,7 +254,12 @@ class _Receipt_list extends State<Receipt_list> {
           SizedBox(
             height: size.height * 0.03,
           ),
-          Center(child: Text("이용 내역",style: TextStyle(fontFamily: "numberfont",fontSize: 23),),),
+          Center(
+            child: Text(
+              "이용 내역",
+              style: TextStyle(fontFamily: "numberfont", fontSize: 23),
+            ),
+          ),
           SizedBox(
             height: size.height * 0.02,
           ),
@@ -285,6 +338,19 @@ class _Receipt_list extends State<Receipt_list> {
                     },
                   ),
                 ),
+          SizedBox(height: size.height*0.03,),
+          InkWell(
+              onTap: () async{
+                Sound().play_sound("assets/mp3/success.mp3");
+                SystemNavigator.pop();
+
+              },
+              child: Container(
+                  width: size.width * 0.7,
+                  height: size.height * 0.1,
+                  child:
+                  Image.asset("assets/images/stop_button.png"))),
+          SizedBox(height: size.height*0.07,)
         ],
       ),
     );

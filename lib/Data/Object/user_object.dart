@@ -1,5 +1,5 @@
 
-class User_token {
+class User_token{
   final String? token;
 
   User_token({this.token});

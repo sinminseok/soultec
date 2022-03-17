@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/fills/fill_setting.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
@@ -10,12 +11,14 @@ import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
 class Fill_start extends StatefulWidget {
-  User_token? user_token;
-  String? user_id;
-  final String car_number;
+
+
   BluetoothDevice? device;
 
-  Fill_start({required this.user_token ,required this.user_id ,required this.car_number, required this.device});
+  //자동차 번호 전역으로 돌려줘야되는데 왜인진 모르겠는데 provider가 안먹어서 일단 위젯으로 데이터 넘김 추후 변경
+  String? car_number;
+
+  Fill_start({required this.device,required this.car_number});
 
   @override
   _Fill_start createState() => _Fill_start();
@@ -25,18 +28,12 @@ class _Fill_start extends State<Fill_start> {
 
 
   @override
-  void initState(){
-    super.initState();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    User_token? user_token = widget.user_token;
 
-    return SafeArea(
-      child: WillPopScope(
+    Size size = MediaQuery.of(context).size;
+    String? user_token = Provider.of<Http_services>(context,listen: false).user_token!.token;
+
+    return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
             backgroundColor: kPrimaryColor,
@@ -67,8 +64,6 @@ class _Fill_start extends State<Fill_start> {
                       ],
                     ),
 
-
-
                     Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
@@ -82,10 +77,12 @@ class _Fill_start extends State<Fill_start> {
                     SizedBox(height: size.height*0.03,),
 
                     InkWell(
-
                         onTap: () async{
+
                           Sound().play_sound("assets/mp3/success.mp3");
-                          User? user_info =await Http_services().get_user_info(widget.user_id, widget.user_token!.token);
+
+                          //user 정보 가져오기 (post receipt에서 어디 지점 유저인지 알아야댐)
+                          User? user_info =await Http_services().get_user_info(user_token);
                           if(user_info == null){
                             showtoast("사용자 정보 오류 관리자에게 문의하세요");
                           }else{
@@ -93,9 +90,8 @@ class _Fill_start extends State<Fill_start> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        Fill_setting(user_token:user_token,user_id:widget.user_id, car_number: widget.car_number,device:widget.device,user_info:user_info)));
+                                        Fill_setting(car_number:widget.car_number,device:widget.device)));
                           }
-
                         },
 
                         child:Container(
@@ -107,7 +103,6 @@ class _Fill_start extends State<Fill_start> {
                     ),
                   ]),
             )),
-      ),
 
     );
   }

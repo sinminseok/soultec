@@ -2,28 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
-import 'package:soultec/Data/Object/user_object.dart';
-import 'package:soultec/Data/toast.dart';
 
 class Blue_device_tile extends StatefulWidget {
-  // const ScanResultTile({Key? key, required this.result, this.onTap})
-  //     : super(key: key);
-  Blue_device_tile({required this.result , required this.onTap, required this.user,required this.user_id,});
+
+  Blue_device_tile({required this.result , required this.onTap,});
 
   final ScanResult result;
   final VoidCallback? onTap;
-  final User_token? user;
-  final String? user_id;
-
 
   @override
   State<Blue_device_tile> createState() => _Blue_device_tile();
 }
 
 class _Blue_device_tile extends State<Blue_device_tile> {
-
   bool check_device_bool = false;
-
 
   @override
   void initState(){
@@ -43,11 +35,16 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       //처음 연결하는 장치 return null
     }else{
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CarNumberPage(
-                  user_token:widget.user,user_id:widget.user_id,device: device)));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) {
+        return CarNumberPage(
+            device: device);
+      }));
+
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => CarNumberPage(device: device)));
     }
 
   }
@@ -107,6 +104,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
 
 
 class CharacteristicTile extends StatelessWidget {
+
   final BluetoothCharacteristic characteristic;
   final List<DescriptorTile> descriptorTiles;
   final VoidCallback? onReadPressed;

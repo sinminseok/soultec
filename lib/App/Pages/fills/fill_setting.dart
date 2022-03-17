@@ -1,30 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:soultec/App/Bluetooth/ble_write.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/App/Bluetooth/ble_controller.dart';
+import 'package:soultec/App/Bluetooth/blue_scan.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
 import 'package:soultec/Sound/sound.dart';
-import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 import 'fill_ing.dart';
-import 'dart:convert' show utf8;
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_setting extends StatefulWidget {
-  User_token? user_token;
-  User? user_info;
-  String? user_id;
-  String car_number;
   BluetoothDevice? device;
+  String? car_number;
 
   Fill_setting(
-      {required this.user_token,
-      required this.user_id,
-      required this.car_number,
+      {
+        required this.car_number,
       required this.device,
-        required this.user_info,
       });
 
   @override
@@ -32,62 +28,53 @@ class Fill_setting extends StatefulWidget {
 }
 
 class _Fill_setting extends State<Fill_setting> {
-  int pageIndex = 0;
+
+  final values = ["가득", "리터"];
+  String? _select_value;
   TextEditingController inputController = TextEditingController();
+
+  bool? ble_return = null;
   @override
   initState() {
     super.initState();
     connectToDevice();
   }
 
-  //
-  final values = ["가득", "리터"];
-  String? _select_value;
-
-  //init에 넣어준뒤 페어링시도
-  String? connectionText = "";
-  BluetoothCharacteristic? targetCharacteristic;
-
-  connectToDevice() async {
-    if (widget.device == null) return;
-    setState(() {
-      connectionText = "Device Connecting";
-    });
-    await widget.device!.connect();
-    print('DEVICE CONNECTED');
-    setState(() {
-      connectionText = "Device Connected";
-    });
+  @override
+  dispose(){
+    ble_return = null;
+    super.dispose();
   }
 
+  //디바이스 연결
+  connectToDevice() async {
+    if (widget.device == null) return;
+    await widget.device!.connect(autoConnect: false);
 
-  //해당 디바이스의 보낼 서비스 uuid를 를아 데이터 송신하는 함수
-
-
-  //넘겨줄 string 데이터를 utf8로 인코딩 해서 송신하는 함수
-  // writeData(String data) async {
-  //   if (targetCharacteristic == null) return;
-  //
-  //   List<int> bytes = utf8.encode(data);
-  //   await targetCharacteristic!.write(bytes);
-  // }
-
+  }
 
   @override
   Widget build(BuildContext context) {
-
+    String? user_id= Provider.of<Http_services>(context).user_id;
     Size size = MediaQuery.of(context).size;
 
     return WillPopScope(
+
       onWillPop: () async => false,
       child: Scaffold(
             backgroundColor: kPrimaryColor,
             body: SingleChildScrollView(
               child: Column(children: [
                 Top_widget(),
+                // InkWell(child: Text("TEST"),
+                // onTap: ()async{
+                //   print(widget.device!.state.listen((event) {print(event);}));
+                //   // print(widget.device!.state.listen((event) {print(event);}));
+                //   // print("GGGGGG");
+                // }),
                 //
                 Text(
-                  "${widget.user_id} - ${widget.car_number}",
+                  "${user_id} -- ${widget.car_number}",
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 29,
@@ -188,21 +175,31 @@ class _Fill_setting extends State<Fill_setting> {
                 ),
                 InkWell(
                     onTap: () async {
-                      User? user =await Http_services().get_user_info(widget.user_id, widget.user_token!.token);
-                      if (_select_value == null) {
+                       if (_select_value == null) {
                         if (!inputController.text.isEmpty) {
                           Sound().play_sound("assets/mp3/success.mp3");
-                          // BLE_CONTROLLER().discoverServices_write(widget.device,);
+
+                          // ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , inputController.text);
+                          // if(ble_return == false){
+                          //   showtoast("주유기 블루트수를 다시 선택해주세요");
+                          //
+                          //   final prefs = await SharedPreferences.getInstance();
+                          //   prefs.remove('${widget.device!.id}');
+                          //
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => Blue_scan(user_id: user_id,
+                          //           )));
+                          // }
+
 
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Filling(
-                                      user_info :user,
-                                      user_token: widget.user_token,
-                                      user_id: widget.user_id,
+                                      car_number:widget.car_number,
                                       liter: int.parse('${inputController.text}') ,
-                                      car_number: widget.car_number,
                                       device:widget.device,
 
                         )));
@@ -212,31 +209,57 @@ class _Fill_setting extends State<Fill_setting> {
                         }
                       } else if (_select_value == "가득") {
                         Sound().play_sound("assets/mp3/success.mp3");
-                       // BLE_CONTROLLER().discoverServices_write(widget.device);
+
+                        //루투스 디바이스를 잘못선택했을때
+                        //  ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , "가득");
+                        // if(ble_return == false){
+                        //   showtoast("주유기 블루트수를 다시 선택해주세요");
+                        //
+                        //   final prefs = await SharedPreferences.getInstance();
+                        //   prefs.remove('${widget.device!.id}');
+                        //
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => Blue_scan(
+                        //           )));
+                        // }
+
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Filling(
-                                  user_info :user,
-                                  user_token: widget.user_token,
-                                    user_id: widget.user_id,
-                                    liter: 100,
-                                    car_number: widget.car_number, device: widget.device,
-
+                                  car_number:widget.car_number,
+                                    liter: 100, device: widget.device,
                               )));
                       } else if (_select_value == "리터") {
+                         //사용자가 직접 리터량을 설정해줬을때
                         if (!inputController.text.isEmpty) {
                           Sound().play_sound("assets/mp3/success.mp3");
-                          //BLE_CONTROLLER().discoverServices_write(widget.device);
+
+                          //블루투스 디바이스를 잘못선택했을때
+                          //  ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , inputController.text);
+                          // if(ble_return == false){
+                          //   showtoast("주유기 블루트수를 다시 선택해주세요");
+                          //
+                          //   final prefs = await SharedPreferences.getInstance();
+                          //   prefs.remove('${widget.device!.id}');
+                          //
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => Blue_scan(user_id: user_id,
+                          //           )));
+                          // }
+
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Filling(
-                                    user_info :user,
-                                    user_token: widget.user_token,
-                                      user_id: widget.user_id,
+                                    car_number:widget.car_number,
                                       liter: int.parse('${inputController.text}'),
-                                      car_number: widget.car_number,
                                     device: widget.device,
                               )));
                         } else {
@@ -255,9 +278,4 @@ class _Fill_setting extends State<Fill_setting> {
     );
   }
 
-  selectedTap(index) {
-    setState(() {
-      pageIndex = index;
-    });
-  }
 }

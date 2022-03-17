@@ -1,24 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/constants.dart';
 import 'package:intl/intl.dart';
 
 import 'date_widget.dart';
 
 class Recepit_content extends StatelessWidget {
-  final String? user_id;
+
   final String? car_number;
   final int? litter;
   final String? date;
 
 
-  Recepit_content(this.user_id ,this.car_number , this.litter ,this.date);
+  Recepit_content(this.car_number , this.litter ,this.date);
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    var user_id= Provider.of<Http_services>(context).user_id;
     return Container(
 
       color: Colors.white,
