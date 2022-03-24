@@ -9,6 +9,7 @@ import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
+import 'fill_stop.dart';
 
 
 class Filling extends StatefulWidget {
@@ -43,8 +44,7 @@ class _FillingState extends State<Filling> {
   @override
   void dispose(){
     super.dispose();
-
-    BLE_CONTROLLER().disconnect_device(widget.device);
+    //BLE_CONTROLLER().disconnect_device(widget.device);
   }
 
 
@@ -59,9 +59,11 @@ class _FillingState extends State<Filling> {
 
     String? user_id= Provider.of<Http_services>(context).user_id;
     String? user_token = Provider.of<Http_services>(context).user_token!.token;
+
     var currentValue;
+
     return StreamBuilder<List<int>>(
-          stream: BLE_CONTROLLER().stream,
+          stream: BLE_CONTROLLER().stream_value,
           builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
             //주유가 종료될때 receipt post 후 navigator
             // if(snapshot.data == "종료"){
@@ -73,7 +75,7 @@ class _FillingState extends State<Filling> {
             //   Navigator.push(
             //       thiscontext,
             //       MaterialPageRoute(
-            //           builder: (context) => Filling_stop(device: widget.device , car_number: widget.car_number , liter:BLE_CONTROLLER().stream as int ,)));
+            //           builder: (context) => Filling_stop(device: widget.device , car_number: widget.car_number , liter:currentValue,)));
             // }
 
             // if (snapshot.hasError) {
@@ -157,7 +159,8 @@ class _FillingState extends State<Filling> {
                             if(res != null){
                               var data_list = await Http_services()
                                   .load_receipt_list(user_token);
-
+                              print(data_list);
+                              //
                               Navigator.push(
                                   thiscontext,
                                   MaterialPageRoute(

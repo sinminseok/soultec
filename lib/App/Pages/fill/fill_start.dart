@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/App/Pages/fills/fill_setting.dart';
+import 'package:soultec/App/Pages/fill/fill_setting.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
@@ -51,7 +51,7 @@ class _Fill_start extends State<Fill_start> {
                               style: TextStyle(fontSize: 22,),),
                             SizedBox(width: 2,),
                             Text("스마트필",
-                              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                              style: TextStyle(fontFamily: "numberfont", fontSize: 25, fontWeight: FontWeight.bold),),
                           ],
                         ),
                         Padding(
@@ -80,7 +80,6 @@ class _Fill_start extends State<Fill_start> {
                         onTap: () async{
 
                           Sound().play_sound("assets/mp3/success.mp3");
-
                           //user 정보 가져오기 (post receipt에서 어디 지점 유저인지 알아야댐)
                           User? user_info =await Http_services().get_user_info(user_token);
                           if(user_info == null){

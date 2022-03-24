@@ -40,7 +40,7 @@ class _Filling_stop extends State<Filling_stop> {
   }
 
   post_receipt()async{
-    String? user_id= Provider.of<Http_services>(context).user_id;
+    // String? user_id= Provider.of<Http_services>(context).user_id;
     String? user_token = Provider.of<Http_services>(context).user_token!.token;
     await Http_services().post_receipt( 9 , widget.liter ,widget.car_number.toString() , user_token);
   }
@@ -61,7 +61,7 @@ class _Filling_stop extends State<Filling_stop> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: kPrimaryColor, body: getBody(size,5,context),);
+      backgroundColor: kPrimaryColor, body: getBody(size,widget.liter,context),);
   }
 
   getBody(Size size, int? liter,thiscontext) {
@@ -154,6 +154,7 @@ class _Filling_stop extends State<Filling_stop> {
                   InkWell(
                       onTap: () async{
                         Sound().play_sound("assets/mp3/success.mp3");
+
                         var data_list = await Http_services().load_receipt_list(user_token);
                         //
                         Navigator.push(
@@ -162,7 +163,6 @@ class _Filling_stop extends State<Filling_stop> {
                                 builder: (context) => Receipt_list(
                                     data_list: data_list,
                                     car_number: widget.car_number,)));
-
                         showtoast("주유가 완료 되었습니다!");
                       },
                       child: Container(

@@ -16,9 +16,7 @@ void main() async {
 
 ChangeNotifierProvider(
           create: (_) => Http_services(),
-
           child: MyApp()),
-
   );
 }
 

@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/cupertino.dart';
 
 class Top_widget extends StatefulWidget {

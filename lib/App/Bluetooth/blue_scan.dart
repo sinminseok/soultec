@@ -11,16 +11,13 @@ import 'package:soultec/constants.dart';
 import 'blue_device_tile.dart';
 
 class Blue_scan extends StatefulWidget {
-
   @override
   State<Blue_scan> createState() => _Blue_scan();
 }
 
 class _Blue_scan extends State<Blue_scan> {
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       color: Colors.lightBlue,
       home: StreamBuilder<BluetoothState>(
@@ -29,8 +26,7 @@ class _Blue_scan extends State<Blue_scan> {
           builder: (c, snapshot) {
             final state = snapshot.data;
             if (state == BluetoothState.on) {
-              return FindDevicesScreen(
-              );
+              return FindDevicesScreen();
             }
             return BluetoothOffScreen(state: state);
           }),
@@ -39,7 +35,6 @@ class _Blue_scan extends State<Blue_scan> {
 }
 
 class BluetoothOffScreen extends StatelessWidget {
-
   const BluetoothOffScreen({Key? key, this.state}) : super(key: key);
   final BluetoothState? state;
 
@@ -70,8 +65,6 @@ class BluetoothOffScreen extends StatelessWidget {
 }
 
 class FindDevicesScreen extends StatefulWidget {
-
-
   @override
   State<FindDevicesScreen> createState() => _FindDevicesScreenState();
 }
@@ -106,27 +99,24 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
               height: 40,
             ),
             StreamBuilder<List<ScanResult>>(
-              stream: FlutterBlue.instance.scanResults,
-              initialData: [],
-              builder: (c, snapshot){
-                return Column(
-                  children: snapshot.data!
-                      .map(
-                        (r) => Blue_device_tile(
-                      result: r,
-                      onTap: () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        // r.device.connect();
-                        return CarNumberPage(
-                            device: r.device);
-                      })),
-
-                    ),
-                  )
-                      .toList(),
-                );
-              }
-            ),
+                stream: FlutterBlue.instance.scanResults,
+                initialData: [],
+                builder: (c, snapshot) {
+                  return Column(
+                    children: snapshot.data!
+                        .map(
+                          (r) => Blue_device_tile(
+                            result: r,
+                            onTap: () => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              // r.device.connect();
+                              return CarNumberPage(device: r.device);
+                            })),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }),
           ],
         ),
       ),

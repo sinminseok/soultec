@@ -21,7 +21,6 @@ class _Blue_device_tile extends State<Blue_device_tile> {
   void initState(){
     check_device(widget.result.device);
     super.initState();
-
   }
 
   void check_device(device)async{
@@ -59,13 +58,15 @@ class _Blue_device_tile extends State<Blue_device_tile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
+
             widget.result.device.name,
             overflow: TextOverflow.ellipsis,
+
           ),
           Text(
             widget.result.device.id.toString(),
             style: Theme.of(context).textTheme.caption,
-          )
+          ),
         ],
       );
     } else {
@@ -91,13 +92,11 @@ class _Blue_device_tile extends State<Blue_device_tile> {
           padding: const EdgeInsets.only(left: 30,bottom: 17,right: 30,),
           child: Icon(Icons.devices_rounded),
         ),
-
         InkWell(
             onTap: (widget.result.advertisementData.connectable) ? widget.onTap : null,
             child: _buildTitle(context)),
       ],
     );
-
     //_buildTitle(context)
   }
 }

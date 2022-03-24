@@ -189,7 +189,7 @@ class _Fill_setting extends State<Fill_setting> {
                           //   Navigator.push(
                           //       context,
                           //       MaterialPageRoute(
-                          //           builder: (context) => Blue_scan(user_id: user_id,
+                          //           builder: (context) => Blue_scan(
                           //           )));
                           // }
 
@@ -226,6 +226,7 @@ class _Fill_setting extends State<Fill_setting> {
                         // }
 
 
+                        //가득 넘길떄 몇 리터로 넘겨야 할지
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -249,7 +250,7 @@ class _Fill_setting extends State<Fill_setting> {
                           //   Navigator.push(
                           //       context,
                           //       MaterialPageRoute(
-                          //           builder: (context) => Blue_scan(user_id: user_id,
+                          //           builder: (context) => Blue_scan(
                           //           )));
                           // }
 

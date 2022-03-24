@@ -15,20 +15,15 @@ class Http_services with ChangeNotifier {
   String? _carnumber;
 
   User_token? get user_token => _user_token;
-
   User? get user_info => _user_info;
-
   String? get user_id => _user_id;
-
   String? get carnumber => _carnumber;
 
   //http 통신 url
-  String login_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
-  String car_url_post =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
-  String post_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
+  String login_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
+  String get_user_info_url ="http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/users";
+  String car_url_post = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
+  String post_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
 
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
@@ -37,9 +32,8 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-    print("GDFGDFGDFg");
-    print(res.statusCode);
-
+    print(res.body);
+    User_token _usertoken = new User_token();
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
@@ -51,20 +45,20 @@ class Http_services with ChangeNotifier {
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
-        print(_user_token!.token);
+
         return _user_token;
       } else {
-        print(_user_token!.token);
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
         return _user_token;
         //디스크에 해당 user id,pw 저장후 로그인
-
       }
     }
-    if(res.statusCode == 400){
-      print("gfdgdfgdfgdfgdfg");
-      return User_token.fromJson(jsonDecode("FALSELOGIN"));
-    }
+    // if(res.statusCode ==401){
+    //   print("asdasdasd");
+    //   return ;
+    //
+    // }
+
     else {
       return null;
     }
@@ -74,20 +68,22 @@ class Http_services with ChangeNotifier {
   Future<User?> get_user_info(token) async {
     var res = await http.get(
         Uri.parse(
-            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/user"),
+            get_user_info_url),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
 
+    print(res.body);
+    print(res.statusCode);
+
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       _user_info = User.fromJson(jsonDecode(res.body));
-      print(_user_info);
-
       notifyListeners();
       return _user_info;
+
     } else {
       return null;
     }
@@ -95,7 +91,6 @@ class Http_services with ChangeNotifier {
 
   //http 자동 로그인
   Future<User_token?> auto_login(id, pw) async {
-    print(id);
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(login_url),
         headers: {'Content-Type': 'application/json'},
@@ -106,8 +101,6 @@ class Http_services with ChangeNotifier {
       User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
       this._user_token = userr_token;
       this._user_id = id;
-      print(_user_token!.token);
-
       notifyListeners();
       return _user_token;
       //디스크에 해당 user id,pw 저장후 로그인
@@ -153,10 +146,6 @@ class Http_services with ChangeNotifier {
         'Authorization': 'Bearer $token',
       },
     );
-
-    print(res);
-
-
 
     if (res.statusCode == 200) {
       _carnumber = number;

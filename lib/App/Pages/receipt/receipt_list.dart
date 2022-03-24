@@ -16,7 +16,8 @@ class Receipt_list extends StatefulWidget {
 
   Receipt_list({
     required this.car_number,
-    required this.data_list, user_id,
+    required this.data_list,
+    user_id,
   });
 
   @override
@@ -35,6 +36,7 @@ class _Receipt_list extends State<Receipt_list> {
 
   //날짜 검색후 필터링된 정보 담을 list
   var filter_use_data = [];
+
 //최종 리스트
   List? itembuilder_list = [];
 
@@ -46,18 +48,11 @@ class _Receipt_list extends State<Receipt_list> {
         dateTime.substring(8, 10) +
         dateTime.substring(11, 13) +
         dateTime.substring(14, 16);
-    // datetime_string = dateTime.substring(0, 4) +
-    //     dateTime.substring(5, 7) +
-    //     dateTime.substring(8, 10) +
-    //     dateTime.substring(11, 13) +
-    //     dateTime.substring(14, 16);
     return int.parse(datetime_string!);
-
   }
 
   //이용내역을 최근 날짜부터 정렬해주는 함수
   sort_datetime(data_list) async {
-
     List<int>? datetime_list = [];
     List<String>? datetime_list_string = [];
 
@@ -65,37 +60,21 @@ class _Receipt_list extends State<Receipt_list> {
       datetime_list.add(filter_string(data_list[i].dateTime));
     }
     datetime_list.sort();
-    print("start sort");
-    print(datetime_list);
-
     var reversed_Date = datetime_list.reversed;
-    print("reversed_Date");
-    print(reversed_Date);
-    print(reversed_Date.length);
-
     for (var j = 0; j < reversed_Date.toList().length; j++) {
       datetime_list_string.add(reversed_Date.toList()[j].toString());
     }
-    print("dasd");
-    print(datetime_list_string);
-
-
-
     return datetime_list_string;
   }
 
   //이용내역 리스트 최근날짜 순으로 정렬
-  index(data_lsit, filyer__list) async {
-    print("sex");
+  index(data_lsit, sort_list) async {
+    print("ASDASD");
     print(data_lsit);
-    print(filyer__list);
-
+    print(sort_list);
     var data_reversed = [];
 
-    for (var i = filyer__list.length - 1; i >= 0; i--) {
-      print(i);
-      print("i");
-      print(filyer__list[i]);
+    for (var i = sort_list.length - 1; i >= 0; i--) {
       for (var j = data_lsit.length - 1; j >= 0; j--) {
         String? datetime_string =
             await data_lsit[j]!.dateTime!.substring(0, 4) +
@@ -103,38 +82,13 @@ class _Receipt_list extends State<Receipt_list> {
                 data_lsit[j]!.dateTime!.substring(8, 10) +
                 data_lsit[j]!.dateTime!.substring(11, 13) +
                 data_lsit[j]!.dateTime!.substring(14, 16);
-        print(datetime_string);
-        print(j);
-        if (filyer__list[i] == datetime_string) {
+        if (sort_list[i] == datetime_string) {
           data_reversed.add(data_lsit![i]);
         }
       }
     }
 
-
-    // for (var i = filyer__list.length - 1; i >= 0; i--) {
-    //   print(i);
-    //   print("i");
-    //   print(filyer__list[i]);
-    //   for (var j = data_lsit.length - 1; j >= 0; j--) {
-    //     String? datetime_string =
-    //         await data_lsit[j]!.dateTime!.substring(0, 4) +
-    //             data_lsit[j]!.dateTime!.substring(5, 7) +
-    //             data_lsit[j]!.dateTime!.substring(8, 10) +
-    //             data_lsit[j]!.dateTime!.substring(11, 13) +
-    //             data_lsit[j]!.dateTime!.substring(14, 16);
-    //     print(datetime_string);
-    //     print(j);
-    //     if (filyer__list[i] == datetime_string) {
-    //       data_reversed.add(data_lsit![i]);
-    //     }
-    //   }
-    // }
-
-    print("data_reversed");
-    print(data_reversed.length);
     print(data_reversed);
-
     setState(() {
       //최근 날짜부터 정렬된 Receipt 객체 리스트 setState후 widget itembuilder에서 사용
       itembuilder_list = data_reversed;
@@ -143,7 +97,6 @@ class _Receipt_list extends State<Receipt_list> {
 
   //검색 필터링 함수( 검색 날짜를 기준으로 필터링)
   scan_day_filiter(date) {
-    print(date);
     filter_use_data = [];
     //user_use_data for 문으로 돌려 해당 날짜 필터링
     for (var i = 0; i < itembuilder_list!.length; i++) {
@@ -155,28 +108,20 @@ class _Receipt_list extends State<Receipt_list> {
       scan_check = true;
     });
 
-    for (var i = 0; i < filter_use_data.length; i++) {
-      print(filter_use_data[i].dateTime);
-    }
-
     return filter_use_data;
   }
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-     call();
-
-  }
-
-
 
   //initState에서는 비동기 호출이 안되므로 call 함수에서 비동기 작업을 수행한다.
   call() async {
     //index(사용자 이용 내역 list , 최근 날짜로 정렬된 리스트)
     index(widget.data_list, await sort_datetime(widget.data_list));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    call();
   }
 
   @override
@@ -232,7 +177,7 @@ class _Receipt_list extends State<Receipt_list> {
                 width: 10,
               ),
               InkWell(
-                onTap: () {
+                onTap: () async{
                   scan_day_filiter(_BirthdayController.text);
                 },
                 child: Container(
@@ -338,19 +283,21 @@ class _Receipt_list extends State<Receipt_list> {
                     },
                   ),
                 ),
-          SizedBox(height: size.height*0.03,),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
           InkWell(
-              onTap: () async{
+              onTap: () async {
                 Sound().play_sound("assets/mp3/success.mp3");
                 SystemNavigator.pop();
-
               },
               child: Container(
                   width: size.width * 0.7,
                   height: size.height * 0.1,
-                  child:
-                  Image.asset("assets/images/stop_button.png"))),
-          SizedBox(height: size.height*0.07,)
+                  child: Image.asset("assets/images/stop_button.png"))),
+          SizedBox(
+            height: size.height * 0.07,
+          )
         ],
       ),
     );

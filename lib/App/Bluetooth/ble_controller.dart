@@ -3,15 +3,16 @@ import 'package:flutter_blue/flutter_blue.dart';
 import '../../constants.dart';
 
 class BLE_CONTROLLER {
+
   BluetoothCharacteristic? targetCharacteristic;
-  Stream<List<int>>? stream;
+  Stream<List<int>>? stream_value;
 
   //해당 디바이스의 보낼 서비스 uuid를 를아 데이터 송신하는 함수
   Future<bool?> discoverServices_write(device, litter) async {
     bool check_uuid = false;
-
     if (device == null) {
       print("device null!");
+      return null;
     }
 
     List<BluetoothService> services = await device!.discoverServices();
@@ -23,12 +24,17 @@ class BLE_CONTROLLER {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() == POST_CHARACTERISTIC_UUID) {
             targetCharacteristic = characteristic;
+
             if (litter == "가득") {
+
               writeData("가득");
               check_uuid = true;
+
             } else {
+
               check_uuid = true;
               writeData("$litter");
+
             }
           }
         });
@@ -50,8 +56,7 @@ class BLE_CONTROLLER {
 
   //stream 으로 데이터 수신
   discoverServices_read(device) async {
-    stream = null;
-
+    stream_value = null;
     if (device == null) {
       return;
     }
@@ -63,7 +68,7 @@ class BLE_CONTROLLER {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() == GET_CHARACTERISTIC_UUID) {
             characteristic.setNotifyValue(!characteristic.isNotifying);
-            stream = characteristic.value;
+            stream_value = characteristic.value;
           }
         });
       }

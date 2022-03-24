@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/fills/fill_start.dart';
+import 'package:soultec/App/Pages/fill/fill_start.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
@@ -12,7 +12,9 @@ import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
+
 class CarNumberPage extends StatefulWidget {
+
   BluetoothDevice? device;
   CarNumberPage({required this.device});
 
@@ -21,13 +23,14 @@ class CarNumberPage extends StatefulWidget {
 }
 
 class _CarNumberPageState extends State<CarNumberPage> {
+
   TextEditingController _carnumber_text = TextEditingController();
   bool check_connected = false;
    
   @override
   void initState() {
     remember_device(widget.device!.id);
-    // connect_devie();
+    connect_devie();
     showtoast("페어링 되었습니다 ${widget.device!.id}");
     super.initState();
   }
@@ -42,7 +45,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
   void dispose(){
     super.dispose();
   }
-
 
   //ble device 기기 id값을 디스크에 저장 추후 자동 페어링 할때 사용
   void remember_device(device_id)async{

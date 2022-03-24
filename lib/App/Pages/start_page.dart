@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Account/login_page.dart';
-import 'package:soultec/App/Pages/fills/fill_stop.dart';
+import 'package:soultec/App/Pages/fill/fill_stop.dart';
 import 'package:soultec/Data/toast.dart';
 
 
@@ -30,13 +30,10 @@ class _Start_pageState extends State<Start_page> {
 
 //네트워크 연결 확인 함수
   Future<void> initConnectivity() async {
-    print("start ");
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult.toString());
     if (connectivityResult == ConnectivityResult.mobile) {
-      print("mobile data");
     } else if (connectivityResult == ConnectivityResult.wifi) {
-      print("wifi");
     }
     else if( connectivityResult.toString() == "ConnectivityResult.none"){
       showAlertDialog(context,"네트워크 오류","와이파이나 데이터를 켜주세요");
@@ -103,7 +100,7 @@ class _Start_pageState extends State<Start_page> {
                       onPressed: () async{
 
                         // final prefs = await SharedPreferences.getInstance();
-                        // prefs.remove('asdf1234');
+                        // prefs.remove('user14');
 
                         Navigator.push(
                             context,
@@ -111,7 +108,6 @@ class _Start_pageState extends State<Start_page> {
                                 builder: (context) => LoginScreen()));
 
                       },
-                      //Text("연결",style: TextStyle(fontWeight: FontWeight.bold),),
                       child: Icon(Icons.bluetooth),
                       splashColor: Colors.blue,
                       color: Colors.blue,
