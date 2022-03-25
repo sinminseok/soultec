@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
 
+import 'api_response.dart';
+
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
   User_token? _user_token;
@@ -32,8 +34,8 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-    print(res.body);
-    User_token _usertoken = new User_token();
+    print(res.statusCode);
+
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
@@ -45,20 +47,28 @@ class Http_services with ChangeNotifier {
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
+        var _usertoken = User_token.fromJson(json.decode(res.body));
 
-        return _user_token;
+        return _usertoken;
       } else {
+
+        var _usertoken = User_token.fromJson(json.decode(res.body));
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
-        return _user_token;
+        print("200");
+        print(_usertoken.token);
+        return _usertoken;
         //디스크에 해당 user id,pw 저장후 로그인
       }
     }
-    // if(res.statusCode ==401){
-    //   print("asdasdasd");
-    //   return ;
-    //
-    // }
+    if( res.statusCode ==400 || res.statusCode ==401){
+      User_token _usertoken = new User_token();
+      _usertoken.error = "error";
+      //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
+      print("200");
+      print(_usertoken.error);
+      return _usertoken;
 
+    }
     else {
       return null;
     }

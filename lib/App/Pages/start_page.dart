@@ -100,7 +100,7 @@ class _Start_pageState extends State<Start_page> {
                       onPressed: () async{
 
                         // final prefs = await SharedPreferences.getInstance();
-                        // prefs.remove('user14');
+                        // prefs.remove('check_login');
 
                         Navigator.push(
                             context,

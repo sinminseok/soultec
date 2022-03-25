@@ -286,49 +286,50 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (_passwordController.text == "") {
                                     showtoast("비밀번호를 입력해주세요");
                                   } else {
-                                    var res =await Http_services().login(_userIDController.text, _passwordController.text, _isChecked);
-                                    print(res);
-                                    if(res == null){
-                                      showtoast("기사번호 또는 비밀번호를 확인해주세요");
-                                    }else{
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Blue_scan(
-                                              )));
-                                    }
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => FutureBuilder<
-                                    //                 User_token?>(
-                                    //             future:
-                                    //                 Provider.of<Http_services>(
-                                    //                         context,
-                                    //                         listen: false)
-                                    //                     .login(
-                                    //                         _userIDController
-                                    //                             .text,
-                                    //                         _passwordController
-                                    //                             .text,
-                                    //                         _isChecked),
-                                    //             builder: (context, snapshot) {
-                                    //               if (snapshot.hasError) {
-                                    //                 showtoast(
-                                    //                     "로그인 실패 아이디와 비밀번호를 확인해주세요");
-                                    //                 return LoginScreen();
-                                    //               } else if (snapshot.hasData) {
-                                    //                 return Blue_scan();
-                                    //               } else {
-                                    //                 return Center(
-                                    //                     child: Container(
-                                    //                       width: size.width * 0.5,
-                                    //                       child: Image.asset(
-                                    //                         'assets/gifs/login_loading.gif',
-                                    //                       ),
-                                    //                     ));
-                                    //               }
-                                    //             })));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => FutureBuilder<
+                                                    User_token?>(
+                                                future:
+                                                    Provider.of<Http_services>(
+                                                            context,
+                                                            listen: false)
+                                                        .login(
+                                                            _userIDController
+                                                                .text,
+                                                            _passwordController
+                                                                .text,
+                                                            _isChecked),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    if(snapshot.data!.error != null){
+                                                      showtoast(
+                                                          "로그인 실패 아이디와 비밀번호를 확인해주세요");
+                                                      return LoginScreen();
+                                                    }else{
+                                                      return Blue_scan();
+                                                    }
+                                                  }else{
+                                                    return Center(
+                                                        child: Container(
+                                                          width: size.width * 0.5,
+                                                          child: Image.asset(
+                                                            'assets/gifs/login_loading.gif',
+                                                          ),
+                                                        ));
+                                                  }
+                                                })));
+                                    // var res =await Http_services().login(_userIDController.text, _passwordController.text, _isChecked);
+                                    // if(res!.error != null){
+                                    //   showtoast("기사번호 또는 비밀번호를 확인해주세요");
+                                    // }else{
+                                    //   Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //           builder: (context) =>
+                                    //               Blue_scan()));
+                                    // }
                                   }
                                 },
                                 borderRadius: BorderRadius.circular(20),
