@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/App/Pages/fill/fill_start.dart';
 
 class Blue_device_tile extends StatefulWidget {
 
@@ -36,7 +37,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
 
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) {
-        return CarNumberPage(
+        return Start_button(
             device: device);
       }));
 

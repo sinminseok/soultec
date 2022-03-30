@@ -15,8 +15,8 @@ class _Top_widgetState extends State<Top_widget> {
     return  Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        SizedBox(height:size.height*0.2),
-        Column(
+        SizedBox(height:size.height*0.15),
+        Row(
           children: [
             // SizedBox(height: ,)
             Text(
@@ -35,10 +35,10 @@ class _Top_widgetState extends State<Top_widget> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: Image(
             image: AssetImage('assets/images/mainimg.png'),
-            width: 60,
+            width: 50,
           ),
         ),
       ],

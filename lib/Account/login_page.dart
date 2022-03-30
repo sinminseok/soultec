@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_scan.dart';
+import 'package:soultec/App/Pages/fill/fill_start.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
@@ -119,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (snapshot.hasError) {
                 return Text("server drop}");
               } else if (snapshot.hasData) {
-                return Blue_scan();
+                return Start_button(device: null,);
               } else {
                 return Center(
                     child: Container(
@@ -149,16 +150,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
+
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Column(
                                     children: [
                                       SizedBox(
-                                        height: size.height * 0.1,
+                                        height: size.height * 0.05,
                                       ),
                                       Text(
                                         "충전 관리 솔루션",
@@ -173,16 +172,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Row(
                                         children: [
                                           Text(
-                                            "SMART",
+                                            "스마트필",
                                             style: TextStyle(
                                                 fontSize: 38,
-                                                color: Colors.white),
-                                          ),
-                                          Text(
-                                            "fill",
-                                            style: TextStyle(
-                                                fontSize: 38,
-                                                color: Colors.yellow),
+                                                color: Colors.black,fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       )
@@ -194,22 +187,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: Image(
                                       image: AssetImage(
                                           'assets/images/mainimg.png'),
-                                      width: 80,
+                                      width: 70,
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: size.height * 0.15,
-                              ),
+                             Container(
+                                    width: size.width*0.8,
+                                    height: size.height*0.2,
+                                    child: Image.asset(
+                                      'assets/gifs/main_img.gif',
+                                    )),
+
                               Container(
+
                                 margin: EdgeInsets.symmetric(vertical: 10),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 5),
                                 width: size.width * 0.8,
                                 decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.white),
+                                    color: kPrimaryColor),
                                 child: TextFormField(
                                   style: TextStyle(
                                       fontFamily: "numberfont", fontSize: 23),
@@ -217,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   decoration: InputDecoration(
                                       icon: Icon(Icons.person,
                                           color: Colors.black),
-                                      hintText: '기사번호 입력',
+                                      hintText: '기사번호',
                                       border: InputBorder.none),
                                 ),
                               ),
@@ -227,8 +226,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     horizontal: 20, vertical: 5),
                                 width: size.width * 0.8,
                                 decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.white),
+                                    color: kPrimaryColor),
                                 child: TextFormField(
                                   style: TextStyle(
                                       fontFamily: "numberfont", fontSize: 23),
@@ -243,48 +243,52 @@ class _LoginScreenState extends State<LoginScreen> {
                                       border: InputBorder.none),
                                 ),
                               ),
-                              Container(
-                                width: size.width * 0.8,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+
+                                  Container(
+                                    width: size.width * 0.5,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Checkbox(
-                                            value: _isChecked,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _isChecked = value!;
-                                              });
-                                            }),
-                                        Text(
-                                          "로그인상태 유지",
-                                          style: TextStyle(
-                                              fontSize: 19,
-                                              color: Colors.black,
-                                              fontFamily: "numberfont"),
+
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Checkbox(
+                                                        value: _isChecked,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            _isChecked = value!;
+                                                          });
+                                                        }),
+                                              //   ),
+                                              // ),
+
+                                              Text(
+                                                "로그인상태 유지",
+                                                style: TextStyle(
+                                                    fontSize: 19,
+                                                    color: Colors.black,
+                                                    fontFamily: "numberfont"),
+                                              ),
+                                            ],
+
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
                               ),
+
                               InkWell(
                                 onTap: () async {
-                                  Sound().play_sound("assets/mp3/click.mp3");
-                                  // user_token = await Http_services().login(
-                                  //     _userIDController.text,
-                                  //     _passwordController.text,
-                                  //     _isChecked);
-                                  if (_userIDController.text == "") {
 
-                                    showtoast("기사번호를 입력해주세요");
+                                  Sound().play_sound("assets/mp3/start.mp3");
+
+                                  if (_userIDController.text == "") {
+                                    return showtoast("기사번호를 입력해주세요");
                                   }
                                   if (_passwordController.text == "") {
-                                    showtoast("비밀번호를 입력해주세요");
+                                    return showtoast("비밀번호를 입력해주세요");
                                   } else {
                                     Navigator.push(
                                         context,
@@ -303,33 +307,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                                             _isChecked),
                                                 builder: (context, snapshot) {
                                                   if (snapshot.hasData) {
-                                                    if(snapshot.data!.error != null){
+                                                    if (snapshot.data!.error !=
+                                                        null) {
                                                       showtoast(
                                                           "로그인 실패 아이디와 비밀번호를 확인해주세요");
                                                       return LoginScreen();
-                                                    }else{
-                                                      return Blue_scan();
+                                                    } else {
+                                                      return Start_button(device: null,);
                                                     }
-                                                  }else{
+                                                  } else {
                                                     return Center(
                                                         child: Container(
-                                                          width: size.width * 0.5,
-                                                          child: Image.asset(
-                                                            'assets/gifs/login_loading.gif',
-                                                          ),
-                                                        ));
+                                                      width: size.width * 0.5,
+                                                      child: Image.asset(
+                                                        'assets/gifs/login_loading.gif',
+                                                      ),
+                                                    ));
                                                   }
                                                 })));
-                                    // var res =await Http_services().login(_userIDController.text, _passwordController.text, _isChecked);
-                                    // if(res!.error != null){
-                                    //   showtoast("기사번호 또는 비밀번호를 확인해주세요");
-                                    // }else{
-                                    //   Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //           builder: (context) =>
-                                    //               Blue_scan()));
-                                    // }
                                   }
                                 },
                                 borderRadius: BorderRadius.circular(20),

@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
 
-import 'api_response.dart';
 
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
@@ -34,10 +33,7 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-    print(res.statusCode);
-
-
-    //statusCode 확인해볼것
+    //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
       _user_token = User_token.fromJson(jsonDecode(res.body));
@@ -48,26 +44,22 @@ class Http_services with ChangeNotifier {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
         var _usertoken = User_token.fromJson(json.decode(res.body));
-
         return _usertoken;
-      } else {
 
+      } else {
         var _usertoken = User_token.fromJson(json.decode(res.body));
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
-        print("200");
-        print(_usertoken.token);
         return _usertoken;
         //디스크에 해당 user id,pw 저장후 로그인
       }
     }
+
+    //로그인 실패
     if( res.statusCode ==400 || res.statusCode ==401){
       User_token _usertoken = new User_token();
       _usertoken.error = "error";
       //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
-      print("200");
-      print(_usertoken.error);
       return _usertoken;
-
     }
     else {
       return null;
@@ -84,9 +76,6 @@ class Http_services with ChangeNotifier {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
-
-    print(res.body);
-    print(res.statusCode);
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
@@ -108,6 +97,7 @@ class Http_services with ChangeNotifier {
 
 
     if (res.statusCode == 200) {
+
       User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
       this._user_token = userr_token;
       this._user_id = id;
@@ -127,7 +117,6 @@ class Http_services with ChangeNotifier {
 
     prefs.setString('id', user_id);
     prefs.setString('pw', user_pw);
-
     return;
   }
 
@@ -174,7 +163,6 @@ class Http_services with ChangeNotifier {
     var res = await http.post(
         Uri.parse(
             "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
-        //http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

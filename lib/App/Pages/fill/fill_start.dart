@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
+import 'package:soultec/App/Pages/cars/car_number.dart';
 import 'package:soultec/App/Pages/fill/fill_setting.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
@@ -10,21 +11,21 @@ import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../constants.dart';
 
-class Fill_start extends StatefulWidget {
+class Start_button extends StatefulWidget {
 
 
   BluetoothDevice? device;
 
   //자동차 번호 전역으로 돌려줘야되는데 왜인진 모르겠는데 provider가 안먹어서 일단 위젯으로 데이터 넘김 추후 변경
-  String? car_number;
 
-  Fill_start({required this.device,required this.car_number});
+
+  Start_button({required this.device});
 
   @override
-  _Fill_start createState() => _Fill_start();
+  _Start_button createState() => _Start_button();
 }
 
-class _Fill_start extends State<Fill_start> {
+class _Start_button extends State<Start_button> {
 
 
   @override
@@ -51,7 +52,7 @@ class _Fill_start extends State<Fill_start> {
                               style: TextStyle(fontSize: 22,),),
                             SizedBox(width: 2,),
                             Text("스마트필",
-                              style: TextStyle(fontFamily: "numberfont", fontSize: 25, fontWeight: FontWeight.bold),),
+                              style: TextStyle( fontSize: 25, fontWeight: FontWeight.bold),),
                           ],
                         ),
                         Padding(
@@ -79,7 +80,7 @@ class _Fill_start extends State<Fill_start> {
                     InkWell(
                         onTap: () async{
 
-                          Sound().play_sound("assets/mp3/success.mp3");
+                          Sound().play_sound("assets/mp3/start.mp3");
                           //user 정보 가져오기 (post receipt에서 어디 지점 유저인지 알아야댐)
                           User? user_info =await Http_services().get_user_info(user_token);
                           if(user_info == null){
@@ -89,7 +90,7 @@ class _Fill_start extends State<Fill_start> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        Fill_setting(car_number:widget.car_number,device:widget.device)));
+                                        CarNumberPage()));
                           }
                         },
 

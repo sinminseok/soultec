@@ -29,12 +29,9 @@ class BLE_CONTROLLER {
 
               writeData("가득");
               check_uuid = true;
-
             } else {
-
               check_uuid = true;
               writeData("$litter");
-
             }
           }
         });

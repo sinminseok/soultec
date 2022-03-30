@@ -90,11 +90,35 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/mainimg.png
+    - assets/images/filling.png
+    - assets/images/filling/f1.png
+    - assets/images/filling/f2.png
+    - assets/images/filling/f3.png
+    - assets/images/filling/f4.png
+    - assets/images/filling/f5.png
+    - assets/images/filling/f6.png
+    - assets/images/filling/f7.png
+    - assets/images/filling/f8.png
+    - assets/images/filling/f9.png
+    - assets/images/filling/f10.png
+    - assets/images/filling/f11.png
+    - assets/images/filling/f12.png
+    - assets/images/filling/f13.png
+    - assets/images/up_button.png
+    - assets/images/down_button.png
+    - assets/images/red_button.png
+    - assets/images/scroll_button.png
     - assets/images/cartoonimg.png
     - assets/images/nfc.png
     - assets/images/gtbimg.png
+    - assets/images/receipt_detail.png
+    - assets/images/stop2.png
+    - assets/images/stop_box.png
+    - assets/images/receipt_list.png
+    - assets/images/filling_ani.jpeg
     - assets/gifs/car_number.gif
     - assets/gifs/load2.GIF
+    - assets/gifs/fill_gif.gif
     - assets/gifs/main_img.gif
     - assets/gifs/login_loading.gif
     - assets/images/button_login.png
@@ -104,6 +128,7 @@ flutter:
     - assets/mp3/click.mp3
     - assets/mp3/error.mp3
     - assets/mp3/success.mp3
+    - assets/mp3/start.mp3
 
 
 

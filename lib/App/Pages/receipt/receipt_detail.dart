@@ -54,6 +54,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                       ),
                     ],
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Image(
@@ -75,66 +76,79 @@ class _Recepit_detail extends State<Recepit_detail> {
                 ),
               ),
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.03,
               ),
-
-              Container(
-
-                  color: Colors.white,
-                  height: size.height*0.55,
-                  width: size.width*0.7,
-                  child: Column(
+              Stack(
+                children: [
+                  Container(
+                      width: size.width * 1,
+                      height: size.height * 0.55,
+                      child: Image.asset("assets/images/receipt_detail.png")),
+                  Row(
                     children: [
-                      Text("",style:TextStyle(fontSize: 14),),
-                      Text("이용 내역",style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                      Text("",style:TextStyle(fontSize: 14),),
-                      Text("${widget.list_Data.branchName}",style:TextStyle(fontSize: 14),),
-                      Text("대표 : ${widget.list_Data.branchCeo}",style:TextStyle(fontSize: 14),),
-                      Text("${widget.list_Data.branchAddress}",style:TextStyle(fontSize: 14),),
-                      Text("담당자 번호 : ${widget.list_Data.branchTEL} ",style:TextStyle(fontSize: 14),),
-                      Text("이용 내역",style:TextStyle(fontSize: 14),),
-                      Text("",style:TextStyle(fontSize: 14),),
-                      Text("사용일시 : ${(widget.list_Data.dateTime)!.substring(0,10)}",style:TextStyle(fontSize: 14),),
-                      Text("승인번호 : ${widget.list_Data.approvalNumber}",style:TextStyle(fontSize: 14),),
-                      Text("주유기 번호: ${widget.list_Data.pumpNumber}",style:TextStyle(fontSize: 14),),
-                      Text("============================",style:TextStyle(fontSize: 14),),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text("제품명"),
-                          Text("수량"),
-                          Text("기사번호"),
-                          Text("차량 번호"),
-                        ],
-                      ),
+                      SizedBox(width: size.width*0.2,),
+                      Container(
+                        width: size.width*0.6,
+                        child: Column(
 
-                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text("요소수"),
-                          Text("${widget.list_Data.amount}"),
-                          Text("${widget.list_Data.username}"),
-                          Text("${widget.list_Data.carNumber}"),
-                        ],
-                      ),
-                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
-                      Text("총 충전량: ${widget.list_Data.amount} ",style:TextStyle(fontSize: 14),),
-                      Text("----------------------------------------------------------",style:TextStyle(fontSize: 14),),
-                      Text("soultec 제출",style:TextStyle(fontSize: 14),),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: size.height*0.05,),
 
+
+
+                          Text("",style:TextStyle(fontSize: 14),),
+                            Text("상호 : ${widget.list_Data.branchName}",style:TextStyle(fontSize: 14),),
+                            Text("대표 : ${widget.list_Data.branchCeo}",style:TextStyle(fontSize: 14),),
+                            Text("${widget.list_Data.branchAddress}",style:TextStyle(fontSize: 14),),
+                            Text("담당자 번호 : ${widget.list_Data.branchTEL} ",style:TextStyle(fontSize: 14),),
+
+                            Text("",style:TextStyle(fontSize: 14),),
+                            Text("사용일시 : ${(widget.list_Data.dateTime)!.substring(0,10)}",style:TextStyle(fontSize: 14),),
+                            Text("승인번호 : ${widget.list_Data.approvalNumber}",style:TextStyle(fontSize: 14),),
+                            Text("주유기 번호: ${widget.list_Data.pumpNumber}",style:TextStyle(fontSize: 14),),
+                            Text("================================",style:TextStyle(fontSize: 14),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("제품명"),
+                                Text("수량"),
+                                Text("기사번호"),
+                                Text("차량 번호"),
+                              ],
+                            ),
+
+                            Text("---------------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("요소수"),
+                                Text("${widget.list_Data.amount}"),
+                                Text("${widget.list_Data.username}"),
+                                Text("${widget.list_Data.carNumber}"),
+                              ],
+                            ),
+                            Text("---------------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                            Text("총 충전량: ${widget.list_Data.amount} ",style:TextStyle(fontSize: 14),),
+                            Text("---------------------------------------------------------------",style:TextStyle(fontSize: 14),),
+                            Center(child: Text("soultec 제출",style:TextStyle(fontSize: 14),)),
+
+                          ],
+                        ),
+                      )
                     ],
-                  )
+                  ),
 
+                ],
               ),
-              //Text(liter),
               SizedBox(
                 height: size.height * 0.05,
               ),
 
               InkWell(
                 onTap: () async{
-                  Navigator.of(context).pop();
+                  print(widget.list_Data.branchAddress);
+                  // Navigator.of(context).pop();
                 },
                 child: Container(
                   width: size.width * 0.3,

@@ -100,12 +100,12 @@ class _Start_pageState extends State<Start_page> {
                       onPressed: () async{
 
                         // final prefs = await SharedPreferences.getInstance();
-                        // prefs.remove('check_login');
+                        // prefs.remove('asdf1234');
 
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
+                                builder:(context) => LoginScreen()));
 
                       },
                       child: Icon(Icons.bluetooth),

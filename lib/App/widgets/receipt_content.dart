@@ -15,8 +15,6 @@ class Recepit_content extends StatelessWidget {
 
 
   Recepit_content(this.car_number , this.litter ,this.date);
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
