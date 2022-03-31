@@ -147,19 +147,20 @@ class _Recepit_detail extends State<Recepit_detail> {
 
               InkWell(
                 onTap: () async{
-                  print(widget.list_Data.branchAddress);
-                  // Navigator.of(context).pop();
+
+                   Navigator.of(context).pop();
                 },
                 child: Container(
                   width: size.width * 0.3,
                   height: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
-                      color: Colors.white),
+                      color: Color(0xffcc0000)),
                   padding: EdgeInsets.symmetric(vertical: 20),
                   alignment: Alignment.center,
                   child: Text('뒤로가기',
-                      style: TextStyle(color: Colors.black, fontSize: 16)),
+
+                      style: TextStyle(color: Colors.black, fontSize: 16,fontWeight:FontWeight.bold,fontFamily: "numberfont")),
                 ),
               ),
             ]),

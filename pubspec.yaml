@@ -91,6 +91,7 @@ flutter:
   assets:
     - assets/images/mainimg.png
     - assets/images/filling.png
+    - assets/images/fillingg.png
     - assets/images/filling/f1.png
     - assets/images/filling/f2.png
     - assets/images/filling/f3.png

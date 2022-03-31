@@ -137,129 +137,89 @@ class _Receipt_list extends State<Receipt_list> {
     Size size = MediaQuery.of(context).size;
     String? user_id = Provider.of<Http_services>(context).user_id;
 
-    return Scaffold(
-      backgroundColor: kPrimaryColor,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Top_widget(),
-            Text(
-              "${user_id}",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 29,
-                fontFamily: "numberfont",
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: kPrimaryColor,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Top_widget(),
+              Text(
+                "${user_id}",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 29,
+                  fontFamily: "numberfont",
+                ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    _selectDate();
-                  },
-                  child: Container(
-                    color: Colors.white,
-                    width: size.width * 0.6,
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      _selectDate();
+                    },
+                    child: Container(
+                      color: Colors.white,
+                      width: size.width * 0.6,
 
-                    child: TextFormField(
+                      child: TextFormField(
 
-                      textAlign: TextAlign.center,
-                      enabled: false,
-                      controller: _BirthdayController,
-                      style: TextStyle(fontSize: 20, color: Colors.black26),
+                        textAlign: TextAlign.center,
+                        enabled: false,
+                        controller: _BirthdayController,
+                        style: TextStyle(fontSize: 20, color: Colors.black26),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () async{
-                    scan_day_filiter(_BirthdayController.text);
-                  },
-                  child: Container(
-                    color: Colors.redAccent,
-                    width: size.width * 0.15,
-                    height: size.width * 0.1,
-                    child: Center(
-                        child: Text(
-                      "조회",
-                      style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "numberfont"),
-                    )),
+                  SizedBox(
+                    width: 10,
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Stack(
-              children: [
-                Container(
-                    width: size.width * 1,
-                    height: size.height * 0.5,
-                    child: Image.asset("assets/images/receipt_list.png")),
-                scan_check
-                    ?
-                    //조회 했을때 보여주는 widget
-                    Center(
-                      child: Container(
-                        height: size.height*0.42,
-                        width: size.width*0.9,
-                        child: ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: filter_use_data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 50, right: 50, bottom: 10),
-                                  child: Container(
-                                    color: kPrimaryColor,
-                                    width: size.width * 1,
-                                    height: size.height * 0.07,
-                                    child: InkWell(
-                                      onTap: () {
-                                        //해당 날짜 이용내역 detail navigator => filter_use_data[index]
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Recepit_detail(
-                                                    list_Data: filter_use_data[index])));
-                                      },
-                                      child: ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
-                                          style: TextStyle(fontFamily: "numberfont"),
-                                        )),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                      ),
-                    )
-                    //조회하지 않았을때 보여주는 widget
-                    : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top:40),
+                  InkWell(
+                    onTap: () async{
+                      scan_day_filiter(_BirthdayController.text);
+                    },
+                    child: Container(
+                      color: Color(0xffcc0000),
+                      width: size.width * 0.15,
+                      height: size.width * 0.1,
+                      child: Center(
+                          child: Text(
+                        "조회",
+                        style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "numberfont"),
+                      )),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              Stack(
+                children: [
+                  Container(
+                      width: size.width * 1,
+                      height: size.height * 0.5,
+                      child: Image.asset("assets/images/receipt_list.png")),
+                  scan_check
+                      ?
+                      //조회 했을때 보여주는 widget
+                      Center(
                         child: Container(
                           height: size.height*0.42,
                           width: size.width*0.9,
-
-                          child:ListView.builder(
+                          child: ListView.builder(
                                 padding: const EdgeInsets.all(8),
-                                itemCount: itembuilder_list!.length,
+                                itemCount: filter_use_data.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Padding(
                                     padding: const EdgeInsets.only(
@@ -270,21 +230,18 @@ class _Receipt_list extends State<Receipt_list> {
                                       height: size.height * 0.07,
                                       child: InkWell(
                                         onTap: () {
-                                          print(itembuilder_list![index]
-                                              .dateTime
-                                              .substring(0, 10));
+                                          //해당 날짜 이용내역 detail navigator => filter_use_data[index]
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => Recepit_detail(
-                                                      list_Data:
-                                                          itembuilder_list![index])));
+                                                      list_Data: filter_use_data[index])));
                                         },
                                         child: ListTile(
                                           title: Center(
                                               child: Text(
-                                            '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
-                                            style: TextStyle(fontFamily: "numberfont",color: Colors.black),
+                                            '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
+                                            style: TextStyle(fontFamily: "numberfont"),
                                           )),
                                         ),
                                       ),
@@ -292,112 +249,158 @@ class _Receipt_list extends State<Receipt_list> {
                                   );
                                 },
                               ),
+                        ),
+                      )
+                      //조회하지 않았을때 보여주는 widget
+                      : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top:40),
+                          child: Container(
+                            height: size.height*0.42,
+                            width: size.width*0.9,
 
+                            child:ListView.builder(
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: itembuilder_list!.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 50, right: 50, bottom: 10),
+                                      child: Container(
+                                        color: kPrimaryColor,
+                                        width: size.width * 1,
+                                        height: size.height * 0.07,
+                                        child: InkWell(
+                                          onTap: () {
+                                            print(itembuilder_list![index]
+                                                .dateTime
+                                                .substring(0, 10));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Recepit_detail(
+                                                        list_Data:
+                                                            itembuilder_list![index])));
+                                          },
+                                          child: ListTile(
+                                            title: Center(
+                                                child: Text(
+                                              '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
+                                              style: TextStyle(fontFamily: "numberfont",color: Colors.black),
+                                            )),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+
+                          ),
                         ),
                       ),
-                    ),
-              ],
-            ),
-            // Center(
-            //   child: Text(
-            //     "이용 내역",
-            //     style: TextStyle(fontFamily: "numberfont", fontSize: 23),
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: size.height * 0.02,
-            // ),
-            // scan_check
-            //     ?
-            //     //조회 했을때 보여주는 widget
-            //     Expanded(
-            //         child: ListView.builder(
-            //           padding: const EdgeInsets.all(8),
-            //           itemCount: filter_use_data.length,
-            //           itemBuilder: (BuildContext context, int index) {
-            //             return Padding(
-            //               padding: const EdgeInsets.only(
-            //                   left: 50, right: 50, bottom: 10),
-            //               child: Container(
-            //                 color: kPrimaryColor,
-            //                 width: size.width * 1,
-            //                 height: size.height * 0.07,
-            //                 child: InkWell(
-            //                   onTap: () {
-            //                     //해당 날짜 이용내역 detail navigator => filter_use_data[index]
-            //                     Navigator.push(
-            //                         context,
-            //                         MaterialPageRoute(
-            //                             builder: (context) => Recepit_detail(
-            //                                 list_Data: filter_use_data[index])));
-            //                   },
-            //                   child: ListTile(
-            //                     title: Center(
-            //                         child: Text(
-            //                       '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
-            //                       style: TextStyle(fontFamily: "numberfont"),
-            //                     )),
-            //                   ),
-            //                 ),
-            //               ),
-            //             );
-            //           },
-            //         ),
-            //       )
-            //     //조회하지 않았을때 보여주는 widget
-            //     : Expanded(
-            //         child: ListView.builder(
-            //           padding: const EdgeInsets.all(8),
-            //           itemCount: itembuilder_list!.length,
-            //           itemBuilder: (BuildContext context, int index) {
-            //             return Padding(
-            //               padding: const EdgeInsets.only(
-            //                   left: 50, right: 50, bottom: 10),
-            //               child: Container(
-            //                 color: Colors.white,
-            //                 width: size.width * 1,
-            //                 height: size.height * 0.07,
-            //                 child: InkWell(
-            //                   onTap: () {
-            //                     print(itembuilder_list![index]
-            //                         .dateTime
-            //                         .substring(0, 10));
-            //                     Navigator.push(
-            //                         context,
-            //                         MaterialPageRoute(
-            //                             builder: (context) => Recepit_detail(
-            //                                 list_Data:
-            //                                     itembuilder_list![index])));
-            //                   },
-            //                   child: ListTile(
-            //                     title: Center(
-            //                         child: Text(
-            //                       '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
-            //                       style: TextStyle(fontFamily: "numberfont"),
-            //                     )),
-            //                   ),
-            //                 ),
-            //               ),
-            //             );
-            //           },
-            //         ),
-            //       ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            InkWell(
-                onTap: () async {
-                  Sound().play_sound("assets/mp3/success.mp3");
-                  SystemNavigator.pop();
-                },
-                child: Container(
-                    width: size.width * 0.7,
-                    height: size.height * 0.1,
-                    child: Image.asset("assets/images/stop_button.png"))),
-            SizedBox(
-              height: size.height * 0.07,
-            )
-          ],
+                ],
+              ),
+              // Center(
+              //   child: Text(
+              //     "이용 내역",
+              //     style: TextStyle(fontFamily: "numberfont", fontSize: 23),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: size.height * 0.02,
+              // ),
+              // scan_check
+              //     ?
+              //     //조회 했을때 보여주는 widget
+              //     Expanded(
+              //         child: ListView.builder(
+              //           padding: const EdgeInsets.all(8),
+              //           itemCount: filter_use_data.length,
+              //           itemBuilder: (BuildContext context, int index) {
+              //             return Padding(
+              //               padding: const EdgeInsets.only(
+              //                   left: 50, right: 50, bottom: 10),
+              //               child: Container(
+              //                 color: kPrimaryColor,
+              //                 width: size.width * 1,
+              //                 height: size.height * 0.07,
+              //                 child: InkWell(
+              //                   onTap: () {
+              //                     //해당 날짜 이용내역 detail navigator => filter_use_data[index]
+              //                     Navigator.push(
+              //                         context,
+              //                         MaterialPageRoute(
+              //                             builder: (context) => Recepit_detail(
+              //                                 list_Data: filter_use_data[index])));
+              //                   },
+              //                   child: ListTile(
+              //                     title: Center(
+              //                         child: Text(
+              //                       '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
+              //                       style: TextStyle(fontFamily: "numberfont"),
+              //                     )),
+              //                   ),
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         ),
+              //       )
+              //     //조회하지 않았을때 보여주는 widget
+              //     : Expanded(
+              //         child: ListView.builder(
+              //           padding: const EdgeInsets.all(8),
+              //           itemCount: itembuilder_list!.length,
+              //           itemBuilder: (BuildContext context, int index) {
+              //             return Padding(
+              //               padding: const EdgeInsets.only(
+              //                   left: 50, right: 50, bottom: 10),
+              //               child: Container(
+              //                 color: Colors.white,
+              //                 width: size.width * 1,
+              //                 height: size.height * 0.07,
+              //                 child: InkWell(
+              //                   onTap: () {
+              //                     print(itembuilder_list![index]
+              //                         .dateTime
+              //                         .substring(0, 10));
+              //                     Navigator.push(
+              //                         context,
+              //                         MaterialPageRoute(
+              //                             builder: (context) => Recepit_detail(
+              //                                 list_Data:
+              //                                     itembuilder_list![index])));
+              //                   },
+              //                   child: ListTile(
+              //                     title: Center(
+              //                         child: Text(
+              //                       '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
+              //                       style: TextStyle(fontFamily: "numberfont"),
+              //                     )),
+              //                   ),
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         ),
+              //       ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              InkWell(
+                  onTap: () async {
+                    Sound().play_sound("assets/mp3/success.mp3");
+                    SystemNavigator.pop();
+                  },
+                  child: Container(
+                      width: size.width * 0.7,
+                      height: size.height * 0.1,
+                      child: Image.asset("assets/images/stop_button.png"))),
+              SizedBox(
+                height: size.height * 0.07,
+              )
+            ],
+          ),
         ),
       ),
     );

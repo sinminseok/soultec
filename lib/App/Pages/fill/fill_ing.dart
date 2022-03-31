@@ -45,9 +45,12 @@ class _FillingState extends State<Filling> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: kPrimaryColor,
-      body: getBody(size, widget.liter, context),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: kPrimaryColor,
+        body: getBody(size, widget.liter, context),
+      ),
     );
   }
 
@@ -75,6 +78,8 @@ class _FillingState extends State<Filling> {
 
           //sdasdasdasdasd
           // if (snapshot.hasError) {
+          // var currentValue = BLE_CONTROLLER().dataParser(snapshot.data);
+          var currentValue;
           return SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,35 +134,34 @@ class _FillingState extends State<Filling> {
                   SizedBox(
                     height: size.height * 0.07,
                   ),
-                  // Stack(children: [
-                  //   Center(
-                  //     child: Container(
-                  //         width: size.width * 0.6,
-                  //         child: Image.asset(
-                  //           'assets/images/filling.png',
-                  //         )),
-                  //   ),
-                  //   Padding(
-                  //     padding: const EdgeInsets.only(top:90,left: 130),
-                  //     child: Center(
-                  //       child: Container(
-                  //
-                  //         width: size.width*0.3,
-                  //         child: Text('${currentValue}',
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontSize: 40,
-                  //                 fontFamily: "numberfont")),
-                  //       ),
-                  //     ),
-                  //   )
-                  // ]),
+                  Stack(children: [
+                    Center(
+                      child: Container(
+                          width: size.width * 0.6,
+                          child: Image.asset(
+                            'assets/images/filling.png',
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:90,left: 130),
+                      child: Center(
+                        child: Container(
+                          width: size.width*0.3,
+                          child: Text('${currentValue}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 40,
+                                  fontFamily: "numberfont")),
+                        ),
+                      ),
+                    )
+                  ]),
 
-                  Container(
-                      width: size.width * 0.6,
-                      child: Image.asset(
-                        'assets/gifs/load2.GIF',
-                      )),
+                  // Container(
+                  //     width: size.width * 0.6,
+                  //     child: Image.asset(
+                  //       'assets/gifs/load2.GIF',
+                  //     )),
 
                   SizedBox(
                     height: size.height * 0.1,
@@ -170,17 +174,14 @@ class _FillingState extends State<Filling> {
                         //주석 제거 (해당 receipt 정보 서버로post)
 
                         //post_receipt(username, pumpId, branchId, amount, carNumber, token)
-                        var res = await Http_services().post_receipt("12341234",
+                        var res = await Http_services().post_receipt("1414",
                             widget.liter, widget.car_number, user_token);
-
                         // 주유후 해당 디바이스  페어링 disconnect
                         //   widget.device!.disconnect();
 
                         if (res != null) {
                           var data_list = await Http_services()
                               .load_receipt_list(user_token);
-                          print(data_list);
-                          //
                           Navigator.push(
                               thiscontext,
                               MaterialPageRoute(
