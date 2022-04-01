@@ -44,8 +44,9 @@ class _Start_pageState extends State<Start_page> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double defaultRegisterSize = size.height - (size.height * 0.1);
-
+    Offset offset = Offset(0,size.height*0.45);
     return Scaffold(
+
         body: Align(
           alignment: Alignment.center,
           child: SingleChildScrollView(
@@ -90,6 +91,8 @@ class _Start_pageState extends State<Start_page> {
                       "페어링이 시작 됩니다 잠시만 기다려 주십시오.",
                       style: TextStyle(fontSize: 15),
                     ),
+
+
                     SizedBox(
                       height: size.height * 0.08,
                     ),
@@ -109,6 +112,7 @@ class _Start_pageState extends State<Start_page> {
 
                       },
                       child: Icon(Icons.bluetooth),
+
                       splashColor: Colors.blue,
                       color: Colors.blue,
                       elevation: 0,

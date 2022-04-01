@@ -164,7 +164,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Test_Fill_Setting(car_number:_carnumber_text.text,
+                                      Test_Fill_Setting(car_number:_carnumber_text.text,sizee: size,
                                           )));
 
                         }else{
