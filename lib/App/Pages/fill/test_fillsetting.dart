@@ -34,24 +34,20 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
 
   Offset? offset;
   int fill_value = 0;
-  String? fill_max;
+  String? fill_max = null;
+
   double button_position = 360;
   double block_container = 0.5;
 
   bool? ble_return = null;
 
-  double? initial;
-  double? _kShoppingMenuHeight;
 
-  final double minHeight = 40.0;
-  final double startHeight = 40.0;
-  final double expandedHeight = 290.0;
 
   @override
   initState() {
     super.initState();
     inputController;
-    offset= Offset(0,widget.sizee!.height*0.45);
+    offset= Offset(0,widget.sizee!.height*0.47);
     button_position;
     //connectToDevice();
   }
@@ -69,6 +65,7 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
     var _currentHeight = size.height * 2;
     var _startHeight = 40.0;
     var _startDy = 290.0;
+    var offsetoffset =offset;
 
 
     return Scaffold(
@@ -128,7 +125,7 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
                                 child: Center(
                                     child: Text("$fill_max",
                                         style: TextStyle(
-                                            fontSize: 40,
+                                            fontSize: 32,
                                             fontFamily: "numberfont",
                                             fontWeight: FontWeight.bold))),
                               ),
@@ -208,50 +205,52 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
                       InkWell(
                           onTap: () async {
                             Sound().play_sound("assets/mp3/success.mp3");
+                            print(offset!.dy);
+                            print(size.height* -0.036);
 
-                            if (fill_max == null) {
-                              // ble_return = await BLE_CONTROLLER()
-                              //     .discoverServices_write(
-                              //         null, fill_value);
-                              // if (ble_return == false) {
-                              //   final prefs =
-                              //       await SharedPreferences.getInstance();
-                              //   prefs.remove('${widget.device!.id}');
-                              //
-                              //   Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => Blue_scan()));
-                              // } else
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Filling(
-                                            car_number: widget.car_number,
-                                            liter: fill_value.toString(),
-                                          )));
-                            } else {
-                              // ble_return = await BLE_CONTROLLER()
-                              //     .discoverServices_write(
-                              //         null, "가득");
-                              // if (ble_return == false) {
-                              //   final prefs =
-                              //       await SharedPreferences.getInstance();
-                              //   prefs.remove('${widget.device!.id}');
-                              //
-                              //   Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => Blue_scan()));
-                              // } else
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Filling(
-                                            car_number: widget.car_number,
-                                            liter: "FULL",
-                                          )));
-                            }
+                            // if (fill_max == null) {
+                            //   // ble_return = await BLE_CONTROLLER()
+                            //   //     .discoverServices_write(
+                            //   //         null, fill_value);
+                            //   // if (ble_return == false) {
+                            //   //   final prefs =
+                            //   //       await SharedPreferences.getInstance();
+                            //   //   prefs.remove('${widget.device!.id}');
+                            //   //
+                            //   //   Navigator.push(
+                            //   //       context,
+                            //   //       MaterialPageRoute(
+                            //   //           builder: (context) => Blue_scan()));
+                            //   // } else
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => Filling(
+                            //                 car_number: widget.car_number,
+                            //                 liter: fill_value.toString(),
+                            //               )));
+                            // } else {
+                            //   // ble_return = await BLE_CONTROLLER()
+                            //   //     .discoverServices_write(
+                            //   //         null, "가득");
+                            //   // if (ble_return == false) {
+                            //   //   final prefs =
+                            //   //       await SharedPreferences.getInstance();
+                            //   //   prefs.remove('${widget.device!.id}');
+                            //   //
+                            //   //   Navigator.push(
+                            //   //       context,
+                            //   //       MaterialPageRoute(
+                            //   //           builder: (context) => Blue_scan()));
+                            //   // } else
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => Filling(
+                            //                 car_number: widget.car_number,
+                            //                 liter: "FULL",
+                            //               )));
+                            //}
                           },
                           child: Container(
                               width: size.width * 0.7,
@@ -268,21 +267,25 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
                       //up
                       InkWell(
                         onTap: () async {
+                          print(offset!.dy);
+                          print(size.height* 0.398);
                           Sound().play_sound("assets/mp3/click.mp3");
                           setState(() {
-                            if (button_position <= -30) {
-                              button_position = -30;
+
+                            if (offset!.dy <= size.height* -0.035) {
+                              offset = Offset(
+                                  offset!.dx + size.width*0.1,
+                                  size.height* -0.035);
                               fill_max = "FULL";
                             } else {
                               if (block_container >= 0.1) {
-                                print("block_container $block_container");
-                                print("button_position $button_position");
                                 block_container -= 0.021;
-                                print("up $offset");
                               }
                               fill_max = null;
                               fill_value += 5;
-                              button_position -= 20;
+                              offset = Offset(
+                                  offset!.dx + size.width*0.1,
+                                  offset!.dy - size.height*0.026);
                             }
                           });
                         },
@@ -312,7 +315,7 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
 
 
                             Positioned(
-                              top: offset!.dy,
+                              top: offsetoffset!.dy,
                               child: GestureDetector(
                                 child: Container(
                                   width: size.width * 0.1,
@@ -320,16 +323,131 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
                                   child: Image.asset(
                                       "assets/images/scroll_button.png"),
                                 ),
-
+//0.039
                                 onPanUpdate: (details) {
-                                  this.setState(() {
-                                    print("before $offset}");
+                                  setState(() {
                                     offset = Offset(
                                         offset!.dx + details.delta.dx,
                                         offset!.dy + details.delta.dy);
-                                    print("after $offset}");
+                                    if(offset!.dy + details.delta.dy >size.height*0.467){
+                                      offset = Offset(offset!.dx + details.delta.dx , size.height* 0.467);
+                                    }
+
+
+                                    if(offset!.dy + details.delta.dy < size.height* 0.45){
+                                      fill_value = 0;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.428){
+                                      fill_value = 5;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.402){
+                                      fill_value = 10;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.376){
+                                      fill_value = 15;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.35){
+                                      setState(() {
+                                        block_container =0.42099999999999993;
+                                      });
+                                      fill_value = 20;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.324){
+                                      setState(() {
+                                        block_container =0.3999999999999999;
+                                      });
+                                      fill_value = 25;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.298){
+                                      setState(() {
+                                        block_container =0.3789999999999999;
+                                      });
+                                      fill_value = 30;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.272){
+                                      setState(() {
+                                        block_container =0.3579999999999999;
+                                      });
+                                      fill_value = 35;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.246){
+                                      setState(() {
+                                        block_container =0.33699999999999986;
+                                      });
+                                      fill_value = 40;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.22){
+                                      setState(() {
+                                        block_container =0.31599999999999984;
+                                      });
+                                      fill_value = 45;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.194){
+                                      setState(() {
+                                        block_container =0.2949999999999998;
+                                      });
+                                      fill_value = 50;
+                                    }
+                                    if(offset!.dy + details.delta.dy < size.height* 0.168){
+                                      setState(() {
+                                        block_container =0.2739999999999998;
+                                      });
+                                      fill_value = 55;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.142){
+                                      setState(() {
+                                        block_container =0.2529999999999998;
+                                      });
+                                      fill_value = 60;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.116){
+                                      setState(() {
+                                        block_container =0.2319999999999998;
+                                      });
+                                      fill_value = 65;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.09){
+                                      setState(() {
+                                        block_container =0.2109999999999998;
+                                      });
+                                      fill_value = 70;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.064){
+                                      setState(() {
+                                        block_container =0.1899999999999998;
+                                      });
+                                      fill_value = 75;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.038){
+                                      setState(() {
+                                        block_container =0.16899999999999982;
+                                      });
+                                      fill_max = null;
+                                      fill_value = 80;
+                                    }if(offset!.dy + details.delta.dy < size.height* 0.012){
+                                      setState(() {
+                                        block_container =0.14799999999999983;
+                                      });
+                                      fill_max = null;
+                                      fill_value = 85;
+                                    }if(offset!.dy + details.delta.dy < size.height* -0.014){
+                                      setState(() {
+                                        block_container =0.12699999999999984;
+                                      });
+                                      fill_max = null;
+                                      fill_value = 90;
+                                    }if(offset!.dy + details.delta.dy < size.height* -0.04){
+                                      setState(() {
+                                        block_container =0.10599999999999983;
+                                      });
+                                      fill_max = null;
+                                      fill_value = 95;
+                                    }
+                                    if(offset!.dy + details.delta.dy <= size.height* -0.066){
+                                      setState(() {
+                                        offset = Offset(offset!.dx + details.delta.dx , size.height* -0.066);
+
+                                        block_container =0.08499999999999983;
+                                      });
+                                      fill_max = "Full";
+
+                                    }
                                   });
-                                    print(offset);
                                 },
                               ),
                             ),
@@ -350,21 +468,25 @@ class _Test_Fill_Setting extends State<Test_Fill_Setting> {
                       InkWell(
                         onTap: () {
                           Sound().play_sound("assets/mp3/click.mp3");
+
+
                           setState(() {
-                            setState(() {
-                              if (block_container <= 0.5) {
-                                block_container += 0.019;
-                              }
-                              fill_max = null;
-                              if (button_position < 360) {
-                                fill_value -= 5;
-                                button_position += 20;
-                              } else {
-                                fill_value = 0;
-                                button_position = 360;
-                              }
-                            });
+                            if (block_container <= 0.5) {
+                              block_container += 0.019;
+                            }
+                            fill_max = null;
+                            if (offset!.dy < size.height*0.45) {
+                              fill_value -= 5;
+                              offset = Offset(
+                                  offset!.dx + size.width*0.1,
+                                  offset!.dy + size.height*0.03);
+                            } else {
+                              fill_value = 0;
+                              button_position = 360;
+                            }
                           });
+
+
                         },
                         child: Container(
                             width: size.width * 0.2,
