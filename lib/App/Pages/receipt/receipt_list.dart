@@ -186,7 +186,6 @@ class _Receipt_list extends State<Receipt_list> {
                   ),
                   InkWell(
                     onTap: () async {
-                      print(_BirthdayController.text);
                       if (_BirthdayController.text == "시간 / 날짜") {
                         return showtoast("조회할 날짜를 선택해주세요");
                       } else {
