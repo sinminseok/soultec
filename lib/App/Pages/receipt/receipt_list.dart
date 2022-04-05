@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
+import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import 'package:soultec/Sound/sound.dart';
 import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
@@ -185,7 +186,12 @@ class _Receipt_list extends State<Receipt_list> {
                   ),
                   InkWell(
                     onTap: () async {
-                      scan_day_filiter(_BirthdayController.text);
+                      print(_BirthdayController.text);
+                      if (_BirthdayController.text == "시간 / 날짜") {
+                        return showtoast("조회할 날짜를 선택해주세요");
+                      } else {
+                        scan_day_filiter(_BirthdayController.text);
+                      }
                     },
                     child: Container(
                         color: Color(0xffcc0000),

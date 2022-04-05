@@ -290,7 +290,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (_passwordController.text == "") {
                                     return showtoast("비밀번호를 입력해주세요");
                                   } else {
-                                    print("D");
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

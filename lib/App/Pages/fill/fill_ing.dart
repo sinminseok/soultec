@@ -29,7 +29,7 @@ class Filling extends StatefulWidget {
 
 class _FillingState extends State<Filling> {
   //노르딕 디바이스 연결
-
+  bool? onTapPressed = false;
   @override
   initState() {
     super.initState();
@@ -169,7 +169,10 @@ class _FillingState extends State<Filling> {
 
                   //snapshot.hasError일때 inkwell 지워준다.
                   InkWell(
-                      onTap: () async {
+                      onTap: onTapPressed == true ? null :() async {
+                        setState(() {
+                          onTapPressed = true;
+                        });
                         Sound().play_sound("assets/mp3/success.mp3");
                         //주석 제거 (해당 receipt 정보 서버로post)
 

@@ -195,34 +195,42 @@ class _CarNumberPageState extends State<CarNumberPage> {
             ),
             InkWell(
                 onTap: () async {
+                  print("ddd");
+                  print(_carnumber_text.text.length);
                   print(user_token!.token);
-                  //http get car_number return bool
-                  if(_carnumber_text.text == ""){
-                    return showtoast("차량 번호를 입력하세요");
+
+                  if(_carnumber_text.text.length <4){
+                    return showtoast("차량번호를 4자리 입력해주세요");
                   }else{
-                    return_carnumber = await Http_services()
-                        .post_carnumber(_carnumber_text.text, user_token.token);
-
-                    if(return_carnumber!.length >=2 ){
-                      setState(() {
-                        overlap_car = true;
-                      });
-
-                      return;
-                    }if(return_carnumber!.length == 0){
-                      Sound().play_sound("assets/mp3/error.mp3");
-                      showtoast("등록되지 않은 차번호 입니다.재 확인 바랍니다.");
+                    if(_carnumber_text.text == ""){
+                      return showtoast("차량 번호를 입력하세요");
                     }else{
-                      Sound().play_sound("assets/mp3/start.mp3");
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Fill_Setting(
-                                car_number: _carnumber_text.text,
-                                sizee: size,
-                              )));
+                      return_carnumber = await Http_services()
+                          .post_carnumber(_carnumber_text.text, user_token.token);
+
+                      if(return_carnumber!.length >=2 ){
+                        setState(() {
+                          overlap_car = true;
+                        });
+
+                        return;
+                      }if(return_carnumber!.length == 0){
+                        Sound().play_sound("assets/mp3/error.mp3");
+                        showtoast("등록되지 않은 차번호 입니다.재 확인 바랍니다.");
+                      }else{
+                        Sound().play_sound("assets/mp3/start.mp3");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Fill_Setting(
+                                  car_number: _carnumber_text.text,
+                                  sizee: size,
+                                )));
+                      }
                     }
                   }
+                  //http get car_number return bool
+
 
 
                   // if (return_carnumber == true) {
