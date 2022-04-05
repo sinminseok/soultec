@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,11 +71,7 @@ class _Receipt_list extends State<Receipt_list> {
 
   //이용내역 리스트 최근날짜 순으로 정렬
   index(data_lsit, sort_list) async {
-    print("ASDASD");
-    print(data_lsit);
-    print(sort_list);
     var data_reversed = [];
-
     for (var i = sort_list.length - 1; i >= 0; i--) {
       for (var j = data_lsit.length - 1; j >= 0; j--) {
         String? datetime_string =
@@ -88,7 +86,6 @@ class _Receipt_list extends State<Receipt_list> {
       }
     }
 
-    print(data_reversed);
     setState(() {
       //최근 날짜부터 정렬된 Receipt 객체 리스트 setState후 widget itembuilder에서 사용
       itembuilder_list = data_reversed;
@@ -147,7 +144,7 @@ class _Receipt_list extends State<Receipt_list> {
             children: [
               Top_widget(),
               Text(
-                "${user_id}",
+                "${user_id} -- ${widget.car_number}",
                 style: TextStyle(
                   color: Colors.red,
                   fontSize: 29,
@@ -168,13 +165,18 @@ class _Receipt_list extends State<Receipt_list> {
                     child: Container(
                       color: Colors.white,
                       width: size.width * 0.6,
-
                       child: TextFormField(
-
                         textAlign: TextAlign.center,
                         enabled: false,
                         controller: _BirthdayController,
                         style: TextStyle(fontSize: 20, color: Colors.black26),
+                        decoration: InputDecoration(
+                          hintText: "Enter a message",
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.arrow_drop_down_sharp),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -182,22 +184,14 @@ class _Receipt_list extends State<Receipt_list> {
                     width: 10,
                   ),
                   InkWell(
-                    onTap: () async{
+                    onTap: () async {
                       scan_day_filiter(_BirthdayController.text);
                     },
                     child: Container(
-                      color: Color(0xffcc0000),
-                      width: size.width * 0.15,
-                      height: size.width * 0.1,
-                      child: Center(
-                          child: Text(
-                        "조회",
-                        style: TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "numberfont"),
-                      )),
-                    ),
+                        color: Color(0xffcc0000),
+                        width: size.width * 0.15,
+                        height: size.width * 0.1,
+                        child: Image.asset("assets/images/inqure_button.png")),
                   ),
                 ],
               ),
@@ -214,10 +208,12 @@ class _Receipt_list extends State<Receipt_list> {
                       ?
                       //조회 했을때 보여주는 widget
                       Center(
-                        child: Container(
-                          height: size.height*0.42,
-                          width: size.width*0.9,
-                          child: ListView.builder(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Container(
+                              height: size.height * 0.42,
+                              width: size.width * 0.95,
+                              child: ListView.builder(
                                 padding: const EdgeInsets.all(8),
                                 itemCount: filter_use_data.length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -226,7 +222,7 @@ class _Receipt_list extends State<Receipt_list> {
                                         left: 50, right: 50, bottom: 10),
                                     child: Container(
                                       color: kPrimaryColor,
-                                      width: size.width * 1,
+                                      width: size.width * 1.2,
                                       height: size.height * 0.07,
                                       child: InkWell(
                                         onTap: () {
@@ -234,14 +230,19 @@ class _Receipt_list extends State<Receipt_list> {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => Recepit_detail(
-                                                      list_Data: filter_use_data[index])));
+                                                  builder: (context) =>
+                                                      Recepit_detail(
+                                                          list_Data:
+                                                              filter_use_data[
+                                                                  index])));
                                         },
                                         child: ListTile(
                                           title: Center(
                                               child: Text(
                                             '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
-                                            style: TextStyle(fontFamily: "numberfont"),
+                                            style: TextStyle(
+                                                fontFamily: "numberfont",
+                                                fontWeight: FontWeight.bold),
                                           )),
                                         ),
                                       ),
@@ -249,141 +250,61 @@ class _Receipt_list extends State<Receipt_list> {
                                   );
                                 },
                               ),
-                        ),
-                      )
+                            ),
+                          ),
+                        )
                       //조회하지 않았을때 보여주는 widget
                       : Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top:40),
-                          child: Container(
-                            height: size.height*0.42,
-                            width: size.width*0.9,
-
-                            child:ListView.builder(
-                                  padding: const EdgeInsets.all(8),
-                                  itemCount: itembuilder_list!.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 50, right: 50, bottom: 10),
-                                      child: Container(
-                                        color: kPrimaryColor,
-                                        width: size.width * 1,
-                                        height: size.height * 0.07,
-                                        child: InkWell(
-                                          onTap: () {
-                                            print(itembuilder_list![index]
-                                                .dateTime
-                                                .substring(0, 10));
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => Recepit_detail(
-                                                        list_Data:
-                                                            itembuilder_list![index])));
-                                          },
-                                          child: ListTile(
-                                            title: Center(
-                                                child: Text(
-                                              '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
-                                              style: TextStyle(fontFamily: "numberfont",color: Colors.black),
-                                            )),
-                                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Container(
+                              height: size.height * 0.42,
+                              width: size.width * 0.95,
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: itembuilder_list!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 50, right: 50, bottom: 10),
+                                    child: Container(
+                                      color: kPrimaryColor,
+                                      width: size.width * 1.2,
+                                      height: size.height * 0.07,
+                                      child: InkWell(
+                                        onTap: () {
+                                          print(itembuilder_list![index]
+                                              .dateTime
+                                              .substring(0, 10));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Recepit_detail(
+                                                          list_Data:
+                                                              itembuilder_list![
+                                                                  index])));
+                                        },
+                                        child: ListTile(
+                                          title: Center(
+                                              child: Text(
+                                            '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
+                                            style: TextStyle(
+                                                fontFamily: "numberfont",
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
+                                          )),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
-                      ),
                 ],
               ),
-              // Center(
-              //   child: Text(
-              //     "이용 내역",
-              //     style: TextStyle(fontFamily: "numberfont", fontSize: 23),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: size.height * 0.02,
-              // ),
-              // scan_check
-              //     ?
-              //     //조회 했을때 보여주는 widget
-              //     Expanded(
-              //         child: ListView.builder(
-              //           padding: const EdgeInsets.all(8),
-              //           itemCount: filter_use_data.length,
-              //           itemBuilder: (BuildContext context, int index) {
-              //             return Padding(
-              //               padding: const EdgeInsets.only(
-              //                   left: 50, right: 50, bottom: 10),
-              //               child: Container(
-              //                 color: kPrimaryColor,
-              //                 width: size.width * 1,
-              //                 height: size.height * 0.07,
-              //                 child: InkWell(
-              //                   onTap: () {
-              //                     //해당 날짜 이용내역 detail navigator => filter_use_data[index]
-              //                     Navigator.push(
-              //                         context,
-              //                         MaterialPageRoute(
-              //                             builder: (context) => Recepit_detail(
-              //                                 list_Data: filter_use_data[index])));
-              //                   },
-              //                   child: ListTile(
-              //                     title: Center(
-              //                         child: Text(
-              //                       '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
-              //                       style: TextStyle(fontFamily: "numberfont"),
-              //                     )),
-              //                   ),
-              //                 ),
-              //               ),
-              //             );
-              //           },
-              //         ),
-              //       )
-              //     //조회하지 않았을때 보여주는 widget
-              //     : Expanded(
-              //         child: ListView.builder(
-              //           padding: const EdgeInsets.all(8),
-              //           itemCount: itembuilder_list!.length,
-              //           itemBuilder: (BuildContext context, int index) {
-              //             return Padding(
-              //               padding: const EdgeInsets.only(
-              //                   left: 50, right: 50, bottom: 10),
-              //               child: Container(
-              //                 color: Colors.white,
-              //                 width: size.width * 1,
-              //                 height: size.height * 0.07,
-              //                 child: InkWell(
-              //                   onTap: () {
-              //                     print(itembuilder_list![index]
-              //                         .dateTime
-              //                         .substring(0, 10));
-              //                     Navigator.push(
-              //                         context,
-              //                         MaterialPageRoute(
-              //                             builder: (context) => Recepit_detail(
-              //                                 list_Data:
-              //                                     itembuilder_list![index])));
-              //                   },
-              //                   child: ListTile(
-              //                     title: Center(
-              //                         child: Text(
-              //                       '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
-              //                       style: TextStyle(fontFamily: "numberfont"),
-              //                     )),
-              //                   ),
-              //                 ),
-              //               ),
-              //             );
-              //           },
-              //         ),
-              //       ),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -393,9 +314,9 @@ class _Receipt_list extends State<Receipt_list> {
                     SystemNavigator.pop();
                   },
                   child: Container(
-                      width: size.width * 0.7,
-                      height: size.height * 0.1,
-                      child: Image.asset("assets/images/stop_button.png"))),
+                      width: size.width * 0.6,
+                      height: size.height * 0.07,
+                      child: Image.asset("assets/images/finish_button.png"))),
               SizedBox(
                 height: size.height * 0.07,
               )
@@ -410,7 +331,6 @@ class _Receipt_list extends State<Receipt_list> {
     DateTime? pickedDate = await showModalBottomSheet<DateTime>(
       backgroundColor: ThemeData.light().scaffoldBackgroundColor,
       context: context,
-
       builder: (context) {
         // DateTime tempPickedDate;
         return Container(

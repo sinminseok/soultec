@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/Data/Object/car_object.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
-
 
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
@@ -16,15 +16,22 @@ class Http_services with ChangeNotifier {
   String? _carnumber;
 
   User_token? get user_token => _user_token;
+
   User? get user_info => _user_info;
+
   String? get user_id => _user_id;
+
   String? get carnumber => _carnumber;
 
   //http 통신 url
-  String login_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
-  String get_user_info_url ="http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/users";
-  String car_url_post = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
-  String post_url = "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
+  String login_url =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
+  String get_user_info_url =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/users";
+  String car_url_post =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
+  String post_url =
+      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
 
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
@@ -45,7 +52,6 @@ class Http_services with ChangeNotifier {
         save_user(id, pw);
         var _usertoken = User_token.fromJson(json.decode(res.body));
         return _usertoken;
-
       } else {
         var _usertoken = User_token.fromJson(json.decode(res.body));
         //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
@@ -55,34 +61,29 @@ class Http_services with ChangeNotifier {
     }
 
     //로그인 실패
-    if( res.statusCode ==400 || res.statusCode ==401){
+    if (res.statusCode == 400 || res.statusCode == 401) {
       User_token _usertoken = new User_token();
       _usertoken.error = "error";
       //자동 로그인을 체크하지 않았을때 http 에서 전달받은 user 객체만 return 해준다.
       return _usertoken;
-    }
-    else {
+    } else {
       return null;
     }
   }
 
   //http userinformation 가져오기
   Future<User?> get_user_info(token) async {
-    var res = await http.get(
-        Uri.parse(
-            get_user_info_url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        });
+    var res = await http.get(Uri.parse(get_user_info_url), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       _user_info = User.fromJson(jsonDecode(res.body));
       notifyListeners();
       return _user_info;
-
     } else {
       return null;
     }
@@ -95,9 +96,7 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-
     if (res.statusCode == 200) {
-
       User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
       this._user_token = userr_token;
       this._user_id = id;
@@ -134,30 +133,43 @@ class Http_services with ChangeNotifier {
   }
 
   //http 차량 번호 post함수
-  Future<bool?> post_carnumber(number, token) async {
+  Future<List<dynamic>?> post_carnumber(number, token) async {
+    var data_list =[];
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.get(
       Uri.parse(
-          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/$number"),
+          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/carNumbers/$number"),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+    print(res.body);
+
+    final decodeData = utf8.decode(res.bodyBytes);
+    final data = jsonDecode(decodeData);
 
     if (res.statusCode == 200) {
+
       _carnumber = number;
+
+      for (int i = 0; i < data.length; i++) {
+        Car car;
+        car = Car.fromJson(data[i]);
+        data_list.add(car);
+      }
+
+      print(data_list);
       notifyListeners();
-      return true;
+      return data_list;
     } else {
-      return false;
+      return null;
     }
   }
 
   //http post
-  Future post_receipt(
-       pumpId, amount, carNumber, token) async {
+  Future post_receipt(pumpId, amount, carNumber, token) async {
     //pumbId 는 노르딕에서 가져오는 것 (메모리 할당)
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(
@@ -174,7 +186,6 @@ class Http_services with ChangeNotifier {
           'amount': amount,
           'carNumber': carNumber,
         }));
-
 
     if (res.statusCode == 200) {
       return res;

@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
 class Top_widget extends StatefulWidget {
-
-
   @override
   _Top_widgetState createState() => _Top_widgetState();
 }
 
 class _Top_widgetState extends State<Top_widget> {
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        SizedBox(height:size.height*0.15),
+        SizedBox(height: size.height * 0.15),
         Row(
           children: [
             // SizedBox(height: ,)
@@ -43,6 +40,5 @@ class _Top_widgetState extends State<Top_widget> {
         ),
       ],
     );
-
   }
 }

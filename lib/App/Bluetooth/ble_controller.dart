@@ -3,7 +3,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 import '../../constants.dart';
 
 class BLE_CONTROLLER {
-
   BluetoothCharacteristic? targetCharacteristic;
   Stream<List<int>>? stream_value;
 
@@ -11,7 +10,6 @@ class BLE_CONTROLLER {
   Future<bool?> discoverServices_write(device, litter) async {
     bool check_uuid = false;
     if (device == null) {
-      print("device null!");
       return null;
     }
 
@@ -26,7 +24,6 @@ class BLE_CONTROLLER {
             targetCharacteristic = characteristic;
 
             if (litter == "가득") {
-
               writeData("가득");
               check_uuid = true;
             } else {

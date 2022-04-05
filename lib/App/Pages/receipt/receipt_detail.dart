@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
+import 'package:soultec/Sound/sound.dart';
 import '../../../constants.dart';
 
 
@@ -81,8 +82,8 @@ class _Recepit_detail extends State<Recepit_detail> {
               Stack(
                 children: [
                   Container(
-                      width: size.width * 1,
-                      height: size.height * 0.55,
+                      width: size.width * 1.3,
+                      height: size.height * 0.6,
                       child: Image.asset("assets/images/receipt_detail.png")),
                   Row(
                     children: [
@@ -97,24 +98,26 @@ class _Recepit_detail extends State<Recepit_detail> {
 
 
 
-                          Text("",style:TextStyle(fontSize: 14),),
-                            Text("상호 : ${widget.list_Data.branchName}",style:TextStyle(fontSize: 14),),
-                            Text("대표 : ${widget.list_Data.branchCeo}",style:TextStyle(fontSize: 14),),
-                            Text("${widget.list_Data.branchAddress}",style:TextStyle(fontSize: 14),),
-                            Text("담당자 번호 : ${widget.list_Data.branchTEL} ",style:TextStyle(fontSize: 14),),
+                            Text("",style:TextStyle(fontSize: 14),),
+                            Text("",style:TextStyle(fontSize: 14),),
+                            Text("상호 : ${widget.list_Data.branchName}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text("대표 : ${widget.list_Data.branchCeo}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text("${widget.list_Data.branchAddress}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text("담당자 번호 : ${widget.list_Data.branchTEL} ",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
 
                             Text("",style:TextStyle(fontSize: 14),),
-                            Text("사용일시 : ${(widget.list_Data.dateTime)!.substring(0,10)}",style:TextStyle(fontSize: 14),),
-                            Text("승인번호 : ${widget.list_Data.approvalNumber}",style:TextStyle(fontSize: 14),),
-                            Text("주유기 번호: ${widget.list_Data.pumpNumber}",style:TextStyle(fontSize: 14),),
+                            Text("사용일시 : ${(widget.list_Data.dateTime)!.substring(0,10)}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text("승인번호 : ${widget.list_Data.approvalNumber}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text("주유기 번호: ${widget.list_Data.pumpNumber}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            Text(""),
                             Text("================================",style:TextStyle(fontSize: 14),),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text("제품명"),
-                                Text("수량"),
-                                Text("기사번호"),
-                                Text("차량 번호"),
+                                Text("제품명",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("수량",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("기사번호",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("차량 번호",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                               ],
                             ),
 
@@ -122,16 +125,16 @@ class _Recepit_detail extends State<Recepit_detail> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text("요소수"),
-                                Text("${widget.list_Data.amount}"),
-                                Text("${widget.list_Data.username}"),
-                                Text("${widget.list_Data.carNumber}"),
+                                Text("요소수",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("${widget.list_Data.amount}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("${widget.list_Data.username}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                Text("${widget.list_Data.carNumber}",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                               ],
                             ),
                             Text("---------------------------------------------------------------",style:TextStyle(fontSize: 14),),
-                            Text("총 충전량: ${widget.list_Data.amount} ",style:TextStyle(fontSize: 14),),
+                            Text("총 충전량: ${widget.list_Data.amount} ",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             Text("---------------------------------------------------------------",style:TextStyle(fontSize: 14),),
-                            Center(child: Text("soultec 제출",style:TextStyle(fontSize: 14),)),
+                            Center(child: Text("soultec 제출",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold),)),
 
                           ],
                         ),
@@ -144,25 +147,17 @@ class _Recepit_detail extends State<Recepit_detail> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-
               InkWell(
-                onTap: () async{
+                  onTap: () async {
+                    Sound().play_sound("assets/mp3/success.mp3");
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                      width: size.width * 0.6,
+                      height: size.height * 0.07,
+                      child: Image.asset("assets/images/check_button.png"))),
 
-                   Navigator.of(context).pop();
-                },
-                child: Container(
-                  width: size.width * 0.3,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: Color(0xffcc0000)),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  child: Text('뒤로가기',
 
-                      style: TextStyle(color: Colors.black, fontSize: 16,fontWeight:FontWeight.bold,fontFamily: "numberfont")),
-                ),
-              ),
             ]),
     ));
   }

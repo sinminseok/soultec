@@ -1,279 +1,488 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_blue/flutter_blue.dart';
-// import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:soultec/App/Bluetooth/ble_controller.dart';
-// import 'package:soultec/App/Bluetooth/blue_scan.dart';
-// import 'package:soultec/App/widgets/top_widget.dart';
-// import 'package:soultec/Sound/sound.dart';
-// import 'package:soultec/Data/toast.dart';
-// import 'package:soultec/RestAPI/http_service.dart';
-// import '../../../constants.dart';
-// import 'fill_ing.dart';
-//
-// //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
-// class Fill_setting extends StatefulWidget {
-//  // BluetoothDevice? device;
-//   String? car_number;
-//
-//   Fill_setting(
-//       {
-//         required this.car_number,
-//       // required this.device,
-//       });
-//
-//   @override
-//   _Fill_setting createState() => _Fill_setting();
-// }
-//
-// class _Fill_setting extends State<Fill_setting> {
-//
-//   final values = ["가득", "리터"];
-//   String? _select_value;
-//   TextEditingController inputController = TextEditingController();
-//
-//   bool? ble_return = null;
-//   @override
-//   initState() {
-//     super.initState();
-//     //connectToDevice();
-//   }
-//
-//   @override
-//   dispose(){
-//     ble_return = null;
-//     super.dispose();
-//   }
-//
-//   //디바이스 연결
-//   // connectToDevice() async {
-//   //   if (widget.device == null) return;
-//   //   await widget.device!.connect(autoConnect: false);
-//   //
-//   // }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     String? user_id= Provider.of<Http_services>(context).user_id;
-//     Size size = MediaQuery.of(context).size;
-//
-//     return WillPopScope(
-//
-//       onWillPop: () async => false,
-//       child: Scaffold(
-//             backgroundColor: kPrimaryColor,
-//             body: SingleChildScrollView(
-//               child: Column(children: [
-//                 Top_widget(),
-//                 // InkWell(child: Text("TEST"),
-//                 // onTap: ()async{
-//                 //   print(widget.device!.state.listen((event) {print(event);}));
-//                 //   // print(widget.device!.state.listen((event) {print(event);}));
-//                 //   // print("GGGGGG");
-//                 // }),
-//                 //
-//                 Text(
-//                   "${user_id} -- ${widget.car_number}",
-//                   style: TextStyle(
-//                     color: Colors.red,
-//                     fontSize: 29,
-//                     fontFamily: "numberfont",
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(0.0),
-//                   child: Container(
-//                       width: size.width * 0.8,
-//                       height: size.height * 0.4,
-//                       child: Image.asset(
-//                         'assets/gifs/main_img.gif',
-//                       )),
-//                 ),
-//                 Container(
-//                   width: size.width * 0.6,
-//                   decoration: BoxDecoration(
-//                       border: Border.all(
-//                           color: Colors.black,
-//                           style: BorderStyle.solid,
-//                           width: 1),
-//                       color: kPrimaryColor),
-//                   child: TextFormField(
-//                     textAlign: TextAlign.center,
-//                     style: TextStyle(
-//                       fontFamily: "numberfont",
-//                       fontSize: 29,
-//                     ),
-//                     controller: inputController,
-//                     decoration: InputDecoration(
-//                       hintText: '리터량 입력',
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(
-//                   height: size.height * 0.03,
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     DropdownButton(
-//                       elevation: 17,
-//                       underline: Container(
-//                           decoration: BoxDecoration(
-//                               border:
-//                                   Border.all(width: 0.5, color: Colors.black))),
-//                       hint: Text(
-//                         "가득/리터",
-//                         textAlign: TextAlign.left,
-//                         style: TextStyle(
-//                           color: Colors.black87,
-//                           fontSize: 14,
-//                         ),
-//                       ),
-//                       value: _select_value,
-//                       dropdownColor: Colors.white,
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                       ),
-//                       onChanged: (val) => setState(() => {
-//                       Sound().play_sound("assets/mp3/success.mp3"),
-//                             _select_value = val.toString(),
-//                             if (val.toString() == "가득")
-//                               {inputController.text = "∞"}
-//                             else
-//                               {inputController.text = ""}
-//                           }),
-//                       items: [
-//                         for (var val in values)
-//                           DropdownMenuItem(
-//                             value: val,
-//                             child: SizedBox(
-//                               child: Text(
-//                                 val.toString(),
-//                                 textAlign: TextAlign.left,
-//                                 style: TextStyle(
-//                                   color: Colors.black87,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                       ],
-//                     ),
-//                     SizedBox(width: size.width * 0.2),
-//                     Text(
-//                       "LITTER",
-//                       style: TextStyle(
-//                           fontFamily: "numberfont",
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 24,
-//                           color: Colors.red),
-//                     ),
-//                   ],
-//                 ),
-//                 SizedBox(
-//                   height: size.height * 0.06,
-//                 ),
-//                 InkWell(
-//                     onTap: () async {
-//                        if (_select_value == null) {
-//                         if (!inputController.text.isEmpty) {
-//                           Sound().play_sound("assets/mp3/success.mp3");
-//
-//                           // ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , inputController.text);
-//                           // if(ble_return == false){
-//                           //   showtoast("주유기 블루트수를 다시 선택해주세요");
-//                           //
-//                           //   final prefs = await SharedPreferences.getInstance();
-//                           //   prefs.remove('${widget.device!.id}');
-//                           //
-//                           //   Navigator.push(
-//                           //       context,
-//                           //       MaterialPageRoute(
-//                           //           builder: (context) => Blue_scan(
-//                           //           )));
-//                           // }
-//
-//
-//                           Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => Filling(
-//                                       car_number:widget.car_number,
-//                                       liter: int.parse('${inputController.text}') ,
-//
-//
-//                         )));
-//                         } else {
-//                           Sound().play_sound("assets/mp3/error.mp3");
-//                           showtoast("리터량을 설정해주세요!");
-//                         }
-//                       } else if (_select_value == "가득") {
-//                         Sound().play_sound("assets/mp3/success.mp3");
-//
-//                         //루투스 디바이스를 잘못선택했을때
-//                         //  ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , "가득");
-//                         // if(ble_return == false){
-//                         //   showtoast("주유기 블루트수를 다시 선택해주세요");
-//                         //
-//                         //   final prefs = await SharedPreferences.getInstance();
-//                         //   prefs.remove('${widget.device!.id}');
-//                         //
-//                         //   Navigator.push(
-//                         //       context,
-//                         //       MaterialPageRoute(
-//                         //           builder: (context) => Blue_scan(
-//                         //           )));
-//                         // }
-//                         //가득 넘길떄 몇 리터로 넘겨야 할지
-//                         Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                                 builder: (context) => Filling(
-//                                   car_number:widget.car_number,
-//                                     liter: 100,
-//                               )));
-//                       } else if (_select_value == "리터") {
-//                          //사용자가 직접 리터량을 설정해줬을때
-//                         if (!inputController.text.isEmpty) {
-//                           Sound().play_sound("assets/mp3/success.mp3");
-//
-//                           //블루투스 디바이스를 잘못선택했을때
-//                           //  ble_return =await BLE_CONTROLLER().discoverServices_write(widget.device , inputController.text);
-//                           // if(ble_return == false){
-//                           //   showtoast("주유기 블루트수를 다시 선택해주세요");
-//                           //
-//                           //   final prefs = await SharedPreferences.getInstance();
-//                           //   prefs.remove('${widget.device!.id}');
-//                           //
-//                           //   Navigator.push(
-//                           //       context,
-//                           //       MaterialPageRoute(
-//                           //           builder: (context) => Blue_scan(
-//                           //           )));
-//                           // }
-//
-//                           Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => Filling(
-//                                     car_number:widget.car_number,
-//                                       liter: int.parse('${inputController.text}'),
-//
-//                               )));
-//                         } else {
-//                           Sound().play_sound("assets/mp3/error.mp3");
-//                           return showtoast("리터량을 설정해주세요!");
-//                         }
-//                       }
-//                     },
-//                     child: Container(
-//                         width: size.width * 0.7,
-//                         height: size.height * 0.1,
-//                         child: Image.asset("assets/images/play_button.png"))),
-//               ]),
-//             )
-//       ),
-//     );
-//   }
-//
-// }
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:provider/provider.dart';
+import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/App/Bluetooth/ble_controller.dart';
+import 'package:soultec/App/Bluetooth/blue_scan.dart';
+import 'package:soultec/App/widgets/top_widget.dart';
+import 'package:soultec/Sound/sound.dart';
+import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
+import '../../../constants.dart';
+import 'fill_ing.dart';
+
+//이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
+class Fill_Setting extends StatefulWidget {
+  // BluetoothDevice? device;
+  String? car_number;
+  Size? sizee;
+
+  Fill_Setting({
+    required this.car_number,
+    required this.sizee,
+    // required this.device,
+  });
+
+  @override
+  _Fill_Setting createState() => _Fill_Setting();
+}
+
+class _Fill_Setting extends State<Fill_Setting> {
+  Offset? offset;
+  int fill_value = 0;
+  String? fill_max = null;
+
+  double button_position = 360;
+  double block_container = 0.5;
+
+  bool? ble_return = null;
+
+  @override
+  initState() {
+    super.initState();
+    offset = Offset(0, widget.sizee!.height * 0.47);
+    //connectToDevice();
+  }
+
+  @override
+  dispose() {
+    ble_return = null;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String? user_id = Provider.of<Http_services>(context).user_id;
+    Size size = MediaQuery.of(context).size;
+    var offsetoffset = offset;
+
+    return Scaffold(
+          backgroundColor: kPrimaryColor,
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Top_widget(),
+              Row(
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Text(
+                          "${user_id} -- ${widget.car_number}",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 29,
+                            fontFamily: "numberfont",
+                          ),
+                        ),
+                        fill_max == null
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Container(
+                                  width: size.width * 0.5,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black,
+                                          style: BorderStyle.solid,
+                                          width: 1),
+                                      color: kPrimaryColor),
+                                  child: Center(
+                                      child: Text("$fill_value",
+                                          style: TextStyle(
+                                              fontSize: 33,
+                                              fontFamily: "numberfont",
+                                              fontWeight: FontWeight.bold))),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Container(
+                                  width: size.width * 0.5,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black,
+                                          style: BorderStyle.solid,
+                                          width: 1),
+                                      color: kPrimaryColor),
+                                  child: Center(
+                                      child: Text("$fill_max",
+                                          style: TextStyle(
+                                              fontSize: 32,
+                                              fontFamily: "numberfont",
+                                              fontWeight: FontWeight.bold))),
+                                ),
+                              ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.3,
+                            ),
+                            Text(
+                              "LITTER",
+                              style: TextStyle(
+                                  fontFamily: "numberfont",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.red),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: size.width * 0.6,
+                          height: size.height * 0.5,
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: size.height * 0.21,
+                                  ),
+                                  Container(
+                                      width: size.width * 0.23,
+                                      height: size.height * 0.29,
+                                      child: Image.asset(
+                                        'assets/gifs/fill_gif.gif',
+                                      )),
+                                ],
+                              ),
+                              Stack(
+                                children: [
+                                  Container(
+                                      height: size.height * 0.7,
+                                      width: size.width * 0.37,
+                                      child: Image.asset(
+                                        "assets/images/fillingg.png",
+                                        width: size.width * 0.3,
+                                      )),
+                                  Container(
+                                    width: size.width * 0.37,
+                                    height: size.height * block_container,
+                                    color: kPrimaryColor,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        InkWell(
+                            onTap: () async {
+                              Sound().play_sound("assets/mp3/success.mp3");
+
+                              if (fill_max == null) {
+                                // ble_return = await BLE_CONTROLLER()
+                                //     .discoverServices_write(
+                                //         null, fill_value);
+                                // if (ble_return == false) {
+                                //   final prefs =
+                                //       await SharedPreferences.getInstance();
+                                //   prefs.remove('${widget.device!.id}');
+                                //
+                                //   Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) => Blue_scan()));
+                                // } else
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Filling(
+                                              car_number: widget.car_number,
+                                              liter: fill_value.toString(),
+                                            )));
+                              } else {
+                                // ble_return = await BLE_CONTROLLER()
+                                //     .discoverServices_write(
+                                //         null, "가득");
+                                // if (ble_return == false) {
+                                //   final prefs =
+                                //       await SharedPreferences.getInstance();
+                                //   prefs.remove('${widget.device!.id}');
+                                //
+                                //   Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) => Blue_scan()));
+                                // } else
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Filling(
+                                              car_number: widget.car_number,
+                                              liter: "FULL",
+                                            )));
+                              }
+                            },
+                            child: Container(
+                                width: size.width * 0.7,
+                                height: size.height * 0.08,
+                                child: Image.asset(
+                                    "assets/images/play_button.png"))),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: size.width * 0.25,
+                    child: Column(
+                      children: [
+                        //up
+                        InkWell(
+                          onTap: () async {
+                            Sound().play_sound("assets/mp3/click.mp3");
+                            setState(() {
+                              if (offset!.dy <= size.height * -0.035) {
+                                offset = Offset(offset!.dx + size.width * 0.1,
+                                    size.height * -0.035);
+                                fill_max = "FULL";
+                              } else {
+                                if (block_container >= 0.1) {
+                                  block_container -= 0.021;
+                                }
+                                fill_max = null;
+                                fill_value += 5;
+                                offset = Offset(offset!.dx + size.width * 0.1,
+                                    offset!.dy - size.height * 0.026);
+                              }
+                            });
+                          },
+                          child: Container(
+                              width: size.width * 0.2,
+                              child:
+                                  Image.asset("assets/images/up_button.png")),
+                        ),
+                        Container(
+                          height: size.height * 0.63,
+                          width: size.width * 0.1,
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  width: size.width * 0.01,
+                                  height: size.height * 0.6,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Positioned(
+                                top: offsetoffset!.dy,
+                                child: GestureDetector(
+                                  child: Container(
+                                    width: size.width * 0.1,
+                                    height: size.height * 0.2,
+                                    child: Image.asset(
+                                        "assets/images/scroll_button.png"),
+                                  ),
+                                  onPanUpdate: (details) {
+                                    setState(() {
+                                      offset = Offset(
+                                          offset!.dx + details.delta.dx,
+                                          offset!.dy + details.delta.dy);
+
+                                      if (offset!.dy + details.delta.dy >
+                                          size.height * 0.467) {
+                                        offset = Offset(
+                                            offset!.dx + details.delta.dx,
+                                            size.height * 0.467);
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.45) {
+                                        setState(() {
+                                          fill_value = 0;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.428) {
+                                        setState(() {
+                                          fill_value = 5;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.402) {
+                                        setState(() {
+                                          fill_value = 10;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.376) {
+                                        setState(() {
+                                          fill_value = 15;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.35) {
+                                        setState(() {
+                                          block_container = 0.42099999999999993;
+                                          fill_value = 20;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.324) {
+                                        setState(() {
+                                          block_container = 0.3999999999999999;
+                                          fill_value = 25;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.298) {
+                                        setState(() {
+                                          block_container = 0.3789999999999999;
+                                          fill_value = 30;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.272) {
+                                        setState(() {
+                                          block_container = 0.3579999999999999;
+                                          fill_value = 35;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.246) {
+                                        setState(() {
+                                          block_container = 0.33699999999999986;
+                                          fill_value = 40;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.22) {
+                                        setState(() {
+                                          block_container = 0.31599999999999984;
+                                          fill_value = 45;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.194) {
+                                        setState(() {
+                                          block_container = 0.2949999999999998;
+                                          fill_value = 50;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.168) {
+                                        setState(() {
+                                          block_container = 0.2739999999999998;
+                                          fill_value = 55;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.142) {
+                                        setState(() {
+                                          block_container = 0.2529999999999998;
+                                          fill_value = 60;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.116) {
+                                        setState(() {
+                                          block_container = 0.2319999999999998;
+                                          fill_value = 65;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.09) {
+                                        setState(() {
+                                          block_container = 0.2109999999999998;
+                                          fill_value = 70;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.064) {
+                                        setState(() {
+                                          block_container = 0.1899999999999998;
+                                          fill_value = 75;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.038) {
+                                        setState(() {
+                                          block_container = 0.16899999999999982;
+                                          fill_value = 80;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * 0.012) {
+                                        setState(() {
+                                          block_container = 0.14799999999999983;
+                                          fill_value = 85;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * -0.014) {
+                                        setState(() {
+                                          block_container = 0.12699999999999984;
+                                          fill_value = 90;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <
+                                          size.height * -0.04) {
+                                        setState(() {
+                                          block_container = 0.10599999999999983;
+                                          fill_max = null;
+                                          fill_value = 95;
+                                        });
+                                      }
+                                      if (offset!.dy + details.delta.dy <=
+                                          size.height * -0.066) {
+                                        setState(() {
+                                          offset = Offset(
+                                              offset!.dx + details.delta.dx,
+                                              size.height * -0.066);
+                                          fill_max = "Full";
+                                          block_container = 0.08499999999999983;
+                                        });
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        //down
+                        InkWell(
+                          onTap: () {
+                            Sound().play_sound("assets/mp3/click.mp3");
+
+                            setState(() {
+                              if (block_container <= 0.5) {
+                                block_container += 0.019;
+                              }
+                              fill_max = null;
+                              if (offset!.dy < size.height * 0.45) {
+                                fill_value -= 5;
+                                offset = Offset(offset!.dx + size.width * 0.1,
+                                    offset!.dy + size.height * 0.03);
+                              } else {
+                                fill_value = 0;
+                                button_position = 360;
+                              }
+                            });
+                          },
+                          child: Container(
+                              width: size.width * 0.2,
+                              child:
+                                  Image.asset("assets/images/down_button.png")),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ]),
+          )
+    );
+  }
+}

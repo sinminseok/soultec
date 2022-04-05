@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/cars/car_number.dart';
 import 'package:soultec/App/Pages/fill/fill_start.dart';
 
 class Blue_device_tile extends StatefulWidget {
-
-  Blue_device_tile({required this.result , required this.onTap,});
+  Blue_device_tile({
+    required this.result,
+    required this.onTap,
+  });
 
   final ScanResult result;
   final VoidCallback? onTap;
@@ -19,26 +20,22 @@ class _Blue_device_tile extends State<Blue_device_tile> {
   bool check_device_bool = false;
 
   @override
-  void initState(){
+  void initState() {
     check_device(widget.result.device);
     super.initState();
   }
 
-  void check_device(device)async{
-
+  void check_device(device) async {
     final prefs = await SharedPreferences.getInstance();
     String? device_id = device.id.toString();
     // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
-     String? devicedd_id = prefs.getString('$device_id');
-    if(devicedd_id == null){
+    String? devicedd_id = prefs.getString('$device_id');
+    if (devicedd_id == null) {
       return;
       //처음 연결하는 장치 return null
-    }else{
-
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) {
-        return Start_button(
-            device: device);
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return Start_button(device: device);
       }));
 
       // Navigator.push(
@@ -46,10 +43,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       //     MaterialPageRoute(
       //         builder: (context) => CarNumberPage(device: device)));
     }
-
   }
-
-
 
   Widget _buildTitle(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,10 +53,8 @@ class _Blue_device_tile extends State<Blue_device_tile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-
             widget.result.device.name,
             overflow: TextOverflow.ellipsis,
-
           ),
           Text(
             widget.result.device.id.toString(),
@@ -73,13 +65,12 @@ class _Blue_device_tile extends State<Blue_device_tile> {
     } else {
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child:
-        Container(
-          height: size.height*0.05,
+        child: Container(
+            height: size.height * 0.05,
             child: Text(
-          widget.result.device.id.toString(),
-          style: TextStyle(fontSize: 20),
-        )),
+              widget.result.device.id.toString(),
+              style: TextStyle(fontSize: 20),
+            )),
       );
     }
   }
@@ -90,11 +81,17 @@ class _Blue_device_tile extends State<Blue_device_tile> {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 30,bottom: 17,right: 30,),
+          padding: const EdgeInsets.only(
+            left: 30,
+            bottom: 17,
+            right: 30,
+          ),
           child: Icon(Icons.devices_rounded),
         ),
         InkWell(
-            onTap: (widget.result.advertisementData.connectable) ? widget.onTap : null,
+            onTap: (widget.result.advertisementData.connectable)
+                ? widget.onTap
+                : null,
             child: _buildTitle(context)),
       ],
     );
@@ -102,9 +99,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
   }
 }
 
-
 class CharacteristicTile extends StatelessWidget {
-
   final BluetoothCharacteristic characteristic;
   final List<DescriptorTile> descriptorTiles;
   final VoidCallback? onReadPressed;

@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? checkbox_state = null;
   String? user_id_disk;
   String? user_pw_disk;
-
+  bool check_click = false;
   bool _isChecked = false;
   bool auth_login = false;
   bool? http_return;
@@ -290,6 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (_passwordController.text == "") {
                                     return showtoast("비밀번호를 입력해주세요");
                                   } else {
+                                    print("D");
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
