@@ -40,6 +40,9 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
+    print("Dddd");
+    print(res.body);
+
     //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
@@ -134,24 +137,23 @@ class Http_services with ChangeNotifier {
 
   //http 차량 번호 post함수
   Future<List<dynamic>?> post_carnumber(number, token) async {
-    var data_list =[];
+    var data_list = [];
+    // /cars/branchId/carNumbers/{number}
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.get(
       Uri.parse(
-          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/carNumbers/$number"),
+          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/branchId/carNumbers/$number"),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
-    print(res.body);
 
     final decodeData = utf8.decode(res.bodyBytes);
     final data = jsonDecode(decodeData);
 
     if (res.statusCode == 200) {
-
       _carnumber = number;
 
       for (int i = 0; i < data.length; i++) {
