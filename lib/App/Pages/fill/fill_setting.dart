@@ -46,9 +46,6 @@ class _Fill_Setting extends State<Fill_Setting> {
     //connectToDevice();
   }
 
-  // void connectToDevice()async{
-  //   await widget!.device.conntect();
-  // }
 
   @override
   dispose() {
@@ -178,7 +175,9 @@ class _Fill_Setting extends State<Fill_Setting> {
                         InkWell(
                             onTap: () async {
                               Sound().play_sound("assets/mp3/success.mp3");
-
+                              if(fill_value == 0){
+                                return showtoast("리터량을 설정해주세요");
+                              }
                               if (fill_max == null) {
                                 // ble_return = await BLE_CONTROLLER()
                                 //     .discoverServices_write(
@@ -238,6 +237,8 @@ class _Fill_Setting extends State<Fill_Setting> {
                         //up
                         InkWell(
                           onTap: () async {
+
+
                             Sound().play_sound("assets/mp3/click.mp3");
                             setState(() {
                               if (offset!.dy <= size.height * -0.035) {
