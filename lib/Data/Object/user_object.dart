@@ -18,8 +18,6 @@ class User {
    String? nickname;
   final List<dynamic>? authorityDtoSet;
 
-
-
    User({this.username , this.nickname, this.authorityDtoSet});
 
   factory User.fromJson(Map<String, dynamic> json) {

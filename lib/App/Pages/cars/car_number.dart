@@ -212,7 +212,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                         setState(() {
                           overlap_car = true;
                         });
-
                         return;
                       }if(return_carnumber!.length == 0){
                         Sound().play_sound("assets/mp3/error.mp3");

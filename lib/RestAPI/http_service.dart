@@ -131,7 +131,6 @@ class Http_services with ChangeNotifier {
 
     var user_pw_disk = prefs.getString('pw');
     data.add(user_pw_disk);
-
     return data;
   }
 
@@ -199,11 +198,9 @@ class Http_services with ChangeNotifier {
   //user 이용내역 list http get
   Future<List<dynamic>?> load_receipt_list(token) async {
     var data_list = [];
-
     final response = await http.get(
       Uri.parse(
           "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
-      //
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

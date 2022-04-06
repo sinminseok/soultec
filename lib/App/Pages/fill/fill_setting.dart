@@ -46,6 +46,10 @@ class _Fill_Setting extends State<Fill_Setting> {
     //connectToDevice();
   }
 
+  // void connectToDevice()async{
+  //   await widget!.device.conntect();
+  // }
+
   @override
   dispose() {
     ble_return = null;

@@ -94,6 +94,8 @@ class _Start_button extends State<Start_button> {
                     //user 정보 가져오기 (post receipt에서 어디 지점 유저인지 알아야댐)
                     User? user_info =
                         await Http_services().get_user_info(user_token);
+
+                   // print(user_info!.authorityDtoSet);
                     if (user_info == null) {
                       showtoast("사용자 정보 오류 관리자에게 문의하세요");
                     } else {

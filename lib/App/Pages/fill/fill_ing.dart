@@ -34,13 +34,15 @@ class _FillingState extends State<Filling> {
   initState() {
     super.initState();
     //BLE_CONTROLLER().discoverServices_read(widget.device);
+
   }
 
   @override
-  void dispose() {
+  void dispose(){
     super.dispose();
     //BLE_CONTROLLER().disconnect_device(widget.device);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,9 +177,8 @@ class _FillingState extends State<Filling> {
                         });
                         Sound().play_sound("assets/mp3/success.mp3");
                         //주석 제거 (해당 receipt 정보 서버로post)
-
                        // post_receipt(username, pumpId, branchId, amount, carNumber, token)
-                        var res = await Http_services().post_receipt("1414",
+                        var res = await Http_services().post_receipt("12341234",
                             widget.liter, widget.car_number, user_token);
                         // 주유후 해당 디바이스  페어링 disconnect
                         //   widget.device!.disconnect();
