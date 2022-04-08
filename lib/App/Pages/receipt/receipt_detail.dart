@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
-import 'package:soultec/Sound/sound.dart';
-import '../../../constants.dart';
+import 'package:soultec/Data/sound.dart';
+import '../../../Data/constants.dart';
 
 
 class Recepit_detail extends StatefulWidget {
 
   final Receipt_object list_Data;
-
   Recepit_detail({required this.list_Data});
 
   @override
@@ -27,6 +26,7 @@ class _Recepit_detail extends State<Recepit_detail> {
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(

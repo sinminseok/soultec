@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/fill/fill_start.dart';
+import 'package:soultec/App/Pages/cars/car_number.dart';
 
 class Blue_device_tile extends StatefulWidget {
   Blue_device_tile({
@@ -15,6 +15,7 @@ class Blue_device_tile extends StatefulWidget {
   @override
   State<Blue_device_tile> createState() => _Blue_device_tile();
 }
+
 
 class _Blue_device_tile extends State<Blue_device_tile> {
   bool check_device_bool = false;
@@ -35,7 +36,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       //처음 연결하는 장치 return null
     } else {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return Start_button(device: device);
+        return CarNumberPage();
       }));
 
       // Navigator.push(

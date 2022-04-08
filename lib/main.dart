@@ -2,21 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'Account/login_page.dart';
 import 'App/Pages/start_page.dart';
 import 'RestAPI/http_service.dart';
-import 'constants.dart';
+import 'Data/constants.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-
-  // runApp(
-  //   MyApp(),
-  // );
   runApp(
-
-ChangeNotifierProvider(
-          create: (_) => Http_services(),
-          child: MyApp()),
+    ChangeNotifierProvider(create: (_) => Http_services(), child: MyApp()),
   );
 }
 
@@ -40,6 +33,6 @@ class MyApp extends StatelessWidget {
           // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
         ),
         //Start_page()
-        home: Start_page());
+        home: LoginScreen());
   }
 }

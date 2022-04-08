@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
-import '../../constants.dart';
+import '../../Data/constants.dart';
 
 class BLE_CONTROLLER {
   BluetoothCharacteristic? targetCharacteristic;

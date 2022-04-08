@@ -1,29 +1,35 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:provider/provider.dart';
 import 'package:soultec/Account/login_page.dart';
-import 'package:soultec/App/Pages/fill/fill_stop.dart';
+import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/Data/sound.dart';
+import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
+import 'package:soultec/RestAPI/http_service.dart';
+import '../../Data/constants.dart';
 
 class Start_page extends StatefulWidget {
+
+
+  //자동차 번호 전역으로 돌려줘야되는데 왜인진 모르겠는데 provider가 안먹어서 일단 위젯으로 데이터 넘김 추후 변경
+
+
   @override
-  _Start_pageState createState() => _Start_pageState();
+  _Start_page createState() => _Start_page();
 }
 
-class _Start_pageState extends State<Start_page> {
+class _Start_page extends State<Start_page> {
   @override
-  void initState() {
+  initState() {
     super.initState();
     initConnectivity();
+    // connect_device();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-//네트워크 연결 확인 함수
+  //네트워크 연결 확인 함수
   Future<void> initConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult.toString());
@@ -34,80 +40,77 @@ class _Start_pageState extends State<Start_page> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double defaultRegisterSize = size.height - (size.height * 0.1);
+
+
     return Scaffold(
-      body: Align(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          child: Container(
-            width: size.width,
-            height: defaultRegisterSize,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+          backgroundColor: kPrimaryColor,
+          body: SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(
+                height: size.height * 0.2,
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image(
-                    image: AssetImage('assets/images/gtbimg.png'),
-                    width: 100,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.06,
-                  ),
-                  Text(
-                    '빠르고 편한 주입',
-                    style: TextStyle(fontSize: 19),
-                  ),
-                  Text(
-                    '스마트필 시작.',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  ),
-                  SizedBox(
-                    height: 10,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "충전관리 솔루션",
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        "스마트필",
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
+                    padding: const EdgeInsets.only(left: 20.0),
                     child: Image(
                       image: AssetImage('assets/images/mainimg.png'),
-                      width: 140,
+                      width: 90,
                     ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.08,
-                  ),
-                  Text(
-                    "페어링이 시작 됩니다 잠시만 기다려 주십시오.",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.08,
-                  ),
-                  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                    onPressed: () async {
-                      // final prefs = await SharedPreferences.getInstance();
-                      // prefs.remove('check_login');
-
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()));
-                    },
-                    child: Icon(Icons.bluetooth),
-                    splashColor: Colors.blue,
-                    color: Colors.blue,
-                    elevation: 0,
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-      ),
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Container(
+                    width: size.width * 0.8,
+                    height: size.height * 0.3,
+                    child: Image.asset(
+                      'assets/gifs/main_img.gif',
+                    )),
+              ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              InkWell(
+                  onTap: () async {
+                    Sound().play_sound("assets/mp3/start.mp3");
+
+                    //user 정보 가져오기 (post receipt에서 어디 지점 유저인지 알아야댐)
+                    // print(user_info!.authorityDtoSet);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CarNumberPage()));
+                  },
+                  child: Container(
+                      width: size.width * 2,
+                      height: size.height * 0.2,
+                      child: Image.asset("assets/images/start_button.png"))),
+            ]),
+          )
     );
   }
 }

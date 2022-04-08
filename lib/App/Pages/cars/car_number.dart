@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/fill/fill_start.dart';
 import 'package:soultec/App/Pages/fill/fill_setting.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Sound/sound.dart';
+import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import '../../../constants.dart';
+import '../../../Data/constants.dart';
 
 class CarNumberPage extends StatefulWidget {
   //BluetoothDevice? device;
@@ -74,7 +72,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
             ),
             Text(
               "차량 번호 4 자리를 입력해주세요",
-              style: TextStyle(fontSize: 24, fontFamily: "numberfont"),
+              style: TextStyle(fontSize: 24),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 30),
@@ -83,20 +81,24 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 width: size.width * 0.7,
                 decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
+
                         color: Colors.black,
                         style: BorderStyle.solid,
                         width: 1),
                     color: kPrimaryColor),
                 child: Center(
                   child: TextFormField(
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "numberfont",
                       fontSize: 21,
                     ),
                     controller: _carnumber_text,
                     decoration: InputDecoration(
-                      hintText: '차량번호 4 자리 입력',
+
+                      hintText: '',
                     ),
                   ),
                 ),
@@ -104,15 +106,28 @@ class _CarNumberPageState extends State<CarNumberPage> {
             ),
             overlap_car == false
                 ?
+            Container(
+              height: size.height * 0.34,
+              child: Row(
+                children: [
+                  SizedBox(width: size.width*0.5,),
+                  Container(
+                      width: size.width * 0.4,
+                      child: Image.asset(
+                        'assets/gifs/car_number.gif',
+                      )),
+                ],
+              ),
+            )
                 //중복되지 않을때
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        width: size.width * 0.5,
-                        child: Image.asset(
-                          'assets/gifs/car_number.gif',
-                        )),
-                  )
+                // Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Container(
+                //         width: size.width * 0.5,
+                //         child: Image.asset(
+                //           'assets/gifs/car_number.gif',
+                //         )),
+                //   )
                 :
                 //중복될때
                 Container(
@@ -184,7 +199,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 "단추를 누르면 조회를 시작합니다.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: "numberfont",
                   color: Colors.black,
                   fontSize: 20,
                 ),
@@ -194,6 +208,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
               height: size.height * 0.03,
             ),
             InkWell(
+
+
+
                 onTap: () async {
                   print("ddd");
                   print(_carnumber_text.text.length);

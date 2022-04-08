@@ -7,10 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/ble_controller.dart';
 import 'package:soultec/App/Bluetooth/blue_scan.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Sound/sound.dart';
+import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import '../../../constants.dart';
+import '../../../Data/constants.dart';
 import 'fill_ing.dart';
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.

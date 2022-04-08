@@ -5,12 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/App/Bluetooth/blue_scan.dart';
-import 'package:soultec/App/Pages/fill/fill_start.dart';
-import 'package:soultec/Sound/sound.dart';
+import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/App/Pages/start_page.dart';
+import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import 'package:soultec/constants.dart';
+import 'package:soultec/Data/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -27,14 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
   //Form controller
   final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   AudioPlayer player = AudioPlayer();
 
   //Object 객체 생성, http get 이후 json을 데이터를 Object 객체로 대입
   User_token? user_token;
-
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
   var disk_user_info = [];
+
+
 
   //디스크에 저장된 id,pw 저장 변수
   String? checkbox_state = null;
@@ -44,6 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isChecked = false;
   bool auth_login = false;
   bool? http_return;
+
+
 
 //http get 비동기 control stream
   late Stream<User_token?> stream;
@@ -68,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       SystemChrome.setEnabledSystemUIOverlays([]);
     } else {
-      print("FFF");
+
       setState(() {
         auth_login = false;
       });
@@ -120,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (snapshot.hasError) {
                 return Text("server drop}");
               } else if (snapshot.hasData) {
-                return Start_button(device: null,);
+                return CarNumberPage();
               } else {
                 return Center(
                     child: Container(
@@ -210,6 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(4),
                                     color: kPrimaryColor),
                                 child: TextFormField(
+
                                   style: TextStyle(
                                       fontFamily: "numberfont", fontSize: 23),
                                   controller: _userIDController,
@@ -281,9 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               InkWell(
                                 onTap: () async {
-
                                   Sound().play_sound("assets/mp3/start.mp3");
-
                                   if (_userIDController.text == "") {
                                     return showtoast("기사번호를 입력해주세요");
                                   }
@@ -313,7 +315,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           "로그인 실패 아이디와 비밀번호를 확인해주세요");
                                                       return LoginScreen();
                                                     } else {
-                                                      return Start_button(device: null,);
+                                                      return Start_page();
                                                     }
                                                   } else {
                                                     return Center(

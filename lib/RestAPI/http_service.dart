@@ -40,16 +40,12 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
-    print("Dddd");
-    print(res.body);
-
     //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {
       //디코딩후 res body 를 user 객체로 대입
       _user_token = User_token.fromJson(jsonDecode(res.body));
       _user_id = id;
       notifyListeners();
-
       if (ischeck) {
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
@@ -116,13 +112,13 @@ class Http_services with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
-
     prefs.setString('id', user_id);
     prefs.setString('pw', user_pw);
     return;
   }
 
   get_userinfo() async {
+
     final prefs = await SharedPreferences.getInstance();
     var data = [];
 // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
@@ -161,7 +157,6 @@ class Http_services with ChangeNotifier {
         data_list.add(car);
       }
 
-      print(data_list);
       notifyListeners();
       return data_list;
     } else {

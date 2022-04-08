@@ -9,8 +9,8 @@ import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import 'package:soultec/Sound/sound.dart';
-import 'package:soultec/constants.dart'; // Date Format 사용시 사용하는 패키지
+import 'package:soultec/Data/sound.dart';
+import 'package:soultec/Data/constants.dart'; // Date Format 사용시 사용하는 패키지
 import 'dart:core';
 
 class Receipt_list extends StatefulWidget {
@@ -166,17 +166,22 @@ class _Receipt_list extends State<Receipt_list> {
                     child: Container(
                       color: Colors.white,
                       width: size.width * 0.6,
+
                       child: TextFormField(
+
+
                         textAlign: TextAlign.center,
                         enabled: false,
                         controller: _BirthdayController,
                         style: TextStyle(fontSize: 20, color: Colors.black26),
                         decoration: InputDecoration(
+
                           hintText: "Enter a message",
                           suffixIcon: IconButton(
                             onPressed: () {},
                             icon: Icon(Icons.arrow_drop_down_sharp),
                           ),
+                          focusColor: Colors.black
                         ),
                       ),
                     ),

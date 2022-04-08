@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/cars/car_number.dart';
-import 'package:soultec/App/Pages/fill/fill_start.dart';
 import 'package:soultec/App/Pages/start_page.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import 'package:soultec/constants.dart';
+import 'package:soultec/Data/constants.dart';
 
 import 'blue_device_tile.dart';
 
@@ -111,8 +110,9 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                             result: r,
                             onTap: () => Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
-                              // r.device.connect();
-                              return Start_button(device: r.device);
+
+                              //device: r.device
+                              return CarNumberPage();
                             })),
                           ),
                         )

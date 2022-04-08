@@ -4,10 +4,10 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/App/Pages/receipt/receipt_list.dart';
 import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Sound/sound.dart';
+import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
-import '../../../constants.dart';
+import '../../../Data/constants.dart';
 
 class Filling_stop extends StatefulWidget {
   final String? car_number;
