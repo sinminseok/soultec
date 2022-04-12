@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .auto_login(disk_user_info[0], disk_user_info[1]),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text("server drop}");
+                return Text("server drop");
               } else if (snapshot.hasData) {
                 return CarNumberPage();
               } else {

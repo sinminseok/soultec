@@ -9,7 +9,6 @@ import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../../Data/constants.dart';
-import '../fill_stop.dart';
 
 
 //주입기 노즐을 잡아 당길때
@@ -56,12 +55,7 @@ class _Filling_ing extends State<Filling_ing> {
 
   getBody(Size size, String? liter, thiscontext) {
     String? user_id = Provider.of<Http_services>(context).user_id;
-    String? user_token = Provider.of<Http_services>(context).user_token!.token;
-
     var currentValue;
-
-
-
     return StreamBuilder<List<int>>(
         stream: BLE_CONTROLLER().stream_value,
         builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {

@@ -9,7 +9,6 @@ import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../../Data/constants.dart';
-import '../fill_stop.dart';
 
 
 
@@ -64,9 +63,8 @@ class _Filling_stop extends State<Filling_stop> {
 
     return StreamBuilder<List<int>>(
         stream: BLE_CONTROLLER().stream_value,
+
         builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-
-
           return SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

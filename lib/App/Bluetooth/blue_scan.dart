@@ -21,6 +21,7 @@ class _Blue_scan extends State<Blue_scan> {
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.lightBlue,
+
       home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           initialData: BluetoothState.unknown,
