@@ -30,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   AudioPlayer player = AudioPlayer();
 
-  //Object 객체 생성, http get 이후 json을 데이터를 Object 객체로 대입
   User_token? user_token;
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
   var disk_user_info = [];
@@ -102,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose(){
     auth_login = false;
     checkbox_state = null;
     user_token = null;

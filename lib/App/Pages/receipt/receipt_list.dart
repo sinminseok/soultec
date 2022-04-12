@@ -168,8 +168,6 @@ class _Receipt_list extends State<Receipt_list> {
                       width: size.width * 0.6,
 
                       child: TextFormField(
-
-
                         textAlign: TextAlign.center,
                         enabled: false,
                         controller: _BirthdayController,

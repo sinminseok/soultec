@@ -12,10 +12,10 @@ import '../../../Data/constants.dart';
 class Filling_stop extends StatefulWidget {
   final String? car_number;
   final int? liter;
-  BluetoothDevice? device;
+
 
   Filling_stop(
-      {required this.liter, required this.car_number, required this.device});
+      {required this.liter, required this.car_number});
 
   @override
   _Filling_stop createState() => _Filling_stop();
@@ -30,7 +30,7 @@ class _Filling_stop extends State<Filling_stop> {
     Sound().play_sound("assets/mp3/success.mp3");
     showtoast("지정한 주입량이 아닌 정량으로 주입되었습니다!");
     post_receipt();
-    disconnect_device();
+    // disconnect_device();
 
     //주입이 멈췄을때 자동으로 서버에 이용내역 전송
     //post_receipt();
@@ -43,9 +43,9 @@ class _Filling_stop extends State<Filling_stop> {
         9, widget.liter, widget.car_number.toString(), user_token);
   }
 
-  disconnect_device() async {
-    await widget.device!.disconnect();
-  }
+  // disconnect_device() async {
+  //   await widget.device!.disconnect();
+  // }
 
   @override
   void dispose() {
@@ -62,8 +62,10 @@ class _Filling_stop extends State<Filling_stop> {
   }
 
   getBody(Size size, int? liter, thiscontext) {
+
     String? user_id = Provider.of<Http_services>(context).user_id;
     String? user_token = Provider.of<Http_services>(context).user_token!.token;
+
     return SingleChildScrollView(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

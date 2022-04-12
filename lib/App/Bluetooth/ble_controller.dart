@@ -18,9 +18,9 @@ class BLE_CONTROLLER {
 
     services.forEach((service) {
       // do something with service
-      if (service.uuid.toString() == POST_SERVICE_UUID) {
+      if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
-          if (characteristic.uuid.toString() == POST_CHARACTERISTIC_UUID) {
+          if (characteristic.uuid.toString() == BLE_UUID().POST_CHARACTERISTIC_UUID) {
             targetCharacteristic = characteristic;
 
             if (litter == "가득") {
@@ -58,9 +58,9 @@ class BLE_CONTROLLER {
     List<BluetoothService> services = await device!.discoverServices();
 
     services.forEach((service) {
-      if (service.uuid.toString() == GET_SERVICE_UUID) {
+      if (service.uuid.toString() == BLE_UUID().GET_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
-          if (characteristic.uuid.toString() == GET_CHARACTERISTIC_UUID) {
+          if (characteristic.uuid.toString() == BLE_UUID().GET_CHARACTERISTIC_UUID) {
             characteristic.setNotifyValue(!characteristic.isNotifying);
             stream_value = characteristic.value;
           }

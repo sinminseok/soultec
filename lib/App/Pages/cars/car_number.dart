@@ -24,6 +24,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
   bool check_connected = false;
   bool overlap_car = false;
   var return_carnumber;
+
   @override
   void initState() {
     //remember_device(widget.device!.id);
@@ -83,7 +84,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-
                         color: Colors.black,
                         style: BorderStyle.solid,
                         width: 1),
@@ -97,7 +97,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     ),
                     controller: _carnumber_text,
                     decoration: InputDecoration(
-
                       hintText: '',
                     ),
                   ),
@@ -105,20 +104,21 @@ class _CarNumberPageState extends State<CarNumberPage> {
               ),
             ),
             overlap_car == false
-                ?
-            Container(
-              height: size.height * 0.34,
-              child: Row(
-                children: [
-                  SizedBox(width: size.width*0.5,),
-                  Container(
-                      width: size.width * 0.4,
-                      child: Image.asset(
-                        'assets/gifs/car_number.gif',
-                      )),
-                ],
-              ),
-            )
+                ? Container(
+                    height: size.height * 0.34,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: size.width * 0.5,
+                        ),
+                        Container(
+                            width: size.width * 0.4,
+                            child: Image.asset(
+                              'assets/gifs/car_number.gif',
+                            )),
+                      ],
+                    ),
+                  )
                 //중복되지 않을때
                 // Padding(
                 //     padding: const EdgeInsets.all(8.0),
@@ -159,7 +159,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                                 builder: (context) =>
                                                     Fill_Setting(
                                                       car_number:
-                                                      return_carnumber[index].carNumber,
+                                                          return_carnumber[
+                                                                  index]
+                                                              .carNumber,
                                                       sizee: size,
                                                     )));
                                       },
@@ -208,63 +210,40 @@ class _CarNumberPageState extends State<CarNumberPage> {
               height: size.height * 0.03,
             ),
             InkWell(
-
-
-
                 onTap: () async {
-                  print("ddd");
-                  print(_carnumber_text.text.length);
-                  print(user_token!.token);
-
-                  if(_carnumber_text.text.length <4){
+                  if (_carnumber_text.text.length < 4) {
                     return showtoast("차량번호를 4자리 입력해주세요");
-                  }else{
-                    if(_carnumber_text.text == ""){
+                  } else {
+                    if (_carnumber_text.text == "") {
                       return showtoast("차량 번호를 입력하세요");
-                    }else{
-                      return_carnumber = await Http_services()
-                          .post_carnumber(_carnumber_text.text, user_token.token);
-
-                      if(return_carnumber!.length >=2 ){
+                    } else {
+                      return_carnumber = await Http_services().post_carnumber(
+                          _carnumber_text.text, user_token!.token);
+                      //중복되는 자동차 번호가 2개 이상일경우
+                      if (return_carnumber!.length >= 2) {
                         setState(() {
                           overlap_car = true;
                         });
                         return;
-                      }if(return_carnumber!.length == 0){
+                      }
+                      //등록된 차량 번호가 아닐경우
+                      if (return_carnumber!.length == 0) {
                         Sound().play_sound("assets/mp3/error.mp3");
                         showtoast("등록되지 않은 차번호 입니다.재 확인 바랍니다.");
-                      }else{
+                      }
+                      //등록된 차량 번호가 하나일경우
+                      else {
                         Sound().play_sound("assets/mp3/start.mp3");
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Fill_Setting(
-                                  car_number: _carnumber_text.text,
-                                  sizee: size,
-                                )));
+                                      car_number: _carnumber_text.text,
+                                      sizee: size,
+                                    )));
                       }
                     }
                   }
-                  //http get car_number return bool
-
-
-
-                  // if (return_carnumber == true) {
-                  //   if (overlap_car == true) {
-                  //     return showtoast("차량 번호를 선택하세요");
-                  //   }
-                  //   Sound().play_sound("assets/mp3/start.mp3");
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => Fill_Setting(
-                  //                 car_number: _carnumber_text.text,
-                  //                 sizee: size,
-                  //               )));
-                  // } else {
-                  //   Sound().play_sound("assets/mp3/error.mp3");
-                  //   showtoast("등록되지 않은 차번호 입니다.재 확인 바랍니다.");
-                  // }
                 },
                 child: Container(
                     width: size.width * 0.7,

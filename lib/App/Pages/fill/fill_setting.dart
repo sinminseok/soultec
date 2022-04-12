@@ -11,7 +11,10 @@ import 'package:soultec/Data/sound.dart';
 import 'package:soultec/Data/toast.dart';
 import 'package:soultec/RestAPI/http_service.dart';
 import '../../../Data/constants.dart';
-import 'fill_ing.dart';
+import 'fill_ing/fill_ing_ing.dart';
+import 'fill_ing/fill_ing_prepare.dart';
+import 'fill_ing/fill_ing_finish.dart';
+import 'fill_ing/fill_ing_stop.dart';
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_Setting extends StatefulWidget {
@@ -195,7 +198,7 @@ class _Fill_Setting extends State<Fill_Setting> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Filling(
+                                        builder: (context) => Filling_Prepare(
                                               car_number: widget.car_number,
                                               liter: fill_value.toString(),
                                             )));
@@ -216,7 +219,7 @@ class _Fill_Setting extends State<Fill_Setting> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Filling(
+                                        builder: (context) => Filling_Prepare(
                                               car_number: widget.car_number,
                                               liter: "FULL",
                                             )));

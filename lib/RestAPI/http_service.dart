@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Data/Object/car_object.dart';
 import 'package:soultec/Data/Object/user_object.dart';
 import 'package:soultec/Data/Object/receipt_object.dart';
+import 'package:soultec/Data/constants.dart';
 
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
@@ -23,20 +24,10 @@ class Http_services with ChangeNotifier {
 
   String? get carnumber => _carnumber;
 
-  //http 통신 url
-  String login_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/authenticate";
-  String get_user_info_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/users";
-  String car_url_post =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/numbers/{number} ";
-  String post_url =
-      "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs ";
-
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(login_url),
+    var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
@@ -72,7 +63,7 @@ class Http_services with ChangeNotifier {
 
   //http userinformation 가져오기
   Future<User?> get_user_info(token) async {
-    var res = await http.get(Uri.parse(get_user_info_url), headers: {
+    var res = await http.get(Uri.parse(Http_Url().get_user_info_url), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -91,7 +82,7 @@ class Http_services with ChangeNotifier {
   //http 자동 로그인
   Future<User_token?> auto_login(id, pw) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(Uri.parse(login_url),
+    var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
@@ -118,7 +109,6 @@ class Http_services with ChangeNotifier {
   }
 
   get_userinfo() async {
-
     final prefs = await SharedPreferences.getInstance();
     var data = [];
 // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
@@ -133,18 +123,14 @@ class Http_services with ChangeNotifier {
   //http 차량 번호 post함수
   Future<List<dynamic>?> post_carnumber(number, token) async {
     var data_list = [];
-    // /cars/branchId/carNumbers/{number}
-    //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.get(
-      Uri.parse(
-          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/cars/branchId/carNumbers/$number"),
+      Uri.parse(Http_Url().post_carnumber_url + "$number"),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
-
     final decodeData = utf8.decode(res.bodyBytes);
     final data = jsonDecode(decodeData);
 
@@ -156,7 +142,6 @@ class Http_services with ChangeNotifier {
         car = Car.fromJson(data[i]);
         data_list.add(car);
       }
-
       notifyListeners();
       return data_list;
     } else {
@@ -168,9 +153,7 @@ class Http_services with ChangeNotifier {
   Future post_receipt(pumpId, amount, carNumber, token) async {
     //pumbId 는 노르딕에서 가져오는 것 (메모리 할당)
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
-    var res = await http.post(
-        Uri.parse(
-            "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
+    var res = await http.post(Uri.parse(Http_Url().post_receipt_url),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -194,8 +177,7 @@ class Http_services with ChangeNotifier {
   Future<List<dynamic>?> load_receipt_list(token) async {
     var data_list = [];
     final response = await http.get(
-      Uri.parse(
-          "http://ec2-3-38-104-80.ap-northeast-2.compute.amazonaws.com:8080/api/fill-logs/users"),
+      Uri.parse(Http_Url().receipt_list_url),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
