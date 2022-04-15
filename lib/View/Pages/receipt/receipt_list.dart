@@ -4,14 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/App/Pages/receipt/receipt_detail.dart';
-import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Data/toast.dart';
-import 'package:soultec/RestAPI/http_service.dart';
-import 'package:soultec/Data/sound.dart';
-import 'package:soultec/Data/constants.dart'; // Date Format 사용시 사용하는 패키지
+import 'package:soultec/View/Pages/receipt/receipt_detail.dart';
+import 'package:soultec/Utils/top_widget.dart';
+import 'package:soultec/Controller/data_controller.dart';
 import 'dart:core';
+
+import '../../../Utils/constants.dart';
+import '../../../Utils/sound.dart';
+import '../../../Utils/toast.dart';
+import '../fill/fill_setting.dart';
 
 class Receipt_list extends StatefulWidget {
   List? data_list;
@@ -166,21 +169,18 @@ class _Receipt_list extends State<Receipt_list> {
                     child: Container(
                       color: Colors.white,
                       width: size.width * 0.6,
-
                       child: TextFormField(
                         textAlign: TextAlign.center,
                         enabled: false,
                         controller: _BirthdayController,
                         style: TextStyle(fontSize: 20, color: Colors.black26),
                         decoration: InputDecoration(
-
-                          hintText: "Enter a message",
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_drop_down_sharp),
-                          ),
-                          focusColor: Colors.black
-                        ),
+                            hintText: "Enter a message",
+                            suffixIcon: IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.arrow_drop_down_sharp),
+                            ),
+                            focusColor: Colors.black),
                       ),
                     ),
                   ),
@@ -235,14 +235,15 @@ class _Receipt_list extends State<Receipt_list> {
                                       child: InkWell(
                                         onTap: () {
                                           //해당 날짜 이용내역 detail navigator => filter_use_data[index]
+
                                           Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Recepit_detail(
-                                                          list_Data:
-                                                              filter_use_data[
-                                                                  index])));
+                                              PageTransition(
+                                                  type: PageTransitionType.fade,
+                                                  child: Recepit_detail(
+                                                      list_Data:
+                                                          filter_use_data[
+                                                              index])));
                                         },
                                         child: ListTile(
                                           title: Center(
@@ -281,17 +282,17 @@ class _Receipt_list extends State<Receipt_list> {
                                       height: size.height * 0.07,
                                       child: InkWell(
                                         onTap: () {
-                                          print(itembuilder_list![index]
-                                              .dateTime
-                                              .substring(0, 10));
+                                          // print(itembuilder_list![index]
+                                          //     .dateTime
+                                          //     .substring(0, 10));
                                           Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Recepit_detail(
-                                                          list_Data:
-                                                              itembuilder_list![
-                                                                  index])));
+                                              PageTransition(
+                                                  type: PageTransitionType.fade,
+                                                  child: Recepit_detail(
+                                                      list_Data:
+                                                          itembuilder_list![
+                                                              index])));
                                         },
                                         child: ListTile(
                                           title: Center(

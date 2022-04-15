@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/App/Pages/cars/car_number.dart';
-import 'package:soultec/App/Pages/start_page.dart';
-import 'package:soultec/Data/Object/user_object.dart';
-import 'package:soultec/Data/toast.dart';
-import 'package:soultec/RestAPI/http_service.dart';
-import 'package:soultec/Data/constants.dart';
+import 'package:soultec/View/Pages/cars/car_number.dart';
+import 'package:soultec/View/Pages/start_page.dart';
+import 'package:soultec/Controller/data_controller.dart';
 
+
+import '../../Utils/constants.dart';
 import 'blue_device_tile.dart';
 
 class Blue_scan extends StatefulWidget {
@@ -109,12 +109,12 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                         .map(
                           (r) => Blue_device_tile(
                             result: r,
-                            onTap: () => Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-
-                              //device: r.device
-                              return CarNumberPage();
-                            })),
+                            onTap: () => Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.fade,
+                                    child: CarNumberPage(
+                                    )))
                           ),
                         )
                         .toList(),

@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'Account/login_page.dart';
-import 'App/Pages/start_page.dart';
-import 'RestAPI/http_service.dart';
-import 'Data/constants.dart';
+
+import 'Controller/data_controller.dart';
+import 'View/Account/login_page.dart';
+
+import 'Utils/constants.dart';
 
 void main() async {
   runApp(

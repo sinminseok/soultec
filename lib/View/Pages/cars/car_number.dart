@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/fill/fill_setting.dart';
-import 'package:soultec/App/widgets/top_widget.dart';
-import 'package:soultec/Data/sound.dart';
-import 'package:soultec/Data/Object/user_object.dart';
-import 'package:soultec/Data/toast.dart';
-import 'package:soultec/RestAPI/http_service.dart';
-import '../../../Data/constants.dart';
+import 'package:soultec/View/Pages/fill/fill_setting.dart';
+import 'package:soultec/Utils/top_widget.dart';
+
+import 'package:soultec/Controller/data_controller.dart';
+import '../../../Model/User_Model.dart';
+import '../../../Utils/constants.dart';
+import '../../../Utils/sound.dart';
+import '../../../Utils/toast.dart';
 
 class CarNumberPage extends StatefulWidget {
   //BluetoothDevice? device;
@@ -56,10 +58,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
   @override
   Widget build(BuildContext context) {
     //http post car number 요청 보낼때 user의 token 값 필요
+
     User_token? user_token = Provider.of<Http_services>(context).user_token;
-
-    List<String?> car_numbers = ["1234", "1768"];
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -119,15 +119,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
                       ],
                     ),
                   )
-                //중복되지 않을때
-                // Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Container(
-                //         width: size.width * 0.5,
-                //         child: Image.asset(
-                //           'assets/gifs/car_number.gif',
-                //         )),
-                //   )
                 :
                 //중복될때
                 Container(
@@ -155,15 +146,14 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                       onTap: () {
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Fill_Setting(
-                                                      car_number:
-                                                          return_carnumber[
-                                                                  index]
-                                                              .carNumber,
-                                                      sizee: size,
-                                                    )));
+                                            PageTransition(
+                                                type: PageTransitionType.fade,
+                                                child: Fill_Setting(
+                                                  car_number:
+                                                      return_carnumber[index]
+                                                          .carNumber,
+                                                  sizee: size,
+                                                )));
                                       },
                                       child: Container(
                                         child: ListTile(
@@ -183,7 +173,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                           ],
                         ),
                         Container(
-                            width: size.width * 0.3,
+                            width: size.width * 0.25,
                             child: Image.asset(
                               'assets/gifs/select_car.gif',
                             )),
@@ -236,11 +226,12 @@ class _CarNumberPageState extends State<CarNumberPage> {
                         Sound().play_sound("assets/mp3/start.mp3");
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => Fill_Setting(
-                                      car_number: _carnumber_text.text,
-                                      sizee: size,
-                                    )));
+                            PageTransition(
+                                type: PageTransitionType.fade,
+                                child: Fill_Setting(
+                                  car_number: _carnumber_text.text,
+                                  sizee: size,
+                                )));
                       }
                     }
                   }

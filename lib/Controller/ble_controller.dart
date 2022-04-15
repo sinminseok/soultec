@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
-import '../../Data/constants.dart';
+
+import '../Utils/constants.dart';
 
 class BLE_CONTROLLER {
   BluetoothCharacteristic? targetCharacteristic;
@@ -50,7 +51,6 @@ class BLE_CONTROLLER {
 
   //stream 으로 데이터 수신
   discoverServices_read(device) async {
-    stream_value = null;
     if (device == null) {
       return;
     }

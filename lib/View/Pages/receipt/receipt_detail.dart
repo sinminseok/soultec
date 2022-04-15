@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:soultec/Data/Object/receipt_object.dart';
-import 'package:soultec/Data/sound.dart';
-import '../../../Data/constants.dart';
+import '../../../Model/Receipt_Model.dart';
+import '../../../Utils/constants.dart';
+import '../../../Utils/sound.dart';
 
 class Recepit_detail extends StatefulWidget {
   final Receipt_object list_Data;

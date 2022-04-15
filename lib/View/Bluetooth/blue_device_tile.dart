@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/App/Pages/cars/car_number.dart';
+import 'package:soultec/View/Pages/cars/car_number.dart';
 
 class Blue_device_tile extends StatefulWidget {
   Blue_device_tile({
@@ -15,7 +16,6 @@ class Blue_device_tile extends StatefulWidget {
   @override
   State<Blue_device_tile> createState() => _Blue_device_tile();
 }
-
 
 class _Blue_device_tile extends State<Blue_device_tile> {
   bool check_device_bool = false;
@@ -31,18 +31,21 @@ class _Blue_device_tile extends State<Blue_device_tile> {
     String? device_id = device.id.toString();
     // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
     String? devicedd_id = prefs.getString('$device_id');
+
     if (devicedd_id == null) {
       return;
       //처음 연결하는 장치 return null
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return CarNumberPage();
-      }));
+      //추후 CarNumberPage로 device 를 넘겨줘야함
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: CarNumberPage()));
 
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => CarNumberPage(device: device)));
+      // Navigator.of(context).push(MaterialPageRoute(builder : (context){
+      //   return CarNumberPage();
+      // }));
+
     }
   }
 

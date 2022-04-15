@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Data/Object/car_object.dart';
-import 'package:soultec/Data/Object/user_object.dart';
-import 'package:soultec/Data/Object/receipt_object.dart';
-import 'package:soultec/Data/constants.dart';
+import 'package:soultec/Model/Car_Model.dart';
+import 'package:soultec/Model/User_Model.dart';
+import 'package:soultec/Model/Receipt_Model.dart';
+import 'package:soultec/Utils/constants.dart';
 
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
