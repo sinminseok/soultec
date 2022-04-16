@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/View/Pages/fill/fill_setting.dart';
 import 'package:soultec/Utils/top_widget.dart';
 
-import 'package:soultec/Controller/data_controller.dart';
+import 'package:soultec/Presenter/data_controller.dart';
 import '../../../Model/User_Model.dart';
 import '../../../Utils/constants.dart';
 import '../../../Utils/sound.dart';

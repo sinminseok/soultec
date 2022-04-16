@@ -58,7 +58,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   animated_text_kit: ^4.2.1
   page_transition: "^2.0.5"
-  flutter_native_splash: ^2.1.5
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -155,6 +155,12 @@ flutter:
       fonts:
         - asset: assets/font/number.ttf
           weight: 200
+    - family: textfont
+      fonts:
+        - asset: assets/font/textfont.ttf
+          weight: 200
+
+
 
   #
   # For details regarding fonts from package dependencies,

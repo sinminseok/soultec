@@ -5,10 +5,10 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Controller/ble_controller.dart';
+import 'package:soultec/Presenter/ble_controller.dart';
 import 'package:soultec/View/Bluetooth/blue_scan.dart';
 import 'package:soultec/Utils/top_widget.dart';
-import 'package:soultec/Controller/data_controller.dart';
+import 'package:soultec/Presenter/data_controller.dart';
 import '../../../Utils/constants.dart';
 import '../../../Utils/sound.dart';
 import '../../../Utils/toast.dart';
@@ -231,8 +231,6 @@ class _Fill_Setting extends State<Fill_Setting> {
                         //up
                         InkWell(
                           onTap: () async {
-
-
                             Sound().play_sound("assets/mp3/click.mp3");
                             setState(() {
                               if (offset!.dy <= size.height * -0.035) {

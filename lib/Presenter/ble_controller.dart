@@ -19,9 +19,10 @@ class BLE_CONTROLLER {
 
     services.forEach((service) {
       // do something with service
-      if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
+      if(service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID){
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() == BLE_UUID().POST_CHARACTERISTIC_UUID) {
+
             targetCharacteristic = characteristic;
 
             if (litter == "가득") {

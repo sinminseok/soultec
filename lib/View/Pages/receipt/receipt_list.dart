@@ -8,7 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/View/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/Utils/top_widget.dart';
-import 'package:soultec/Controller/data_controller.dart';
+import 'package:soultec/Presenter/data_controller.dart';
 import 'dart:core';
 
 import '../../../Utils/constants.dart';

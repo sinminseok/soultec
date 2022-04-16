@@ -10,7 +10,7 @@ import 'package:soultec/View/Pages/start_page.dart';
 import 'package:soultec/Utils/sound.dart';
 import 'package:soultec/Model/User_Model.dart';
 import 'package:soultec/Utils/toast.dart';
-import 'package:soultec/Controller/data_controller.dart';
+import 'package:soultec/Presenter/data_controller.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -31,10 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   AudioPlayer player = AudioPlayer();
 
   User_token? user_token;
+
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
   var disk_user_info = [];
-
-
 
   //디스크에 저장된 id,pw 저장 변수
   String? checkbox_state = null;
@@ -44,8 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isChecked = false;
   bool auth_login = false;
   bool? http_return;
-
-
 
 //http get 비동기 control stream
   late Stream<User_token?> stream;
@@ -70,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       SystemChrome.setEnabledSystemUIOverlays([]);
     } else {
-
       setState(() {
         auth_login = false;
       });
@@ -101,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     auth_login = false;
     checkbox_state = null;
     user_token = null;
@@ -152,7 +148,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -177,7 +172,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             "스마트필",
                                             style: TextStyle(
                                                 fontSize: 38,
-                                                color: Colors.black,fontWeight: FontWeight.bold),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       )
@@ -194,25 +190,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ],
                               ),
-                             Container(
-                                    width: size.width*0.8,
-                                    height: size.height*0.2,
-                                    child: Image.asset(
-                                      'assets/gifs/main_img.gif',
-                                    )),
-
                               Container(
-
+                                  width: size.width * 0.8,
+                                  height: size.height * 0.2,
+                                  child: Image.asset(
+                                    'assets/gifs/main_img.gif',
+                                  )),
+                              Container(
                                 margin: EdgeInsets.symmetric(vertical: 10),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 5),
-                                width: size.width * 0.8,
+                                width: size.width * 0.7,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
+                                    border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(4),
                                     color: kPrimaryColor),
                                 child: TextFormField(
-
                                   style: TextStyle(
                                       fontFamily: "numberfont", fontSize: 23),
                                   controller: _userIDController,
@@ -227,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 margin: EdgeInsets.symmetric(vertical: 10),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 5),
-                                width: size.width * 0.8,
+                                width: size.width * 0.7,
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(4),
@@ -246,42 +239,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                       border: InputBorder.none),
                                 ),
                               ),
-
-                                  Container(
-                                    width: size.width * 0.5,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                              Container(
+                                width: size.width * 0.5,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
+                                        Checkbox(
+                                            value: _isChecked,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _isChecked = value!;
+                                              });
+                                            }),
+                                        //   ),
+                                        // ),
 
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                        value: _isChecked,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            _isChecked = value!;
-                                                          });
-                                                        }),
-                                              //   ),
-                                              // ),
-
-                                              Text(
-                                                "로그인상태 유지",
-                                                style: TextStyle(
-                                                    fontSize: 19,
-                                                    color: Colors.black,
-                                                    fontFamily: "numberfont"),
-                                              ),
-                                            ],
-
+                                        Text(
+                                          "로그인상태 유지",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 19,
+                                              color: Colors.black,
+                                              fontFamily: "numberfont"),
                                         ),
                                       ],
                                     ),
+                                  ],
+                                ),
                               ),
-
                               InkWell(
                                 onTap: () async {
                                   Sound().play_sound("assets/mp3/start.mp3");

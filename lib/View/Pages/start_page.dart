@@ -5,7 +5,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 
 import 'package:soultec/View/Pages/cars/car_number.dart';
-import 'package:soultec/Controller/data_controller.dart';
+import 'package:soultec/Presenter/data_controller.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -57,12 +57,13 @@ class _Start_page extends State<Start_page> {
                     Container(
                       width: size.width*0.5,
                       child: TextLiquidFill(
-                          loadDuration:Duration(milliseconds : 2000),
-                        waveDuration: Duration(milliseconds: 1500),
+                        loadDuration:Duration(milliseconds : 2000),
+                        waveDuration: Duration(milliseconds: 3000),
                         text: '충전관리 솔루션 스마트 필',
                         waveColor: Colors.black,
                         boxBackgroundColor: kPrimaryColor,
                         textStyle: TextStyle(
+                          fontFamily: "numberfont",
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                         ),

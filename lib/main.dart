@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'Controller/data_controller.dart';
+import 'Presenter/data_controller.dart';
 import 'View/Account/login_page.dart';
 
 import 'Utils/constants.dart';
+import 'View/splah_screen.dart';
 
 void main() async {
   runApp(
@@ -34,6 +35,6 @@ class MyApp extends StatelessWidget {
           // textTheme: GoogleFonts.roboTextTheme(Theme.of(context).textTheme)
         ),
         //Start_page()
-        home: LoginScreen());
+        home: Splah_Screen());
   }
 }
