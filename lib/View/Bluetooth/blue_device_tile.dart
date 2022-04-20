@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/View/Pages/cars/car_number.dart';
 
 class Blue_device_tile extends StatefulWidget {
+  
   Blue_device_tile({
     required this.result,
     required this.onTap,

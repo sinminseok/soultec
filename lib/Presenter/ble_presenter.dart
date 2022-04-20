@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/constants.dart';
 
@@ -7,13 +8,24 @@ class BLE_CONTROLLER {
   BluetoothCharacteristic? targetCharacteristic;
   Stream<List<int>>? stream_value;
 
-  //해당 디바이스의 보낼 서비스 uuid를 를아 데이터 송신하는 함수
-  Future<bool?> discoverServices_write(device, litter) async {
-    bool check_uuid = false;
-    if (device == null) {
-      return null;
-    }
+  void connect_devie(device) async {
+    await device.connect(autoConnect: false);
+  }
 
+  void remember_device(device_id) async {
+    String? check_device_id = device_id.toString();
+// shared preferences 얻기
+    final prefs = await SharedPreferences.getInstance();
+// 값 저장하기
+    prefs.setString('$check_device_id', check_device_id);
+    return;
+  }
+
+  //해당 디바이스의 보낼 서비스 uuid를 받아 데이터 송신하는 함수
+  Future<bool?> discoverServices_write(device, litter) async {
+
+
+    bool check_uuid = false;
     List<BluetoothService> services = await device!.discoverServices();
     //해당 uuid 검색 서비스가 없을경우 디바이스 디스크 id remove후 다시 페어링 페이지로
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:soultec/Presenter/ble_presenter.dart';
 import 'package:soultec/View/Pages/cars/car_number.dart';
 import 'package:soultec/View/Pages/start_page.dart';
 import 'package:soultec/Presenter/data_controller.dart';
@@ -109,12 +110,19 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                         .map(
                           (r) => Blue_device_tile(
                             result: r,
-                            onTap: () => Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.fade,
-                                    child: CarNumberPage(
-                                    )))
+                            onTap: (){
+
+                              //처음 페어링 할때 해당 디바이스 기억
+                              BLE_CONTROLLER().remember_device(r.device.id);
+
+                              //이후 CarNumber page로 이동
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.fade,
+                                      child: CarNumberPage(
+                                      )));
+                            }
                           ),
                         )
                         .toList(),

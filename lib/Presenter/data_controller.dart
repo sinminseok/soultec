@@ -17,11 +17,8 @@ class Http_services with ChangeNotifier {
   String? _carnumber;
 
   User_token? get user_token => _user_token;
-
   User? get user_info => _user_info;
-
   String? get user_id => _user_id;
-
   String? get carnumber => _carnumber;
 
   //http 로그인
@@ -38,6 +35,7 @@ class Http_services with ChangeNotifier {
       _user_id = id;
       notifyListeners();
       if (ischeck) {
+
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
         var _usertoken = User_token.fromJson(json.decode(res.body));

@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Presenter/ble_controller.dart';
+import 'package:soultec/Presenter/ble_presenter.dart';
 import 'package:soultec/View/Bluetooth/blue_scan.dart';
 import 'package:soultec/Utils/top_widget.dart';
 import 'package:soultec/Presenter/data_controller.dart';
@@ -34,28 +34,31 @@ class _Fill_Setting extends State<Fill_Setting> {
   Offset? offset;
   int fill_value = 0;
   String? fill_max = null;
-
   double button_position = 360;
   double block_container = 0.5;
-
   bool? ble_return = null;
+
 
   @override
   initState() {
     super.initState();
     offset = Offset(0, widget.sizee!.height * 0.47);
-    //connectToDevice();
   }
 
 
   @override
   dispose() {
+    button_position =360;
+    block_container = 0.5;
+    fill_max = null;
+    fill_value = 0;
     ble_return = null;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     String? user_id = Provider.of<Http_services>(context).user_id;
     Size size = MediaQuery.of(context).size;
     var offsetoffset = offset;
@@ -187,7 +190,8 @@ class _Fill_Setting extends State<Fill_Setting> {
                                 //   final prefs =
                                 //       await SharedPreferences.getInstance();
                                 //   prefs.remove('${widget.device!.id}');
-                                //
+
+                                //showtoast("해당 블루투스는 주유기가 아닙니다.주유기로 다시한번 페어링 해주세요");
                                 //   Navigator.push(
                                 //       context,
                                 //       MaterialPageRoute(

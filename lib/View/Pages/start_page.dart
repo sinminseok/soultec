@@ -104,6 +104,7 @@ class _Start_page extends State<Start_page> {
             InkWell(
                 onTap: () async {
                   Sound().play_sound("assets/mp3/start.mp3");
+                  //추후 ble scan page로 이동시켜야댐
                   Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CarNumberPage()));
                 },
                 child: Container(

@@ -5,11 +5,15 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
 
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+<!--    앱이 저전력 블루투스 지원 기기에만 제공된다고 선언하고 싶다면 앱 매니페스트에 다음 항목을 포함하세요.-->
+<!--    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>-->
+
+<!--    그러나 저전력 블루투스를 지원하지 않는 기기에도 앱을 제공하고 싶다면 앱 매니페스트에 이 요소를 포함하되, required="false"로 설정해야 합니다. 그런 다음, 런타임에서 PackageManager.hasSystemFeature()를 사용하여 저전력 블루투스의 가용성을 지정할 수 있습니다.-->
 
 
     <application

@@ -75,21 +75,21 @@ class _Recepit_detail extends State<Recepit_detail> {
             Stack(
               children: [
                 Container(
-                    width: size.width * 1.3,
+                    width: size.width * 1.4,
                     height: size.height * 0.6,
                     child: Image.asset("assets/images/receipt_detail.png")),
                 Row(
                   children: [
                     SizedBox(
-                      width: size.width * 0.2,
+                      width: size.width * 0.15,
                     ),
                     Container(
-                      width: size.width * 0.6,
+                      width: size.width * 0.7,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: size.height * 0.05,
+                            height: size.height * 0.08,
                           ),
                           Text(
                             "",
@@ -140,7 +140,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                           ),
                           Text(""),
                           Text(
-                            "=============================",
+                            "==================================",
                             style: TextStyle(fontSize: 14),
                           ),
                           Row(
@@ -169,7 +169,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             ],
                           ),
                           Text(
-                            "------------------------------------------------------------",
+                            "-------------------------------------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Row(
@@ -198,7 +198,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             ],
                           ),
                           Text(
-                            "------------------------------------------------------------",
+                            "-------------------------------------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
@@ -207,7 +207,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "---------------------------------------------------------------",
+                            "-------------------------------------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Center(
