@@ -128,11 +128,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            "승인번호 : ${widget.list_Data.approvalNumber}",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
+
                           Text(
                             "주유기 번호: ${widget.list_Data.pumpNumber}",
                             style: TextStyle(
@@ -210,12 +206,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             "-------------------------------------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
-                          Center(
-                              child: Text(
-                            "soultec 제출",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )),
+
                         ],
                       ),
                     )

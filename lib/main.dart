@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:soultec/Presenter/tutorial_provider.dart';
 
 import 'Presenter/data_controller.dart';
 import 'View/Account/login_page.dart';
@@ -11,7 +12,9 @@ import 'View/splah_screen.dart';
 
 void main() async {
   runApp(
-    ChangeNotifierProvider(create: (_) => Http_services(), child: MyApp()),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => Http_services()),
+    ], child: MyApp()),
   );
 }
 

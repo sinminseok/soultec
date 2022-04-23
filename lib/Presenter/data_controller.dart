@@ -16,11 +16,23 @@ class Http_services with ChangeNotifier {
   String? _user_id;
   String? _carnumber;
 
+  //false 일때 튜토리얼 모드 켜져있는거 true일때 꺼져있는거
+  bool _check_tutorial = false;
+
   User_token? get user_token => _user_token;
   User? get user_info => _user_info;
   String? get user_id => _user_id;
   String? get carnumber => _carnumber;
+  bool get check_tutorial=>_check_tutorial;
 
+
+
+  void change_tutorial()async {
+
+    _check_tutorial = !_check_tutorial;
+
+    notifyListeners();
+  }
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
@@ -96,6 +108,16 @@ class Http_services with ChangeNotifier {
     }
   }
 
+
+  void logout()async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
+    prefs.remove('id');
+    prefs.remove('pw');
+    prefs.remove("check_login");
+    return;
+  }
   //user information 저장 함수
   void save_user(user_id, user_pw) async {
     final prefs = await SharedPreferences.getInstance();
@@ -163,6 +185,7 @@ class Http_services with ChangeNotifier {
           'amount': amount,
           'carNumber': carNumber,
         }));
+    print(res.body);
 
     if (res.statusCode == 200) {
       return res;

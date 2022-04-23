@@ -12,6 +12,7 @@ class BLE_CONTROLLER {
     await device.connect(autoConnect: false);
   }
 
+
   void remember_device(device_id) async {
     String? check_device_id = device_id.toString();
 // shared preferences 얻기
@@ -34,9 +35,7 @@ class BLE_CONTROLLER {
       if(service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID){
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() == BLE_UUID().POST_CHARACTERISTIC_UUID) {
-
             targetCharacteristic = characteristic;
-
             if (litter == "가득") {
               writeData("가득");
               check_uuid = true;
@@ -56,20 +55,17 @@ class BLE_CONTROLLER {
 
   //넘겨줄 string 데이터를 utf8로 인코딩 해서 송신하는 함수
   writeData(String data) async {
+
     if (targetCharacteristic == null) return;
     List<int> bytes = utf8.encode(data);
     //write메서드 파라미터는 list값
     await targetCharacteristic!.write(bytes);
+
   }
 
   //stream 으로 데이터 수신
   discoverServices_read(device) async {
-    if (device == null) {
-      return;
-    }
-
     List<BluetoothService> services = await device!.discoverServices();
-
     services.forEach((service) {
       if (service.uuid.toString() == BLE_UUID().GET_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {

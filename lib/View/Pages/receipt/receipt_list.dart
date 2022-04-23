@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:soultec/Presenter/tutorial_provider.dart';
 import 'package:soultec/View/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/Utils/top_widget.dart';
 import 'package:soultec/Presenter/data_controller.dart';
@@ -14,7 +16,7 @@ import 'dart:core';
 import '../../../Utils/constants.dart';
 import '../../../Utils/sound.dart';
 import '../../../Utils/toast.dart';
-import '../fill/fill_setting.dart';
+import '../../Account/login_page.dart';
 
 class Receipt_list extends StatefulWidget {
   List? data_list;
@@ -99,6 +101,7 @@ class _Receipt_list extends State<Receipt_list> {
   //검색 필터링 함수( 검색 날짜를 기준으로 필터링)
   scan_day_filiter(date) {
     filter_use_data = [];
+    // print(itembuilder_list![0].dateTime.substring(0, 10));
     //user_use_data for 문으로 돌려 해당 날짜 필터링
     for (var i = 0; i < itembuilder_list!.length; i++) {
       if (itembuilder_list![i].dateTime.substring(0, 10) == date) {
@@ -108,6 +111,7 @@ class _Receipt_list extends State<Receipt_list> {
     setState(() {
       scan_check = true;
     });
+    print(filter_use_data.length);
 
     return filter_use_data;
   }
@@ -137,16 +141,90 @@ class _Receipt_list extends State<Receipt_list> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String? user_id = Provider.of<Http_services>(context).user_id;
-
+    bool? check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Image.asset("assets/images/smartfill_logo.png",fit: BoxFit.contain,
+                height: 55,),
+            ],
+          ),
+        ),
+        drawer: Drawer(
+          backgroundColor: kPrimaryColor,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                child: Container(
+              child: Center(
+                child: Text("$user_id 기사님",style: TextStyle(fontSize: 27),),
+              ),
+          ),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                ),
+              ),
+              SizedBox(height: size.height*0.5,),
+
+              ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.offline_pin_outlined),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('튜토리얼 모드 on/off'),
+                    ),
+                  ],
+                ),
+                onTap: () {
+
+                  Provider.of<Http_services>(context,listen: false).change_tutorial();
+                  print(check_tutorial);
+                  if(check_tutorial){
+                    showtoast("튜토리얼 모드가 꺼졌습니다");
+                  }
+                  if(!check_tutorial){
+                    showtoast("튜토리얼 모드가 켜졌습니다.");
+                  }
+                },
+              ),
+              ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.login),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('로그아웃'),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Http_services().logout();
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fade,
+                          child: LoginScreen(
+                          )));
+
+                },
+              ),
+            ],
+          ),
+        ),
         backgroundColor: kPrimaryColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Top_widget(),
+              
               Text(
                 "${user_id} -- ${widget.car_number}",
                 style: TextStyle(
@@ -192,6 +270,7 @@ class _Receipt_list extends State<Receipt_list> {
                       if (_BirthdayController.text == "시간 / 날짜") {
                         return showtoast("조회할 날짜를 선택해주세요");
                       } else {
+                        print(_BirthdayController.text);
                         scan_day_filiter(_BirthdayController.text);
                       }
                     },
@@ -222,7 +301,7 @@ class _Receipt_list extends State<Receipt_list> {
                               height: size.height * 0.42,
                               width: size.width * 0.95,
                               child: ListView.builder(
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(3),
                                 itemCount: filter_use_data.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Padding(
@@ -230,26 +309,25 @@ class _Receipt_list extends State<Receipt_list> {
                                         left: 50, right: 50, bottom: 10),
                                     child: Container(
                                       color: kPrimaryColor,
-                                      width: size.width * 1.2,
+                                      width: size.width * 1.3,
                                       height: size.height * 0.07,
                                       child: InkWell(
                                         onTap: () {
                                           //해당 날짜 이용내역 detail navigator => filter_use_data[index]
-
                                           Navigator.push(
                                               context,
                                               PageTransition(
                                                   type: PageTransitionType.fade,
                                                   child: Recepit_detail(
-                                                      list_Data:
-                                                          filter_use_data[
-                                                              index])));
+                                                      list_Data: filter_use_data[
+                                                          index])));
                                         },
                                         child: ListTile(
                                           title: Center(
                                               child: Text(
                                             '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
                                             style: TextStyle(
+                                              color: HexColor("#4c5af5"),
                                                 fontFamily: "numberfont",
                                                 fontWeight: FontWeight.bold),
                                           )),
@@ -300,7 +378,7 @@ class _Receipt_list extends State<Receipt_list> {
                                             '${itembuilder_list![index].dateTime.substring(0, 4)}년 ${itembuilder_list![index].dateTime.substring(5, 7)}월 ${itembuilder_list![index].dateTime.substring(8, 10)}일 - ${itembuilder_list![index].dateTime.substring(11, 16)}  [${itembuilder_list![index].amount}리터]',
                                             style: TextStyle(
                                                 fontFamily: "numberfont",
-                                                color: Colors.black,
+                                                color: HexColor("#4c5af5"),
                                                 fontWeight: FontWeight.bold),
                                           )),
                                         ),

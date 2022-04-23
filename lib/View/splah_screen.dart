@@ -22,7 +22,8 @@ class _Splah_ScreenState extends State<Splah_Screen> {
   void initState() {
     Timer(Duration(milliseconds: 3000), () {
       Navigator.push(context,
-          PageTransition(type: PageTransitionType.fade, child: LoginScreen()));
+          PageTransition(type: PageTransitionType.fade, child: LoginScreen(
+          )));
     });
   }
 

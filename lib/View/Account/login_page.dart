@@ -148,50 +148,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        height: size.height * 0.05,
-                                      ),
-                                      Text(
-                                        "충전 관리 솔루션",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: size.width * 0.03,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "스마트필",
-                                            style: TextStyle(
-                                                fontSize: 38,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 30.0, top: 60),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/mainimg.png'),
-                                      width: 70,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(height: size.height * 0.04),
+                              Container(
+                                width: size.width * 0.6,
+                                child: Image(
+                                  image: AssetImage(
+                                      'assets/images/smartfill_logo.png'),
+                                  width: 70,
+                                ),
                               ),
                               Container(
-                                  width: size.width * 0.8,
+                                  width: size.width * 0.6,
                                   height: size.height * 0.2,
                                   child: Image.asset(
                                     'assets/gifs/main_img.gif',
@@ -239,38 +206,50 @@ class _LoginScreenState extends State<LoginScreen> {
                                       border: InputBorder.none),
                                 ),
                               ),
-                              Container(
-                                width: size.width * 0.5,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: size.width * 0.25,
+                                  ),
+                                  Container(
+                                    width: size.width * 0.5,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Checkbox(
-                                            value: _isChecked,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _isChecked = value!;
-                                              });
-                                            }),
-                                        //   ),
-                                        // ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Checkbox(
+                                                value: _isChecked,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _isChecked = value!;
+                                                  });
+                                                }),
+                                            //   ),
+                                            // ),
 
-                                        Text(
-                                          "로그인상태 유지",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 19,
-                                              color: Colors.black,
-                                              fontFamily: "numberfont"),
+                                            Text(
+                                              "로그인상태 유지",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 19,
+                                                  color: Colors.black,
+                                                  fontFamily: "numberfont"),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:10),
+                                    child: Container(
+                                        child: Icon(Icons.call_received,size: 37,)),
+                                  )
+                                ],
                               ),
                               InkWell(
                                 onTap: () async {

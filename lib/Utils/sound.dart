@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 
 
 class Sound{
-  AudioPlayer player = AudioPlayer();
 
+  AudioPlayer player = AudioPlayer();
   void play_sound(audioasset)async{
     ByteData bytes = await rootBundle.load(audioasset); //load audio from assets
     Uint8List audiobytes = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);

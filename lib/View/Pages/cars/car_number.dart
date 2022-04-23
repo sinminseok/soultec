@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Presenter/ble_presenter.dart';
 import 'package:soultec/View/Pages/fill/fill_setting.dart';
 import 'package:soultec/Utils/top_widget.dart';
-
+import 'package:hexcolor/hexcolor.dart';
 import 'package:soultec/Presenter/data_controller.dart';
 import '../../../Model/User_Model.dart';
 import '../../../Utils/constants.dart';
@@ -118,13 +118,14 @@ class _CarNumberPageState extends State<CarNumberPage> {
                           Column(
                             children: [
                               SizedBox(
-                                height: size.height * 0.1,
+                                height: size.height * 0.06,
                               ),
                               Text(
                                 "차량선택",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(height: size.height*0.01,),
                               Container(
                                 width: size.width * 0.5,
                                 height: size.height * 0.15,
@@ -134,6 +135,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                         (BuildContext context, int index) {
                                       return InkWell(
                                         onTap: () {
+                                          Sound().play_sound("assets/mp3/click.mp3");
                                           Navigator.push(
                                               context,
                                               PageTransition(
@@ -151,8 +153,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                                 child: Text(
                                               "${return_carnumber[index].carNumber}",
                                               style: TextStyle(
+                                                fontSize: 20,
                                                   fontFamily: "numberfont",
-                                                  color: Colors.black,
+                                                  color: HexColor("#4c5af5"),
                                                   fontWeight: FontWeight.bold),
                                             )),
                                           ),
@@ -181,7 +184,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   "단추를 누르면 조회를 시작합니다.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black,
+                    color:Colors.black,
                     fontSize: 20,
                   ),
                 ),
@@ -195,15 +198,18 @@ class _CarNumberPageState extends State<CarNumberPage> {
                     //
                     // prefs.remove('asdf1234');
                     if (_carnumber_text.text.length < 4) {
+                      Sound().play_sound("assets/mp3/error.mp3");
                       return showtoast("차량번호를 4자리 입력해주세요");
                     } else {
                       if (_carnumber_text.text == "") {
+                        Sound().play_sound("assets/mp3/error.mp3");
                         return showtoast("차량 번호를 입력하세요");
                       } else {
                         return_carnumber = await Http_services().post_carnumber(
                             _carnumber_text.text, user_token!.token);
                         //중복되는 자동차 번호가 2개 이상일경우
                         if (return_carnumber!.length >= 2) {
+                          Sound().play_sound("assets/mp3/click.mp3");
                           setState(() {
                             overlap_car = true;
                           });

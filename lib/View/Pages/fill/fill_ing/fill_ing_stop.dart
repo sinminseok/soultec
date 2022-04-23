@@ -47,6 +47,7 @@ class _Filling_stop extends State<Filling_stop> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+
       backgroundColor: kPrimaryColor,
       body: getBody(size, widget.liter, context),
 
@@ -56,7 +57,6 @@ class _Filling_stop extends State<Filling_stop> {
   getBody(Size size, String? liter, thiscontext) {
     String? user_id = Provider.of<Http_services>(context).user_id;
     String? user_token = Provider.of<Http_services>(context).user_token!.token;
-
     var currentValue;
 
     return WillPopScope(

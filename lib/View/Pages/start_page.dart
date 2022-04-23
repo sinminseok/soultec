@@ -41,77 +41,45 @@ class _Start_page extends State<Start_page> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-        backgroundColor: kPrimaryColor,
-        body: SingleChildScrollView(
-          child: Column(children: [
-            SizedBox(
-              height: size.height * 0.1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      width: size.width*0.5,
-                      child: TextLiquidFill(
-                        loadDuration:Duration(milliseconds : 2000),
-                        waveDuration: Duration(milliseconds: 3000),
-                        text: '충전관리 솔루션 스마트 필',
-                        waveColor: Colors.black,
-                        boxBackgroundColor: kPrimaryColor,
-                        textStyle: TextStyle(
-                          fontFamily: "numberfont",
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-
-                    // AnimatedTextKit(
-                    //     animatedTexts:[
-                    //
-                    //   FadeAnimatedText('충전관리 솔루션',textStyle: TextStyle(fontSize: 22,))
-                    //
-                    // ],
-                    //   isRepeatingAnimation = false,
-                    // ),
-
-
-                  ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          backgroundColor: kPrimaryColor,
+          body: SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(
+                height: size.height * 0.2,
+              ),
+              Container(
+                width: size.width*0.6,
+                child: Image(
+                  image: AssetImage(
+                      'assets/images/smartfill_logo.png'),
+                  width: 70,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Image(
-                    image: AssetImage('assets/images/mainimg.png'),
-                    width: 90,
-                  ),
-                ),
-              ],
-            ),
-          Container(
-                  width: size.width * 0.8,
-                  height: size.height * 0.3,
-                  child: Image.asset(
-                    'assets/gifs/main_img.gif',
-                  )),
+              ),
+            Container(
+                    width: size.width * 0.8,
+                    height: size.height * 0.3,
+                    child: Image.asset(
+                      'assets/gifs/main_img.gif',
+                    )),
 
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            InkWell(
-                onTap: () async {
-                  Sound().play_sound("assets/mp3/start.mp3");
-                  //추후 ble scan page로 이동시켜야댐
-                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CarNumberPage()));
-                },
-                child: Container(
-                    width: size.width * 2,
-                    height: size.height * 0.2,
-                    child: Image.asset("assets/images/start_button.png"))),
-          ]),
-        ));
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              InkWell(
+                  onTap: () async {
+                    Sound().play_sound("assets/mp3/start.mp3");
+                    //추후 ble scan page로 이동시켜야댐
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CarNumberPage()));
+                  },
+                  child: Container(
+                      width: size.width * 2,
+                      height: size.height * 0.2,
+                      child: Image.asset("assets/images/start_button.png"))),
+            ]),
+          )),
+    );
   }
 }

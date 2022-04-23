@@ -13,29 +13,12 @@ class _Top_widgetState extends State<Top_widget> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         SizedBox(height: size.height * 0.15),
-        Row(
-          children: [
-            // SizedBox(height: ,)
-            Text(
-              "충전관리 솔루션",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
-            SizedBox(
-              width: 2,
-            ),
-            Text(
-              "스마트필",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+        Container(
+          width: size.width*0.3,
           child: Image(
-            image: AssetImage('assets/images/mainimg.png'),
-            width: 50,
+            image: AssetImage(
+                'assets/images/smartfill_logo.png'),
+            width: 70,
           ),
         ),
       ],
