@@ -9,6 +9,8 @@ import 'package:soultec/Model/User_Model.dart';
 import 'package:soultec/Model/Receipt_Model.dart';
 import 'package:soultec/Utils/constants.dart';
 
+import '../Utils/toast.dart';
+
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
   User_token? _user_token;
@@ -17,28 +19,45 @@ class Http_services with ChangeNotifier {
   String? _carnumber;
 
   //false 일때 튜토리얼 모드 켜져있는거 true일때 꺼져있는거
-  bool _check_tutorial = false;
+  String? _check_tutorial;
 
   User_token? get user_token => _user_token;
+
   User? get user_info => _user_info;
+
   String? get user_id => _user_id;
+
   String? get carnumber => _carnumber;
-  bool get check_tutorial=>_check_tutorial;
 
+  String? get check_tutorial => _check_tutorial;
 
+  void change_tutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    _check_tutorial = prefs.getString("check_tutorial");
 
-  void change_tutorial()async {
-
-    _check_tutorial = !_check_tutorial;
-
+    if (_check_tutorial != null) {
+      print("튜토리얼 모드가 꺼졌습니다 ");
+      prefs.remove("check_tutorial");
+      showtoast("튜토리얼 모드가 꺼졌습니다.");
+    }
+    if (_check_tutorial == null) {
+      print("튜토리얼 모드가 켜졌습니다. ");
+      prefs.setString("check_tutorial", "true");
+      showtoast("튜토리얼 모드가 켜졌습니다.");
+    }
     notifyListeners();
   }
+
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
+    print("start");
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
+
+    print(res.body);
+    print(res.bodyBytes);
 
     //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {
@@ -47,7 +66,6 @@ class Http_services with ChangeNotifier {
       _user_id = id;
       notifyListeners();
       if (ischeck) {
-
         //자동로그인 체크를 했을경우 해당 id,pw 를 디스크에 저장한다.
         save_user(id, pw);
         var _usertoken = User_token.fromJson(json.decode(res.body));
@@ -96,6 +114,8 @@ class Http_services with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
 
+
+
     if (res.statusCode == 200) {
       User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
       this._user_token = userr_token;
@@ -108,8 +128,7 @@ class Http_services with ChangeNotifier {
     }
   }
 
-
-  void logout()async{
+  void logout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
@@ -118,6 +137,7 @@ class Http_services with ChangeNotifier {
     prefs.remove("check_login");
     return;
   }
+
   //user information 저장 함수
   void save_user(user_id, user_pw) async {
     final prefs = await SharedPreferences.getInstance();

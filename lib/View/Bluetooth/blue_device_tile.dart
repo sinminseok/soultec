@@ -19,6 +19,7 @@ class Blue_device_tile extends StatefulWidget {
 }
 
 class _Blue_device_tile extends State<Blue_device_tile> {
+
   bool check_device_bool = false;
 
   @override

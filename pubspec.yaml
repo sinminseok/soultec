@@ -58,6 +58,9 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   animated_text_kit: ^4.2.1
   page_transition: "^2.0.5"
+  keyboard_actions: "^3.4.7"
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -93,10 +96,12 @@ flutter:
     - assets/images/filling.png
     - assets/images/Gage.png
     - assets/images/inqure_button.png
+    - assets/images/user.png
     - assets/images/check_button.png
     - assets/images/finish_button.png
     - assets/images/filling/f1.png
     - assets/images/filling/f2.png
+    - assets/images/arrow.png
     - assets/images/filling/f3.png
     - assets/images/filling/f4.png
     - assets/images/filling/f5.png
@@ -121,8 +126,8 @@ flutter:
     - assets/images/receipt_list.png
     - assets/gifs/car_number.gif
     - assets/gifs/select_car.gif
-    - assets/gifs/load2.GIF
     - assets/gifs/fill_gif.gif
+    - assets/gifs/load2.GIF
     - assets/gifs/main_img.gif
     - assets/gifs/login_loading.gif
     - assets/images/button_login.png

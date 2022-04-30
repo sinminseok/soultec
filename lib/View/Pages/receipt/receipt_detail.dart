@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../Model/Receipt_Model.dart';
 import '../../../Utils/constants.dart';
 import '../../../Utils/sound.dart';
+import '../../../Utils/top_widget.dart';
 
 class Recepit_detail extends StatefulWidget {
   final Receipt_object list_Data;
@@ -30,37 +31,11 @@ class _Recepit_detail extends State<Recepit_detail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "충전관리 솔루션",
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Text(
-                      "스마트필",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Image(
-                    image: AssetImage('assets/images/mainimg.png'),
-                    width: 60,
-                  ),
-                ),
+                Top_widget(),
+
               ],
             ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
+
             Text(
               "${widget.list_Data.username} -- ${widget.list_Data.carNumber!}",
               style: TextStyle(
@@ -205,6 +180,12 @@ class _Recepit_detail extends State<Recepit_detail> {
                           Text(
                             "-------------------------------------------------------------------",
                             style: TextStyle(fontSize: 14),
+                          ),
+                          Center(
+                            child: Text(
+                              "스마트필 주식회사",
+                              style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+                            ),
                           ),
 
                         ],

@@ -22,21 +22,56 @@ class CarNumberPage extends StatefulWidget {
   State<CarNumberPage> createState() => _CarNumberPageState();
 }
 
-class _CarNumberPageState extends State<CarNumberPage> {
+class _CarNumberPageState extends State<CarNumberPage>
+    with SingleTickerProviderStateMixin {
+  var check_tutorial_bool;
+
+  List<Widget> children = [
+    Image.asset("assets/images/arrow.png",),
+    Image.asset("assets/images/arrow.png",color: Colors.transparent,),
+  ];
+  int interval = 500;
+
+  void check_tutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    check_tutorial_bool = prefs.get('check_tutorial');
+  }
+
   TextEditingController _carnumber_text = TextEditingController();
   bool check_connected = false;
   bool overlap_car = false;
   var return_carnumber;
+  AnimationController? _controller;
+  int _currentWidget = 0;
 
   @override
   void initState() {
     //BLE_CONTROLLER().connect_devie(widget!.device);
     // showtoast("페어링 되었습니다 ${widget.device!.id}");
+
+    _controller = new AnimationController(
+        duration: Duration(milliseconds: interval), vsync: this);
+
+    _controller!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          if (++_currentWidget == children.length) {
+            _currentWidget = 0;
+          }
+        });
+
+        _controller!.forward(from: 0.0);
+      }
+    });
+
+    _controller!.forward();
+
     super.initState();
   }
 
   @override
   void dispose() {
+    check_tutorial_bool = null;
     overlap_car = false;
     super.dispose();
   }
@@ -46,7 +81,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
   @override
   Widget build(BuildContext context) {
     //http post car number 요청 보낼때 user의 token 값 필요
-
+    var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     User_token? user_token = Provider.of<Http_services>(context).user_token;
     Size size = MediaQuery.of(context).size;
 
@@ -80,6 +115,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                       color: kPrimaryColor),
                   child: Center(
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: "numberfont",
@@ -125,7 +161,9 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: size.height*0.01,),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
                               Container(
                                 width: size.width * 0.5,
                                 height: size.height * 0.15,
@@ -135,7 +173,8 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                         (BuildContext context, int index) {
                                       return InkWell(
                                         onTap: () {
-                                          Sound().play_sound("assets/mp3/click.mp3");
+                                          Sound().play_sound(
+                                              "assets/mp3/click.mp3");
                                           Navigator.push(
                                               context,
                                               PageTransition(
@@ -153,7 +192,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                                 child: Text(
                                               "${return_carnumber[index].carNumber}",
                                               style: TextStyle(
-                                                fontSize: 20,
+                                                  fontSize: 20,
                                                   fontFamily: "numberfont",
                                                   color: HexColor("#4c5af5"),
                                                   fontWeight: FontWeight.bold),
@@ -163,13 +202,28 @@ class _CarNumberPageState extends State<CarNumberPage> {
                                       );
                                     }),
                               ),
+
+                            ],
+
+                          ),
+
+                          Row(
+                            children: [
+                              check_tutorial != null ?Container() :
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 50,right: 20),
+                                child: Container(
+                                  width: size.width*0.1,
+                                  child: children[_currentWidget],
+                                ),
+                              ),
+                              Container(
+                                  width: size.width * 0.25,
+                                  child: Image.asset(
+                                    'assets/gifs/select_car.gif',
+                                  )),
                             ],
                           ),
-                          Container(
-                              width: size.width * 0.25,
-                              child: Image.asset(
-                                'assets/gifs/select_car.gif',
-                              )),
                         ],
                       ),
                     ),
@@ -184,7 +238,7 @@ class _CarNumberPageState extends State<CarNumberPage> {
                   "단추를 누르면 조회를 시작합니다.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color:Colors.black,
+                    color: Colors.black,
                     fontSize: 20,
                   ),
                 ),
@@ -194,9 +248,6 @@ class _CarNumberPageState extends State<CarNumberPage> {
               ),
               InkWell(
                   onTap: () async {
-                    // final prefs = await SharedPreferences.getInstance();
-                    //
-                    // prefs.remove('asdf1234');
                     if (_carnumber_text.text.length < 4) {
                       Sound().play_sound("assets/mp3/error.mp3");
                       return showtoast("차량번호를 4자리 입력해주세요");

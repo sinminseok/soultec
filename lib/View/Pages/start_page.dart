@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:soultec/View/Pages/cars/car_number.dart';
 import 'package:soultec/Presenter/data_controller.dart';
@@ -20,11 +21,51 @@ class Start_page extends StatefulWidget {
   _Start_page createState() => _Start_page();
 }
 
-class _Start_page extends State<Start_page> {
+class _Start_page extends State<Start_page>
+    with SingleTickerProviderStateMixin {
+
+  //
+  var check_tutorial_bool;
+  List<Widget> children = [
+    Image.asset("assets/images/arrow.png",),
+    Image.asset("assets/images/arrow.png",color: Colors.transparent,),
+  ];
+  int interval = 500;
+  AnimationController? _controller;
+  int _currentWidget = 0;
+
+  void check_tutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    check_tutorial_bool = prefs.get('check_tutorial');
+  }
+
   @override
   initState() {
+    _controller = new AnimationController(
+        duration: Duration(milliseconds: interval), vsync: this);
+
+    _controller!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          if (++_currentWidget == children.length) {
+            _currentWidget = 0;
+          }
+        });
+
+        _controller!.forward(from: 0.0);
+      }
+    });
+
+    _controller!.forward();
+
     super.initState();
     initConnectivity();
+  }
+
+  @override
+  void dispose() {
+    check_tutorial_bool = null;
+    super.dispose();
   }
 
   //네트워크 연결 확인 함수
@@ -40,7 +81,7 @@ class _Start_page extends State<Start_page> {
 
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -48,31 +89,45 @@ class _Start_page extends State<Start_page> {
           body: SingleChildScrollView(
             child: Column(children: [
               SizedBox(
-                height: size.height * 0.2,
+                height: size.height * 0.1,
               ),
               Container(
-                width: size.width*0.6,
+                width: size.width * 0.6,
                 child: Image(
-                  image: AssetImage(
-                      'assets/images/smartfill_logo.png'),
+                  image: AssetImage('assets/images/smartfill_logo.png'),
                   width: 70,
                 ),
               ),
-            Container(
-                    width: size.width * 0.8,
-                    height: size.height * 0.3,
-                    child: Image.asset(
-                      'assets/gifs/main_img.gif',
-                    )),
+              Container(
 
-              SizedBox(
-                height: size.height * 0.01,
+                  width: size.width * 0.8,
+                  height: size.height * 0.3,
+                  child: Image.asset(
+                    'assets/gifs/main_img.gif',
+                  )
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: size.width * 0.7,
+                  ),
+                  check_tutorial != null
+                      ? Container()
+                      : Container(
+                    width: size.width*0.1,
+                          child: children[_currentWidget],
+                        ),
+                ],
               ),
               InkWell(
                   onTap: () async {
                     Sound().play_sound("assets/mp3/start.mp3");
                     //추후 ble scan page로 이동시켜야댐
-                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CarNumberPage()));
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.fade,
+                            child: CarNumberPage()));
                   },
                   child: Container(
                       width: size.width * 2,

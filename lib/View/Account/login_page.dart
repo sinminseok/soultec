@@ -14,22 +14,41 @@ import 'package:soultec/Presenter/data_controller.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginScreen extends StatefulWidget {
+
+
+class LoginScreen extends StatefulWidget{
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
+
+  static final storage =
+  new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
+
+  //튜토리얼 애니메이션
+  int interval = 500;
+  AnimationController? _controller;
+  int _currentWidget = 0;
+  List<Widget> children = [
+    Image.asset("assets/images/arrow.png",),
+    Image.asset("assets/images/arrow.png",color: Colors.transparent,),
+  ];
+
+
   bool isLogin = true;
 
   //Form controller
   final TextEditingController _userIDController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  AudioPlayer player = AudioPlayer();
 
+
+  AudioPlayer player = AudioPlayer();
   User_token? user_token;
 
   //자동로그인 checkbox가 확인되면 get_userinfo 실행해서 저장된 user의 information 을 가져온다
@@ -44,6 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool auth_login = false;
   bool? http_return;
 
+  var check_tutorial_bool;
+
 //http get 비동기 control stream
   late Stream<User_token?> stream;
 
@@ -51,12 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void check_box() async {
     final prefs = await SharedPreferences.getInstance();
     checkbox_state = prefs.getString("check_login");
-
-    print(checkbox_state);
-
     if (checkbox_state != null) {
       disk_user_info = await Http_services().get_userinfo();
-
       user_id_disk = disk_user_info[0];
       user_pw_disk = disk_user_info[1];
 
@@ -77,18 +94,43 @@ class _LoginScreenState extends State<LoginScreen> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult.toString());
     if (connectivityResult == ConnectivityResult.mobile) {
-      print("mobile data");
       // I am connected to a mobile network.
     } else if (connectivityResult == ConnectivityResult.wifi) {
       // I am connected to a wifi network.
-      print("wifi");
     } else if (connectivityResult.toString() == "ConnectivityResult.none") {
       showAlertDialog(context, "네트워크 오류", "와이파이나 데이터를 켜주세요");
     }
   }
 
+  void check_tutorial()async{
+    final prefs = await SharedPreferences.getInstance();
+    check_tutorial_bool = prefs.get('check_tutorial');
+  }
+
   @override
   void initState() {
+    _controller = new AnimationController(
+        duration: Duration(milliseconds: interval),
+        vsync: this
+    );
+
+    _controller!.addStatusListener((status) {
+      if(status == AnimationStatus.completed) {
+        setState(() {
+          if(++_currentWidget == children.length) {
+            _currentWidget = 0;
+          }
+        });
+
+        _controller!.forward(from: 0.0);
+      }
+    });
+
+    _controller!.forward();
+
+
+
+
     super.initState();
     initConnectivity();
     check_box();
@@ -98,6 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _controller!.dispose();
+    check_tutorial_bool = null;
     auth_login = false;
     checkbox_state = null;
     user_token = null;
@@ -109,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     double defaultRegisterSize = size.height - (size.height * 0.1);
     return auth_login
         ? FutureBuilder<User_token?>(
@@ -158,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               Container(
-                                  width: size.width * 0.6,
+                                  width: size.width * 0.7,
                                   height: size.height * 0.2,
                                   child: Image.asset(
                                     'assets/gifs/main_img.gif',
@@ -244,15 +289,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:10),
+
+                                  check_tutorial !=null ? Container():Padding(
+                                    padding: const EdgeInsets.only(top:30),
                                     child: Container(
-                                        child: Icon(Icons.call_received,size: 37,)),
-                                  )
+                                      width: size.width*0.1,
+                            child: children[_currentWidget],
+                          ),
+                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(top: 10),
+                                  //   child: Container(
+                                  //       child: Icon(
+                                  //     Icons.call_received,
+                                  //     size: 37,
+                                  //   )),
+                                  // )
                                 ],
                               ),
                               InkWell(
                                 onTap: () async {
+                                  initConnectivity();
                                   Sound().play_sound("assets/mp3/start.mp3");
                                   if (_userIDController.text == "") {
                                     return showtoast("기사번호를 입력해주세요");
@@ -288,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   } else {
                                                     return Center(
                                                         child: Container(
-                                                      width: size.width * 0.5,
+                                                      width: size.width * 0.45,
                                                       child: Image.asset(
                                                         'assets/gifs/login_loading.gif',
                                                       ),

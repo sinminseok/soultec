@@ -30,7 +30,24 @@ class Fill_Setting extends StatefulWidget {
   _Fill_Setting createState() => _Fill_Setting();
 }
 
-class _Fill_Setting extends State<Fill_Setting> {
+class _Fill_Setting extends State<Fill_Setting> with SingleTickerProviderStateMixin{
+  var check_tutorial_bool;
+
+  List<Widget> children = [
+    Image.asset("assets/images/arrow.png",),
+    Image.asset("assets/images/arrow.png",color: Colors.transparent,),
+  ];
+  int interval = 500;
+
+  AnimationController? _controller;
+  int _currentWidget = 0;
+
+  void check_tutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    check_tutorial_bool = prefs.get('check_tutorial');
+  }
+
+
   Offset? offset;
   int fill_value = 0;
   String? fill_max = null;
@@ -41,6 +58,23 @@ class _Fill_Setting extends State<Fill_Setting> {
 
   @override
   initState() {
+    _controller = new AnimationController(
+        duration: Duration(milliseconds: interval), vsync: this);
+
+    _controller!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          if (++_currentWidget == children.length) {
+            _currentWidget = 0;
+          }
+        });
+
+        _controller!.forward(from: 0.0);
+      }
+    });
+
+    _controller!.forward();
+
     super.initState();
     offset = Offset(0, widget.sizee!.height * 0.47);
   }
@@ -48,6 +82,7 @@ class _Fill_Setting extends State<Fill_Setting> {
 
   @override
   dispose() {
+    check_tutorial_bool = null;
     button_position =360;
     block_container = 0.5;
     fill_max = null;
@@ -58,14 +93,12 @@ class _Fill_Setting extends State<Fill_Setting> {
 
   @override
   Widget build(BuildContext context) {
-
+    var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     String? user_id = Provider.of<Http_services>(context).user_id;
     Size size = MediaQuery.of(context).size;
     var offsetoffset = offset;
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
+    return Scaffold(
             backgroundColor: kPrimaryColor,
             body: SingleChildScrollView(
               child: Column(children: [
@@ -171,6 +204,17 @@ class _Fill_Setting extends State<Fill_Setting> {
                                       height: size.height * block_container,
                                       color: kPrimaryColor,
                                     ),
+
+                          check_tutorial != null?Container():Positioned(
+                            top: size.height*0.4,
+                            left: size.width*0.2,
+                            child: Container(
+                              width: size.width*0.1,
+                              child: children[_currentWidget],
+                            ),
+                          ),
+
+
                                   ],
                                 ),
                               ],
@@ -223,6 +267,7 @@ class _Fill_Setting extends State<Fill_Setting> {
 
                                 }
                               },
+
                               child: Container(
                                   width: size.width * 0.7,
                                   height: size.height * 0.08,
@@ -505,7 +550,6 @@ class _Fill_Setting extends State<Fill_Setting> {
                   ],
                 ),
               ]),
-            )
       ),
     );
   }

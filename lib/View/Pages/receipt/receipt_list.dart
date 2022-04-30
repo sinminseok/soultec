@@ -7,10 +7,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/Presenter/tutorial_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/View/Pages/receipt/receipt_detail.dart';
 import 'package:soultec/Utils/top_widget.dart';
 import 'package:soultec/Presenter/data_controller.dart';
+import 'package:soultec/View/Pages/start_page.dart';
 import 'dart:core';
 
 import '../../../Utils/constants.dart';
@@ -141,18 +142,25 @@ class _Receipt_list extends State<Receipt_list> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String? user_id = Provider.of<Http_services>(context).user_id;
-    bool? check_tutorial = Provider.of<Http_services>(context).check_tutorial;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Image.asset("assets/images/smartfill_logo.png",fit: BoxFit.contain,
-                height: 55,),
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Image.asset(
+                  "assets/images/smartfill_logo.png",
+                  fit: BoxFit.contain,
+                  height: 55,
+                ),
+              ),
             ],
           ),
         ),
@@ -161,18 +169,32 @@ class _Receipt_list extends State<Receipt_list> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              DrawerHeader(
-                child: Container(
-              child: Center(
-                child: Text("$user_id 기사님",style: TextStyle(fontSize: 27),),
+              Column(
+                children: [
+                  Container(
+                    width: size.width*0.4,
+                    height: size.height*0.3,
+                    child: CircleAvatar(
+                      radius: 16.0,
+                      child: ClipRRect(
+                        child: Image.asset('assets/images/user.png'),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Center(
+                      child: Text(
+                        "$user_id 기사님",
+                        style: TextStyle(fontSize: 27),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-          ),
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                ),
+              SizedBox(
+                height: size.height * 0.35,
               ),
-              SizedBox(height: size.height*0.5,),
-
               ListTile(
                 title: Row(
                   children: [
@@ -184,15 +206,26 @@ class _Receipt_list extends State<Receipt_list> {
                   ],
                 ),
                 onTap: () {
-
-                  Provider.of<Http_services>(context,listen: false).change_tutorial();
-                  print(check_tutorial);
-                  if(check_tutorial){
-                    showtoast("튜토리얼 모드가 꺼졌습니다");
-                  }
-                  if(!check_tutorial){
-                    showtoast("튜토리얼 모드가 켜졌습니다.");
-                  }
+                  print("das");
+                  Provider.of<Http_services>(context, listen: false)
+                      .change_tutorial();
+                },
+              ),
+              ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.undo),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('처음 화면으로 가기'),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fade, child: Start_page()));
                 },
               ),
               ListTile(
@@ -210,10 +243,7 @@ class _Receipt_list extends State<Receipt_list> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          type: PageTransitionType.fade,
-                          child: LoginScreen(
-                          )));
-
+                          type: PageTransitionType.fade, child: LoginScreen()));
                 },
               ),
             ],
@@ -224,7 +254,6 @@ class _Receipt_list extends State<Receipt_list> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              
               Text(
                 "${user_id} -- ${widget.car_number}",
                 style: TextStyle(
@@ -319,15 +348,16 @@ class _Receipt_list extends State<Receipt_list> {
                                               PageTransition(
                                                   type: PageTransitionType.fade,
                                                   child: Recepit_detail(
-                                                      list_Data: filter_use_data[
-                                                          index])));
+                                                      list_Data:
+                                                          filter_use_data[
+                                                              index])));
                                         },
                                         child: ListTile(
                                           title: Center(
                                               child: Text(
                                             '${filter_use_data[index].dateTime.substring(0, 4)}년 ${filter_use_data[index].dateTime.substring(5, 7)}월 ${filter_use_data[index].dateTime.substring(8, 10)}일 - ${filter_use_data[index].dateTime.substring(11, 16)}  [${filter_use_data[index].amount}리터]',
                                             style: TextStyle(
-                                              color: HexColor("#4c5af5"),
+                                                color: HexColor("#4c5af5"),
                                                 fontFamily: "numberfont",
                                                 fontWeight: FontWeight.bold),
                                           )),
