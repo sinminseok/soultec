@@ -8,7 +8,7 @@ import 'package:soultec/Model/Car_Model.dart';
 import 'package:soultec/Model/User_Model.dart';
 import 'package:soultec/Model/Receipt_Model.dart';
 import 'package:soultec/Utils/constants.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../Utils/toast.dart';
 
 class Http_services with ChangeNotifier {
@@ -31,17 +31,16 @@ class Http_services with ChangeNotifier {
 
   String? get check_tutorial => _check_tutorial;
 
+  //튜토리얼 모드 체크 함수
   void change_tutorial() async {
     final prefs = await SharedPreferences.getInstance();
     _check_tutorial = prefs.getString("check_tutorial");
 
     if (_check_tutorial != null) {
-      print("튜토리얼 모드가 꺼졌습니다 ");
       prefs.remove("check_tutorial");
       showtoast("튜토리얼 모드가 꺼졌습니다.");
     }
     if (_check_tutorial == null) {
-      print("튜토리얼 모드가 켜졌습니다. ");
       prefs.setString("check_tutorial", "true");
       showtoast("튜토리얼 모드가 켜졌습니다.");
     }
@@ -50,14 +49,10 @@ class Http_services with ChangeNotifier {
 
   //http 로그인
   Future<User_token?> login(id, pw, ischeck) async {
-    print("start");
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
-
-    print(res.body);
-    print(res.bodyBytes);
 
     //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {
@@ -109,12 +104,11 @@ class Http_services with ChangeNotifier {
 
   //http 자동 로그인
   Future<User_token?> auto_login(id, pw) async {
+
     //url 로 post(이메일 컨트롤러 , 패스워드 컨트롤러)
     var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
-
-
 
     if (res.statusCode == 200) {
       User_token? userr_token = User_token.fromJson(jsonDecode(res.body));
@@ -129,33 +123,42 @@ class Http_services with ChangeNotifier {
   }
 
   void logout() async {
+    final storage = FlutterSecureStorage();
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
-    prefs.remove('id');
-    prefs.remove('pw');
+    storage.delete(key: 'id');
+    storage.delete(key: 'pw');
     prefs.remove("check_login");
     return;
   }
 
   //user information 저장 함수
   void save_user(user_id, user_pw) async {
+     final storage = new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
-    prefs.setString('id', user_id);
-    prefs.setString('pw', user_pw);
+    // prefs.setString('id', user_id);
+    // prefs.setString('pw', user_pw);
+     await storage.write(
+         key: "id",
+         value: user_id);
+     await storage.write(
+         key: "pw",
+         value: user_pw);
     return;
   }
 
+  //자동 로그인시 디스크에 저장된 정보 가져오는 함수
   get_userinfo() async {
-    final prefs = await SharedPreferences.getInstance();
+    final storage = new FlutterSecureStorage();
     var data = [];
 // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
-    var user_id_disk = prefs.getString('id');
+    var user_id_disk = await storage.read(key: "id");
     data.add(user_id_disk);
 
-    var user_pw_disk = prefs.getString('pw');
+    var user_pw_disk = await storage.read(key: "pw");
     data.add(user_pw_disk);
     return data;
   }
@@ -176,7 +179,6 @@ class Http_services with ChangeNotifier {
 
     if (res.statusCode == 200) {
       _carnumber = number;
-
       for (int i = 0; i < data.length; i++) {
         Car car;
         car = Car.fromJson(data[i]);
@@ -205,8 +207,6 @@ class Http_services with ChangeNotifier {
           'amount': amount,
           'carNumber': carNumber,
         }));
-    print(res.body);
-
     if (res.statusCode == 200) {
       return res;
     } else {

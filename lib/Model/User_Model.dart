@@ -1,7 +1,7 @@
 
 class User_token{
   final String? token;
-   String? error;
+  String? error;
   User_token({this.token,this.error});
   factory User_token.fromJson(Map<String, dynamic> json) {
     return User_token(

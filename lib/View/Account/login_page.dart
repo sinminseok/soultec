@@ -28,18 +28,16 @@ class LoginScreen extends StatefulWidget{
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
 
-  static final storage =
-  new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
 
   //튜토리얼 애니메이션
   int interval = 500;
   AnimationController? _controller;
   int _currentWidget = 0;
+
   List<Widget> children = [
     Image.asset("assets/images/arrow.png",),
     Image.asset("assets/images/arrow.png",color: Colors.transparent,),
   ];
-
 
   bool isLogin = true;
 
@@ -56,9 +54,12 @@ class _LoginScreenState extends State<LoginScreen>
 
   //디스크에 저장된 id,pw 저장 변수
   String? checkbox_state = null;
+
+  //디스크에 저장할 id,pw 추후 비밀화
   String? user_id_disk;
   String? user_pw_disk;
-  bool check_click = false;
+
+
   bool _isChecked = false;
   bool auth_login = false;
   bool? http_return;
@@ -70,12 +71,14 @@ class _LoginScreenState extends State<LoginScreen>
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box() async {
+    print("check_box");
     final prefs = await SharedPreferences.getInstance();
     checkbox_state = prefs.getString("check_login");
     if (checkbox_state != null) {
       disk_user_info = await Http_services().get_userinfo();
       user_id_disk = disk_user_info[0];
       user_pw_disk = disk_user_info[1];
+      print(user_id_disk);
 
       setState(() {
         auth_login = true;

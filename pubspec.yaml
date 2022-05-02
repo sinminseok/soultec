@@ -125,6 +125,7 @@ flutter:
     - assets/images/stop_box.png
     - assets/images/receipt_list.png
     - assets/gifs/car_number.gif
+    - assets/gifs/updown.gif
     - assets/gifs/select_car.gif
     - assets/gifs/fill_gif.gif
     - assets/gifs/load2.GIF

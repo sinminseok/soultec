@@ -1,3 +1,5 @@
+
+
 class Receipt_object {
   final int? id; //영수증 id
   final String? dateTime;// 영수증 발행 시간
@@ -32,6 +34,7 @@ class Receipt_object {
     this.nickname,
     this.carNumber,
   });
+
 
   factory Receipt_object.fromJson(Map<String, dynamic> json) {
     return Receipt_object(
