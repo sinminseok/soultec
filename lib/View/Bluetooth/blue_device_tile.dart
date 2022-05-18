@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/Utils/toast.dart';
 import 'package:soultec/View/Pages/cars/car_number.dart';
 
 class Blue_device_tile extends StatefulWidget {
@@ -33,7 +34,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
     String? device_id = device.id.toString();
     // counter 키에 해당하는 데이터 읽기를 시도합니다. 만약 존재하지 않는 다면 0을 반환합니다.
     String? devicedd_id = prefs.getString('$device_id');
-
+    device.connect();
     if (devicedd_id == null) {
       return;
       //처음 연결하는 장치 return null
@@ -42,7 +43,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       Navigator.push(
           context,
           PageTransition(
-              type: PageTransitionType.fade, child: CarNumberPage()));
+              type: PageTransitionType.fade, child: CarNumberPage(device: device,)));
 
       // Navigator.of(context).push(MaterialPageRoute(builder : (context){
       //   return CarNumberPage();

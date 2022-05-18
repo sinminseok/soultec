@@ -16,11 +16,12 @@ import 'fill_ing/fill_ing.dart';
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.
 class Fill_Setting extends StatefulWidget {
-  // BluetoothDevice? device;
+  BluetoothDevice? device;
   String? car_number;
   Size? sizee;
 
   Fill_Setting({
+    required this.device,
     required this.car_number,
     required this.sizee,
     // required this.device,
@@ -59,9 +60,17 @@ class _Fill_Setting extends State<Fill_Setting>
   double button_position = 360;
   double block_container = 0.5;
   bool? ble_return = null;
+  Stream<String>? device_number_stream;
+  var device_number;
 
+//해당 주유기 번호
+//  var device_numberl;
   @override
   initState() {
+    //주유 정보 가져오기
+    // device_number = BLE_CONTROLLER().read_device_information(widget.device);
+
+
     _controller = new AnimationController(
         duration: Duration(milliseconds: interval), vsync: this);
 
@@ -78,9 +87,9 @@ class _Fill_Setting extends State<Fill_Setting>
     });
 
     _controller!.forward();
-
-    super.initState();
     offset = Offset(0, widget.sizee!.height * 0.47);
+    super.initState();
+
   }
 
   @override
@@ -96,6 +105,7 @@ class _Fill_Setting extends State<Fill_Setting>
 
   @override
   Widget build(BuildContext context) {
+
     var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
     String? user_id = Provider.of<Http_services>(context).user_id;
     Size size = MediaQuery.of(context).size;
@@ -226,20 +236,21 @@ class _Fill_Setting extends State<Fill_Setting>
                     ),
                     InkWell(
                         onTap: () async {
+                          //주유 시작 신호 넘기기
                           Sound().play_sound("assets/mp3/success.mp3");
                           if (fill_value == 0) {
                             return showtoast("리터량을 설정해주세요");
                           }
                           if (fill_max == null) {
                             // ble_return = await BLE_CONTROLLER()
-                            //     .discoverServices_write(
-                            //         null, fill_value);
+                            //     .ble_post_litter(
+                            //         widget.device, fill_value);
                             // if (ble_return == false) {
                             //   final prefs =
                             //       await SharedPreferences.getInstance();
                             //   prefs.remove('${widget.device!.id}');
-
-                            //showtoast("해당 블루투스는 주유기가 아닙니다.주유기로 다시한번 페어링 해주세요");
+                            //
+                            // showtoast("해당 블루투스는 주유기가 아닙니다.주유기로 다시한번 페어링 해주세요");
                             //   Navigator.push(
                             //       context,
                             //       MaterialPageRoute(
@@ -250,6 +261,7 @@ class _Fill_Setting extends State<Fill_Setting>
                                 PageTransition(
                                     type: PageTransitionType.fade,
                                     child: Filling(
+                                      device: widget.device,
                                       car_number: widget.car_number,
                                       liter: fill_value.toString(),
                                     )));
@@ -273,6 +285,7 @@ class _Fill_Setting extends State<Fill_Setting>
                                 PageTransition(
                                     type: PageTransitionType.fade,
                                     child: Filling(
+                                      device: widget.device,
                                       car_number: widget.car_number,
                                       liter: "100",
                                     )));

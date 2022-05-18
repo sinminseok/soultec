@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +46,9 @@ class Http_services with ChangeNotifier {
       prefs.setString("check_tutorial", "true");
       showtoast("튜토리얼 모드가 켜졌습니다.");
     }
+
     notifyListeners();
+
   }
 
   //http 로그인
@@ -135,18 +139,18 @@ class Http_services with ChangeNotifier {
 
   //user information 저장 함수
   void save_user(user_id, user_pw) async {
-     final storage = new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
+    final storage = new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
     // prefs.setString('id', user_id);
     // prefs.setString('pw', user_pw);
-     await storage.write(
-         key: "id",
-         value: user_id);
-     await storage.write(
-         key: "pw",
-         value: user_pw);
+    await storage.write(
+        key: "id",
+        value: user_id);
+    await storage.write(
+        key: "pw",
+        value: user_pw);
     return;
   }
 

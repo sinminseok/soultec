@@ -1,3 +1,4 @@
+
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -222,10 +223,13 @@ class _Receipt_list extends State<Receipt_list> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.fade, child: Start_page()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          Start_page()), (route) => false);
+                  // Navigator.push(
+                  //     context,
+                  //     PageTransition(
+                  //         type: PageTransitionType.fade, child: Start_page()));
                 },
               ),
               ListTile(
@@ -240,10 +244,13 @@ class _Receipt_list extends State<Receipt_list> {
                 ),
                 onTap: () {
                   Http_services().logout();
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.fade, child: LoginScreen()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          Start_page()), (route) => false);
+                  // Navigator.push(
+                  //     context,
+                  //     PageTransition(
+                  //         type: PageTransitionType.fade, child: LoginScreen()));
                 },
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soultec/View/Bluetooth/blue_scan.dart';
 
 import 'package:soultec/View/Pages/cars/car_number.dart';
 import 'package:soultec/Presenter/data_controller.dart';
@@ -127,7 +128,7 @@ class _Start_page extends State<Start_page>
                         context,
                         PageTransition(
                             type: PageTransitionType.fade,
-                            child: CarNumberPage()));
+                            child: Blue_scan()));
                   },
                   child: Container(
                       width: size.width * 2,

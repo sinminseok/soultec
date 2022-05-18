@@ -6,7 +6,7 @@ import '../Utils/constants.dart';
 
 class BLE_CONTROLLER {
   BluetoothCharacteristic? targetCharacteristic;
-  Stream<List<int>>? stream_value;
+  Stream<List<int>>? device_number_stream;
 
   void connect_devie(device) async {
     await device.connect(autoConnect: false);
@@ -22,45 +22,121 @@ class BLE_CONTROLLER {
     return;
   }
 
-  //해당 디바이스의 보낼 서비스 uuid를 받아 데이터 송신하는 함수
-  Future<bool?> discoverServices_write(device, litter) async {
+  //해당 주유기에게 리터량을 내포해
+  Future<bool?> ble_post_litter(device, litter) async {
     bool check_uuid = false;
     List<BluetoothService> services = await device!.discoverServices();
     //해당 uuid 검색 서비스가 없을경우 디바이스 디스크 id remove후 다시 페어링 페이지로
 
     services.forEach((service) {
       // do something with service
+      var value_return;
       if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
               BLE_UUID().POST_CHARACTERISTIC_UUID) {
-            targetCharacteristic = characteristic;
             if (litter == "가득") {
-              writeData("가득");
-              check_uuid = true;
+              List<int> bytes =
+                  ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + 가득 + ‘>");
+              value_return = characteristic.write(bytes);
+              characteristic.value;
+
+              if (value_return == "success") {
+                check_uuid = true;
+              }
+              //주유기 연결은 성공했으나 비정상 처리 됐을때 나타나는 문제이다.
+              if (value_return == "false") {
+                //재귀로 돌려줘야되려나?
+                check_uuid = true;
+              }
             } else {
-              check_uuid = true;
-              writeData("$litter");
+              //‘<‘ + “LD” + ID + UP + MODE + VAL + ‘>’
+              List<int> bytes =
+                  ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + litter + ‘>");
+              value_return = characteristic.write(bytes);
+              if (value_return == "ACK") {
+                check_uuid = true;
+              }
+              if (value_return == "false") {
+                check_uuid = true;
+              }
             }
           }
         });
       }
     });
+
     if (check_uuid == false) {
       return false;
     }
     return true;
   }
 
-  //넘겨줄 string 데이터를 utf8로 인코딩 해서 송신하는 함수
-  writeData(String data) async {
-    if (targetCharacteristic == null) return;
-    List<int> bytes = utf8.encode(data);
+  //해당 블루투스 디바이스(주유기) 번호 추출 함수
+  Future<String?> read_device_information(device) async {
+
+    var device_number;
+    var device_number_return;
+    List<BluetoothService> services = await device!.discoverServices();
+    services.forEach((service) {
+      // do something with service
+      if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() ==
+              BLE_UUID().POST_CHARACTERISTIC_UUID) {
+            List<int> bytes = ascii.encode("‘<‘ + “RI” + ‘>’");
+            device_number = characteristic.write(bytes);
+            //characteristic.value;
+            device_number_return = ascii.decode(device_number).substring(0, 2);
+          }
+        });
+      }
+    });
+
+    if (device_number_return == null) {
+      return null;
+    } else {
+
+      //주유기 번호 (정보)
+      return device_number_return;
+    }
+  }
+
+  //주유 완료를 알수있는 함수
+  // convert_ascii_startdata(String data , bytes) async {
+  //   if(targetCharacteristic == null ){return;}
+  //   await targetCharacteristic.write("value")
+  //
+  //
+  //
+  //   String? start_fill_return = ascii.decode(bytes);
+  //   if(start_fill_return == "‘[‘ + ”LD” + ID + ’:’ + ”ACK” + ‘]’"){
+  //     return "success";
+  //   }
+  //   if(start_fill_return == "‘[‘ + ”LD” + ID + ’:’ + ”NAK” + ‘]’"){
+  //     return "false";
+  //   }
+  //
+  //   return ascii.decode(bytes);
+  // }
+
+  writeData_filling(String data) async {
+    List<int> bytes = ascii.encode(data);
+
+    String? start_fill_return = ascii.decode(bytes);
+    if (start_fill_return == "‘[‘ + ”LD” + ID + ’:’ + ”NAK” + ‘]’") {
+      return "false";
+    } else {
+      return "success";
+    }
+
     //write메서드 파라미터는 list값
     await targetCharacteristic!.write(bytes);
+    return ascii.decode(bytes);
   }
 
   //stream 으로 데이터 수신
+  //주유 완료 보고로 명령을 넣은다음 완료된 응답을 받을때까지 stream 으로 관찰한다.
   discoverServices_read(device) async {
     List<BluetoothService> services = await device!.discoverServices();
     services.forEach((service) {
@@ -68,8 +144,12 @@ class BLE_CONTROLLER {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
               BLE_UUID().GET_CHARACTERISTIC_UUID) {
-            characteristic.setNotifyValue(!characteristic.isNotifying);
-            stream_value = characteristic.value;
+
+            List<int> bytes = ascii.encode("‘[‘ + “LE”+ ID + ET + UP + CQ + CP + CT + ‘]’");
+            characteristic.write(bytes);
+            device_number_stream= characteristic.value;
+            // characteristic.setNotifyValue(!characteristic.isNotifying);
+            // device_number_stream = characteristic.value;
           }
         });
       }
@@ -78,7 +158,7 @@ class BLE_CONTROLLER {
 
   //수신한데이터 파싱후 가공
   String dataParser(List<int>? dataFromDevice) {
-    return utf8.decode(dataFromDevice!);
+    return ascii.decode(dataFromDevice!);
   }
 
   disconnect_device(device) async {

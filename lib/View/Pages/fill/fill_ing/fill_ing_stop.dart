@@ -62,7 +62,7 @@ class _Filling_stop extends State<Filling_stop> {
     return WillPopScope(
       onWillPop: () async => false,
       child: StreamBuilder<List<int>>(
-          stream: BLE_CONTROLLER().stream_value,
+          stream: BLE_CONTROLLER().device_number_stream,
           builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
             return SingleChildScrollView(
               child: Column(

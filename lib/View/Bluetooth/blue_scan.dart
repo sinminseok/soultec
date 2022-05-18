@@ -111,16 +111,16 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                           (r) => Blue_device_tile(
                             result: r,
                             onTap: (){
-
                               //처음 페어링 할때 해당 디바이스 기억
                               BLE_CONTROLLER().remember_device(r.device.id);
-
+                              r.device.connect();
                               //이후 CarNumber page로 이동
                               Navigator.push(
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.fade,
                                       child: CarNumberPage(
+                                        device: r.device,
                                       )));
                             }
                           ),

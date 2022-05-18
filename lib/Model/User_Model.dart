@@ -1,4 +1,3 @@
-
 class User_token{
   final String? token;
   String? error;
@@ -11,10 +10,10 @@ class User_token{
 }
 
 class User{
-   String? username;
-   String? nickname;
+  String? username;
+  String? nickname;
   final List<dynamic>? authorityDtoSet;
-   User({this.username , this.nickname, this.authorityDtoSet});
+  User({this.username , this.nickname, this.authorityDtoSet});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -25,7 +24,5 @@ class User{
   }
 
 }
-
-
 
 

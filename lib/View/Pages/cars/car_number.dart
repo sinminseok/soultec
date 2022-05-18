@@ -1,6 +1,9 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +18,8 @@ import '../../../Utils/sound.dart';
 import '../../../Utils/toast.dart';
 
 class CarNumberPage extends StatefulWidget {
-  //BluetoothDevice? device;
-  // CarNumberPage({required this.device});
+  BluetoothDevice? device;
+  CarNumberPage({required this.device});
 
   @override
   State<CarNumberPage> createState() => _CarNumberPageState();
@@ -24,6 +27,7 @@ class CarNumberPage extends StatefulWidget {
 
 class _CarNumberPageState extends State<CarNumberPage>
     with SingleTickerProviderStateMixin {
+
   var check_tutorial_bool;
 
   List<Widget> children = [
@@ -46,8 +50,8 @@ class _CarNumberPageState extends State<CarNumberPage>
 
   @override
   void initState() {
-    //BLE_CONTROLLER().connect_devie(widget!.device);
-    // showtoast("페어링 되었습니다 ${widget.device!.id}");
+    BLE_CONTROLLER().connect_devie(widget.device);
+    showtoast("페어링 되었습니다 ${widget.device!.id}");
 
     _controller = new AnimationController(
         duration: Duration(milliseconds: interval), vsync: this);
@@ -96,6 +100,15 @@ class _CarNumberPageState extends State<CarNumberPage>
               SizedBox(
                 height: size.height * 0.03,
               ),
+              InkWell(
+                onTap: ()async{
+                  print("see");
+
+                  print(widget.device!.connect().whenComplete(() => print("dasdasd"+"${widget.device!.discoverServices()}")));
+               //   print(await widget.device!.discoverServices());
+                },
+                child: Text("dasd")
+              ),
               Text(
                 "차량 번호 4 자리를 입력해주세요",
                 style: TextStyle(fontSize: 24),
@@ -131,102 +144,104 @@ class _CarNumberPageState extends State<CarNumberPage>
               ),
               overlap_car == false
                   ? Container(
-                      height: size.height * 0.34,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: size.width * 0.5,
-                          ),
-                          Container(
-                              width: size.width * 0.4,
-                              child: Image.asset(
-                                'assets/gifs/car_number.gif',
-                              )),
-                        ],
-                      ),
-                    )
-                  :
-                  //중복될때
-                  Container(
-                      height: size.height * 0.34,
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: size.height * 0.06,
-                              ),
-                              Text(
-                                "차량선택",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Container(
-                                width: size.width * 0.5,
-                                height: size.height * 0.15,
-                                child: ListView.builder(
-                                    itemCount: return_carnumber.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Sound().play_sound(
-                                              "assets/mp3/click.mp3");
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  type: PageTransitionType.fade,
-                                                  child: Fill_Setting(
-                                                    car_number:
-                                                        return_carnumber[index]
-                                                            .carNumber,
-                                                    sizee: size,
-                                                  )));
-                                        },
-                                        child: Container(
-                                          child: ListTile(
-                                            title: Center(
-                                                child: Text(
-                                              "${return_carnumber[index].carNumber}",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: "numberfont",
-                                                  color: HexColor("#4c5af5"),
-                                                  fontWeight: FontWeight.bold),
-                                            )),
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-
-                            ],
-
-                          ),
-
-                          Row(
-                            children: [
-                              check_tutorial != null ?Container() :
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 50,right: 20),
-                                child: Container(
-                                  width: size.width*0.1,
-                                  child: children[_currentWidget],
-                                ),
-                              ),
-                              Container(
-                                  width: size.width * 0.25,
-                                  child: Image.asset(
-                                    'assets/gifs/select_car.gif',
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
+                height: size.height * 0.34,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.5,
                     ),
+                    Container(
+                        width: size.width * 0.4,
+                        child: Image.asset(
+                          'assets/gifs/car_number.gif',
+                        )),
+                  ],
+                ),
+              )
+                  :
+              //중복될때
+              Container(
+                height: size.height * 0.34,
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.06,
+                        ),
+                        Text(
+                          "차량선택",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Container(
+                          width: size.width * 0.5,
+                          height: size.height * 0.15,
+                          child: ListView.builder(
+                              itemCount: return_carnumber.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Sound().play_sound(
+                                        "assets/mp3/click.mp3");
+
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type: PageTransitionType.fade,
+                                            child: Fill_Setting(
+                                              device: widget.device,
+                                                    car_number:
+                                              return_carnumber[index]
+                                                  .carNumber,
+                                              sizee: size,
+                                            )));
+                                  },
+                                  child: Container(
+                                    child: ListTile(
+                                      title: Center(
+                                          child: Text(
+                                            "${return_carnumber[index].carNumber}",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: "numberfont",
+                                                color: HexColor("#4c5af5"),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+
+                      ],
+
+                    ),
+
+                    Row(
+                      children: [
+                        check_tutorial != null ?Container() :
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50,right: 20),
+                          child: Container(
+                            width: size.width*0.1,
+                            child: children[_currentWidget],
+                          ),
+                        ),
+                        Container(
+                            width: size.width * 0.25,
+                            child: Image.asset(
+                              'assets/gifs/select_car.gif',
+                            )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -274,11 +289,13 @@ class _CarNumberPageState extends State<CarNumberPage>
                         //등록된 차량 번호가 하나일경우
                         else {
                           Sound().play_sound("assets/mp3/start.mp3");
+
                           Navigator.push(
                               context,
                               PageTransition(
                                   type: PageTransitionType.fade,
                                   child: Fill_Setting(
+                                    device: widget.device,
                                     car_number: _carnumber_text.text,
                                     sizee: size,
                                   )));

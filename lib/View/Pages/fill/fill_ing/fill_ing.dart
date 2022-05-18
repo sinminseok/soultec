@@ -12,15 +12,16 @@ import '../../../../Utils/sound.dart';
 import '../../../../Utils/toast.dart';
 
 class Filling extends StatefulWidget {
+
   String? liter;
   String? car_number;
 
-  // BluetoothDevice? device;
+  BluetoothDevice? device;
 
   Filling({
     required this.car_number,
     required this.liter,
-    //   required this.device
+      required this.device
   });
 
   @override
@@ -37,7 +38,7 @@ class _Filling extends State<Filling> {
   @override
   initState() {
     super.initState();
-    //BLE_CONTROLLER().discoverServices_read(widget.device);
+    // BLE_CONTROLLER().discoverServices_read(widget.device);
   }
 
   @override
@@ -61,11 +62,12 @@ class _Filling extends State<Filling> {
     String? user_token = Provider.of<Http_services>(context).user_token!.token;
 
     return StreamBuilder<List<int>>(
-        stream: BLE_CONTROLLER().stream_value,
+        stream: BLE_CONTROLLER().device_number_stream,
         builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
 
           if (snapshot.connectionState == ConnectionState.active) {
             setState(() {
+
               currentValue = BLE_CONTROLLER().dataParser(snapshot.data);
               fill_start = true;
             });
@@ -114,12 +116,12 @@ class _Filling extends State<Filling> {
                           height: size.height * 0.08,
                           child: Center(
                               child: Text(
-                            "$liter",
-                            style: TextStyle(
-                                fontFamily: "numberfont",
-                                fontSize: 45,
-                                fontWeight: FontWeight.bold),
-                          )),
+                                "$liter",
+                                style: TextStyle(
+                                    fontFamily: "numberfont",
+                                    fontSize: 45,
+                                    fontWeight: FontWeight.bold),
+                              )),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
                           ),
@@ -160,15 +162,15 @@ class _Filling extends State<Filling> {
                             width: size.width * 0.3,
                             child: fill_start
                                 ? Text('$currentValue',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 40,
-                                        fontFamily: "numberfont"))
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40,
+                                    fontFamily: "numberfont"))
                                 : Text('0.00',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 40,
-                                        fontFamily: "numberfont")),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40,
+                                    fontFamily: "numberfont")),
                           ),
                         ),
                       )
@@ -182,103 +184,103 @@ class _Filling extends State<Filling> {
                     //주유가 시작됐을때
                     fill_start
                         ? fill_finish
-                            ? InkWell(
-                                onTap: onTapPressed == true
-                                    ? null
-                                    : () async {
-                                        setState(() {
-                                          onTapPressed = true;
-                                        });
-                                        Sound()
-                                            .play_sound("assets/mp3/success.mp3");
-                                        //주석 제거 (해당 receipt 정보 서버로post)
-                                        // post_receipt(username, pumpId, branchId, amount, carNumber, token)
+                        ? InkWell(
+                        onTap: onTapPressed == true
+                            ? null
+                            : () async {
+                          setState(() {
+                            onTapPressed = true;
+                          });
+                          Sound()
+                              .play_sound("assets/mp3/success.mp3");
+                          //주석 제거 (해당 receipt 정보 서버로post)
+                          // post_receipt(username, pumpId, branchId, amount, carNumber, token)
 
-                                        //post_receipt는 주유기 시리얼 넘버로 어디 지점인지 알려준다. 추후 하드웨어와 협상후 시리얼 번호를 등록한다.
-                                        var res = await Http_services()
-                                            .post_receipt(
-                                          //등록된 pumpid 입력
-                                                "12341234",
-                                                widget.liter,
-                                                widget.car_number,
-                                                user_token);
-                                        // 주유후 해당 디바이스  페어링 disconnect
-                                        //   widget.device!.disconnect();
+                          //post_receipt는 주유기 시리얼 넘버로 어디 지점인지 알려준다. 추후 하드웨어와 협상후 시리얼 번호를 등록한다.
+                          var res = await Http_services()
+                              .post_receipt(
+                            //등록된 pumpid 입력
+                              "12341234",
+                              widget.liter,
+                              widget.car_number,
+                              user_token);
+                          // 주유후 해당 디바이스  페어링 disconnect
+                          //   widget.device!.disconnect();
 
-                                        if (res != null) {
-                                          var data_list = await Http_services()
-                                              .load_receipt_list(user_token);
+                          if (res != null) {
+                            var data_list = await Http_services()
+                                .load_receipt_list(user_token);
 
-                                          Navigator.push(
-                                              thiscontext,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Receipt_list(
-                                                          car_number:
-                                                              widget.car_number,
-                                                          data_list: data_list)));
+                            Navigator.push(
+                                thiscontext,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Receipt_list(
+                                            car_number:
+                                            widget.car_number,
+                                            data_list: data_list)));
 
-                                          showtoast("주유가 완료 되었습니다!");
-                                        } else {
-                                          showtoast("주유 정보 등록이 실패했습니다.");
-                                        }
-                                      },
-                                child: Container(
-                                    width: size.width * 0.7,
-                                    height: size.height * 0.1,
-                                    child: Image.asset(
-                                        "assets/images/stop_box.png")))
-                            : InkWell(
-                                onTap: () {
-                                  showtoast("주유중입니다 잠시만 기다려주세요");
-                                },
-                                child: Container(
-                                    width: size.width * 0.7,
-                                    height: size.height * 0.1,
-                                    child: Image.asset(
-                                        "assets/images/stop_button.png")))
+                            showtoast("주유가 완료 되었습니다!");
+                          } else {
+                            showtoast("주유 정보 등록이 실패했습니다.");
+                          }
+                        },
+                        child: Container(
+                            width: size.width * 0.7,
+                            height: size.height * 0.1,
+                            child: Image.asset(
+                                "assets/images/stop_box.png")))
+                        : InkWell(
+                        onTap: () {
+                          showtoast("주유중입니다 잠시만 기다려주세요");
+                        },
+                        child: Container(
+                            width: size.width * 0.7,
+                            height: size.height * 0.1,
+                            child: Image.asset(
+                                "assets/images/stop_button.png")))
                         : InkWell(
 
-                            //추후 ontap에 있는 기능 빼야됨
-                            onTap: onTapPressed == true
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      onTapPressed = true;
-                                    });
-                                    Sound().play_sound("assets/mp3/success.mp3");
-                                    //주석 제거 (해당 receipt 정보 서버로post)
-                                    // post_receipt(username, pumpId, branchId, amount, carNumber, token)
+                      //추후 ontap에 있는 기능 빼야됨
+                        onTap: onTapPressed == true
+                            ? null
+                            : () async {
+                          setState(() {
+                            onTapPressed = true;
+                          });
+                          Sound().play_sound("assets/mp3/success.mp3");
+                          //주석 제거 (해당 receipt 정보 서버로post)
+                          // post_receipt(username, pumpId, branchId, amount, carNumber, token)
 
-                                    //post_receipt는 주유기 시리얼 넘버로 어디 지점인지 알려준다. 추후 하드웨어와 협상후 시리얼 번호를 등록한다.
-                                    var res = await Http_services().post_receipt(
-                                        "12341234",
-                                        widget.liter,
-                                        widget.car_number,
-                                        user_token);
-                                    // 주유후 해당 디바이스  페어링 disconnect
-                                    //   widget.device!.disconnect();
+                          //post_receipt는 주유기 시리얼 넘버로 어디 지점인지 알려준다. 추후 하드웨어와 협상후 시리얼 번호를 등록한다.
+                          var res = await Http_services().post_receipt(
+                              "12341234",
+                              widget.liter,
+                              widget.car_number,
+                              user_token);
+                          // 주유후 해당 디바이스  페어링 disconnect
+                          //   widget.device!.disconnect();
 
-                                    if (res != null) {
-                                      var data_list = await Http_services()
-                                          .load_receipt_list(user_token);
+                          if (res != null) {
+                            var data_list = await Http_services()
+                                .load_receipt_list(user_token);
 
-                                      Navigator.push(
-                                          thiscontext,
-                                          MaterialPageRoute(
-                                              builder: (context) => Receipt_list(
-                                                  car_number: widget.car_number,
-                                                  data_list: data_list)));
-                                      showtoast("주유가 완료 되었습니다!");
-                                    } else {
-                                      showtoast("주유 정보 등록이 실패했습니다.");
-                                    }
-                                  },
-                            child: Container(
-                                width: size.width * 0.7,
-                                height: size.height * 0.1,
-                                child: Image.asset(
-                                    "assets/images/play_button.png"))),
+                            Navigator.push(
+                                thiscontext,
+                                MaterialPageRoute(
+                                    builder: (context) => Receipt_list(
+                                        car_number: widget.car_number,
+                                        data_list: data_list)));
+                            showtoast("주유가 완료 되었습니다!");
+                          } else {
+                            showtoast("주유 정보 등록이 실패했습니다.");
+                          }
+                        },
+                        child: Container(
+                            width: size.width * 0.7,
+                            height: size.height * 0.1,
+                            child: Image.asset(
+                                "assets/images/play_button.png"))),
                   ]),
             ),
           );

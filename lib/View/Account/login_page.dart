@@ -1,3 +1,5 @@
+
+
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
@@ -160,220 +162,220 @@ class _LoginScreenState extends State<LoginScreen>
     double defaultRegisterSize = size.height - (size.height * 0.1);
     return auth_login
         ? FutureBuilder<User_token?>(
-            future: Provider.of<Http_services>(context, listen: false)
-                .auto_login(disk_user_info[0], disk_user_info[1]),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text("server drop");
-              } else if (snapshot.hasData) {
-                return CarNumberPage();
-              } else {
-                return Center(
-                    child: Container(
+        future: Provider.of<Http_services>(context, listen: false)
+            .auto_login(disk_user_info[0], disk_user_info[1]),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("server drop");
+          } else if (snapshot.hasData) {
+            return Blue_scan();
+          } else {
+            return Center(
+                child: Container(
                   width: size.width * 0.5,
                   child: Image.asset(
                     'assets/gifs/login_loading.gif',
                   ),
                 ));
-              }
-            })
+          }
+        })
         :
-        //자동로그인 체크를 하지 않았을 때
-        WillPopScope(
-            onWillPop: () async => false,
-            child: Scaffold(
-              backgroundColor: kPrimaryColor,
-              body: Stack(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        width: size.width,
-                        height: defaultRegisterSize,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(height: size.height * 0.04),
-                              Container(
-                                width: size.width * 0.6,
-                                child: Image(
-                                  image: AssetImage(
-                                      'assets/images/smartfill_logo.png'),
-                                  width: 70,
-                                ),
-                              ),
-                              Container(
-                                  width: size.width * 0.7,
-                                  height: size.height * 0.2,
-                                  child: Image.asset(
-                                    'assets/gifs/main_img.gif',
-                                  )),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
-                                width: size.width * 0.7,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: kPrimaryColor),
-                                child: TextFormField(
-                                  style: TextStyle(
-                                      fontFamily: "numberfont", fontSize: 23),
-                                  controller: _userIDController,
-                                  decoration: InputDecoration(
-                                      icon: Icon(Icons.person,
-                                          color: Colors.black),
-                                      hintText: '기사번호',
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
-                                width: size.width * 0.7,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: kPrimaryColor),
-                                child: TextFormField(
-                                  style: TextStyle(
-                                      fontFamily: "numberfont", fontSize: 23),
-                                  controller: _passwordController,
-                                  obscureText: true,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  //inp
-                                  decoration: InputDecoration(
-                                      icon:
-                                          Icon(Icons.lock, color: Colors.black),
-                                      hintText: '비밀번호',
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: size.width * 0.25,
-                                  ),
-                                  Container(
-                                    width: size.width * 0.5,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Checkbox(
-                                                value: _isChecked,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _isChecked = value!;
-                                                  });
-                                                }),
-                                            //   ),
-                                            // ),
-
-                                            Text(
-                                              "로그인상태 유지",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 19,
-                                                  color: Colors.black,
-                                                  fontFamily: "numberfont"),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  check_tutorial !=null ? Container():Padding(
-                                    padding: const EdgeInsets.only(top:30),
-                                    child: Container(
-                                      width: size.width*0.1,
-                            child: children[_currentWidget],
-                          ),
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(top: 10),
-                                  //   child: Container(
-                                  //       child: Icon(
-                                  //     Icons.call_received,
-                                  //     size: 37,
-                                  //   )),
-                                  // )
-                                ],
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  initConnectivity();
-                                  Sound().play_sound("assets/mp3/start.mp3");
-                                  if (_userIDController.text == "") {
-                                    return showtoast("기사번호를 입력해주세요");
-                                  }
-                                  if (_passwordController.text == "") {
-                                    return showtoast("비밀번호를 입력해주세요");
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => FutureBuilder<
-                                                    User_token?>(
-                                                future:
-                                                    Provider.of<Http_services>(
-                                                            context,
-                                                            listen: false)
-                                                        .login(
-                                                            _userIDController
-                                                                .text,
-                                                            _passwordController
-                                                                .text,
-                                                            _isChecked),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    if (snapshot.data!.error !=
-                                                        null) {
-                                                      showtoast(
-                                                          "로그인 실패 아이디와 비밀번호를 확인해주세요");
-                                                      return LoginScreen();
-                                                    } else {
-                                                      return Start_page();
-                                                    }
-                                                  } else {
-                                                    return Center(
-                                                        child: Container(
-                                                      width: size.width * 0.45,
-                                                      child: Image.asset(
-                                                        'assets/gifs/login_loading.gif',
-                                                      ),
-                                                    ));
-                                                  }
-                                                })));
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(20),
-                                child: Container(
-                                    width: size.width * 0.7,
-                                    height: size.height * 0.2,
-                                    child: Image.asset(
-                                      'assets/images/button_login.png',
-                                    )),
-                              ),
-                            ],
+    //자동로그인 체크를 하지 않았을 때
+    WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: kPrimaryColor,
+        body: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                child: Container(
+                  width: size.width,
+                  height: defaultRegisterSize,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: size.height * 0.04),
+                        Container(
+                          width: size.width * 0.6,
+                          child: Image(
+                            image: AssetImage(
+                                'assets/images/smartfill_logo.png'),
+                            width: 70,
                           ),
                         ),
-                      ),
+                        Container(
+                            width: size.width * 0.7,
+                            height: size.height * 0.2,
+                            child: Image.asset(
+                              'assets/gifs/main_img.gif',
+                            )),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 5),
+                          width: size.width * 0.7,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(4),
+                              color: kPrimaryColor),
+                          child: TextFormField(
+                            style: TextStyle(
+                                fontFamily: "numberfont", fontSize: 23),
+                            controller: _userIDController,
+                            decoration: InputDecoration(
+                                icon: Icon(Icons.person,
+                                    color: Colors.black),
+                                hintText: '기사번호',
+                                border: InputBorder.none),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 5),
+                          width: size.width * 0.7,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(4),
+                              color: kPrimaryColor),
+                          child: TextFormField(
+                            style: TextStyle(
+                                fontFamily: "numberfont", fontSize: 23),
+                            controller: _passwordController,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            //inp
+                            decoration: InputDecoration(
+                                icon:
+                                Icon(Icons.lock, color: Colors.black),
+                                hintText: '비밀번호',
+                                border: InputBorder.none),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.25,
+                            ),
+                            Container(
+                              width: size.width * 0.5,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Checkbox(
+                                          value: _isChecked,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _isChecked = value!;
+                                            });
+                                          }),
+                                      //   ),
+                                      // ),
+
+                                      Text(
+                                        "로그인상태 유지",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 19,
+                                            color: Colors.black,
+                                            fontFamily: "numberfont"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            check_tutorial !=null ? Container():Padding(
+                              padding: const EdgeInsets.only(top:30),
+                              child: Container(
+                                width: size.width*0.1,
+                                child: children[_currentWidget],
+                              ),
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 10),
+                            //   child: Container(
+                            //       child: Icon(
+                            //     Icons.call_received,
+                            //     size: 37,
+                            //   )),
+                            // )
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            initConnectivity();
+                            Sound().play_sound("assets/mp3/start.mp3");
+                            if (_userIDController.text == "") {
+                              return showtoast("기사번호를 입력해주세요");
+                            }
+                            if (_passwordController.text == "") {
+                              return showtoast("비밀번호를 입력해주세요");
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FutureBuilder<
+                                          User_token?>(
+                                          future:
+                                          Provider.of<Http_services>(
+                                              context,
+                                              listen: false)
+                                              .login(
+                                              _userIDController
+                                                  .text,
+                                              _passwordController
+                                                  .text,
+                                              _isChecked),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              if (snapshot.data!.error !=
+                                                  null) {
+                                                showtoast(
+                                                    "로그인 실패 아이디와 비밀번호를 확인해주세요");
+                                                return LoginScreen();
+                                              } else {
+                                                return Start_page();
+                                              }
+                                            } else {
+                                              return Center(
+                                                  child: Container(
+                                                    width: size.width * 0.45,
+                                                    child: Image.asset(
+                                                      'assets/gifs/login_loading.gif',
+                                                    ),
+                                                  ));
+                                            }
+                                          })));
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                              width: size.width * 0.7,
+                              height: size.height * 0.2,
+                              child: Image.asset(
+                                'assets/images/button_login.png',
+                              )),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }
