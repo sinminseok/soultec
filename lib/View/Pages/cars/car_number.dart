@@ -100,15 +100,11 @@ class _CarNumberPageState extends State<CarNumberPage>
               SizedBox(
                 height: size.height * 0.03,
               ),
-              InkWell(
-                onTap: ()async{
-                  print("see");
-
-                  print(widget.device!.connect().whenComplete(() => print("dasdasd"+"${widget.device!.discoverServices()}")));
-               //   print(await widget.device!.discoverServices());
-                },
-                child: Text("dasd")
-              ),
+              // InkWell(
+              //   onTap: ()async{
+              //   },
+              //   child: Text("dasd")
+              // ),
               Text(
                 "차량 번호 4 자리를 입력해주세요",
                 style: TextStyle(fontSize: 24),
