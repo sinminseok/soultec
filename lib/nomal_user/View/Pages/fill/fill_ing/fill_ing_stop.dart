@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/Presenter/ble_presenter.dart';
-import 'package:soultec/View/Pages/receipt/receipt_list.dart';
-import 'package:soultec/Utils/top_widget.dart';
+import 'package:soultec/Utils/constants.dart';
+import '../../../../../Utils/sound.dart';
+import '../../../../../Utils/toast.dart';
+import '../../../../../Utils/top_widget.dart';
+import '../../../../Presenter/ble_presenter.dart';
 import '../../../../Presenter/data_controller.dart';
-import '../../../../Utils/constants.dart';
-import '../../../../Utils/sound.dart';
-import '../../../../Utils/toast.dart';
+import '../../receipt/receipt_list.dart';
+
+
 
 
 

@@ -1,19 +1,16 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/View/Bluetooth/blue_scan.dart';
-
-import 'package:soultec/View/Pages/cars/car_number.dart';
-import 'package:soultec/Presenter/data_controller.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../../Utils/constants.dart';
-import '../../Utils/sound.dart';
-import '../../Utils/toast.dart';
+import '../../../Utils/constants.dart';
+import '../../../Utils/sound.dart';
+import '../../../Utils/toast.dart';
+import '../../Presenter/data_controller.dart';
+import '../Bluetooth/blue_scan.dart';
+
 
 class Start_page extends StatefulWidget {
   //자동차 번호 전역으로 돌려줘야되는데 왜인진 모르겠는데 provider가 안먹어서 일단 위젯으로 데이터 넘김 추후 변경

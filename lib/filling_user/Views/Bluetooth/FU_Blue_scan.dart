@@ -2,22 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:soultec/Presenter/ble_presenter.dart';
-import 'package:soultec/View/Pages/cars/car_number.dart';
-import 'package:soultec/View/Pages/start_page.dart';
-import 'package:soultec/Presenter/data_controller.dart';
+import 'package:soultec/Utils/constants.dart';
+import '../../Presenter/FU_ble_presenter.dart';
+import '../Pages/QR/FU_QR_page.dart';
+import 'FU_Blue_device_tile.dart';
 
-
-import '../../Utils/constants.dart';
-import 'blue_device_tile.dart';
-
-class Blue_scan extends StatefulWidget {
+class FU_Blue_scan extends StatefulWidget {
   @override
-  State<Blue_scan> createState() => _Blue_scan();
+  State<FU_Blue_scan> createState() => _FU_Blue_scan();
 }
 
-class _Blue_scan extends State<Blue_scan> {
+class _FU_Blue_scan extends State<FU_Blue_scan> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,23 +103,23 @@ class _FindDevicesScreenState extends State<FindDevicesScreen> {
                   return Column(
                     children: snapshot.data!
                         .map(
-                          (r) => Blue_device_tile(
-                            result: r,
-                            onTap: (){
-                              //처음 페어링 할때 해당 디바이스 기억
-                              BLE_CONTROLLER().remember_device(r.device.id);
-                              r.device.connect();
-                              //이후 CarNumber page로 이동
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.fade,
-                                      child: CarNumberPage(
-                                        device: r.device,
-                                      )));
-                            }
-                          ),
-                        )
+                          (r) => FU_Blue_device_tile(
+                          result: r,
+                          onTap: (){
+                            //처음 페어링 할때 해당 디바이스 기억
+                            FU_BLE_CONTROLLER().remember_device(r.device.id);
+                            r.device.connect();
+                            //이후 CarNumber page로 이동
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.fade,
+                                    child: FU_QR_page(
+                                      device: r.device,
+                                    )));
+                          }
+                      ),
+                    )
                         .toList(),
                   );
                 }),

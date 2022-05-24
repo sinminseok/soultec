@@ -8,17 +8,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/View/Pages/receipt/receipt_detail.dart';
-import 'package:soultec/Utils/top_widget.dart';
-import 'package:soultec/Presenter/data_controller.dart';
-import 'package:soultec/View/Pages/start_page.dart';
+import 'package:soultec/nomal_user/View/Account/login_page.dart';
+import 'package:soultec/nomal_user/View/Pages/receipt/receipt_detail.dart';
 import 'dart:core';
 
-import '../../../Utils/constants.dart';
-import '../../../Utils/sound.dart';
-import '../../../Utils/toast.dart';
-import '../../Account/login_page.dart';
+import '../../../../Utils/constants.dart';
+import '../../../../Utils/sound.dart';
+import '../../../../Utils/toast.dart';
+import '../../../Presenter/data_controller.dart';
+import '../start_page.dart';
 
 class Receipt_list extends StatefulWidget {
   List? data_list;
@@ -246,7 +244,7 @@ class _Receipt_list extends State<Receipt_list> {
                   Http_services().logout();
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          Start_page()), (route) => false);
+                          LoginScreen()), (route) => false);
                   // Navigator.push(
                   //     context,
                   //     PageTransition(

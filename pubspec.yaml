@@ -59,7 +59,11 @@ dependencies:
   animated_text_kit: ^4.2.1
   page_transition: "^2.0.5"
   keyboard_actions: "^3.4.7"
-
+  flutter_qr_bar_scanner: ^3.0.2
+  flutter_vibrate: ^1.3.0
+  wakelock: ^0.6.1+2
+  url_launcher: ^6.1.2
+#  mobile_scanner: ^1.1.0
 
 
 
@@ -125,6 +129,7 @@ flutter:
     - assets/images/stop_box.png
     - assets/images/receipt_list.png
     - assets/gifs/car_number.gif
+    - assets/gifs/inputer_img.gif
     - assets/gifs/updown.gif
     - assets/gifs/select_car.gif
     - assets/gifs/fill_gif.gif

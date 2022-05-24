@@ -3,11 +3,13 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soultec/Utils/toast.dart';
-import 'package:soultec/View/Pages/cars/car_number.dart';
 
-class Blue_device_tile extends StatefulWidget {
-  
-  Blue_device_tile({
+import '../Pages/QR/FU_QR_page.dart';
+
+
+class FU_Blue_device_tile extends StatefulWidget {
+
+  FU_Blue_device_tile({
     required this.result,
     required this.onTap,
   });
@@ -16,10 +18,10 @@ class Blue_device_tile extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<Blue_device_tile> createState() => _Blue_device_tile();
+  State<FU_Blue_device_tile> createState() => _FU_Blue_device_tile();
 }
 
-class _Blue_device_tile extends State<Blue_device_tile> {
+class _FU_Blue_device_tile extends State<FU_Blue_device_tile> {
 
   bool check_device_bool = false;
 
@@ -43,7 +45,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       Navigator.push(
           context,
           PageTransition(
-              type: PageTransitionType.fade, child: CarNumberPage(device: device,)));
+              type: PageTransitionType.fade, child: FU_QR_page(device: device,)));
 
       // Navigator.of(context).push(MaterialPageRoute(builder : (context){
       //   return CarNumberPage();
@@ -115,11 +117,11 @@ class CharacteristicTile extends StatelessWidget {
 
   const CharacteristicTile(
       {Key? key,
-      required this.characteristic,
-      required this.descriptorTiles,
-      this.onReadPressed,
-      this.onWritePressed,
-      this.onNotificationPressed})
+        required this.characteristic,
+        required this.descriptorTiles,
+        this.onReadPressed,
+        this.onWritePressed,
+        this.onNotificationPressed})
       : super(key: key);
 
   @override
@@ -183,9 +185,9 @@ class DescriptorTile extends StatelessWidget {
 
   const DescriptorTile(
       {Key? key,
-      required this.descriptor,
-      this.onReadPressed,
-      this.onWritePressed})
+        required this.descriptor,
+        this.onReadPressed,
+        this.onWritePressed})
       : super(key: key);
 
   @override

@@ -6,12 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Model/Car_Model.dart';
-import 'package:soultec/Model/User_Model.dart';
-import 'package:soultec/Model/Receipt_Model.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../Utils/toast.dart';
+import '../../Utils/toast.dart';
+import '../Model/Car_Model.dart';
+import '../Model/Receipt_Model.dart';
+import '../Model/User_Model.dart';
 
 class Http_services with ChangeNotifier {
   //로그인후 반환할 user 객체
@@ -128,12 +128,14 @@ class Http_services with ChangeNotifier {
 
   void logout() async {
     final storage = FlutterSecureStorage();
+    _user_token = null;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         'check_login', "true"); //추후 자동 로그인 여부를 확인하는 disk information
     storage.delete(key: 'id');
     storage.delete(key: 'pw');
     prefs.remove("check_login");
+    notifyListeners();
     return;
   }
 

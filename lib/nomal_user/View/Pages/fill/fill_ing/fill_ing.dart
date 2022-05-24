@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
-import 'package:soultec/Presenter/ble_presenter.dart';
-import 'package:soultec/View/Pages/fill/fill_ing/fill_ing_stop.dart';
-import 'package:soultec/View/Pages/receipt/receipt_list.dart';
 import 'package:soultec/Utils/top_widget.dart';
-import 'package:soultec/Presenter/data_controller.dart';
-import '../../../../Utils/constants.dart';
-import '../../../../Utils/sound.dart';
-import '../../../../Utils/toast.dart';
+import '../../../../../Utils/constants.dart';
+import '../../../../../Utils/sound.dart';
+import '../../../../../Utils/toast.dart';
+import '../../../../Presenter/ble_presenter.dart';
+import '../../../../Presenter/data_controller.dart';
+import '../../receipt/receipt_list.dart';
+import 'fill_ing_stop.dart';
 
 class Filling extends StatefulWidget {
 
@@ -241,7 +241,6 @@ class _Filling extends State<Filling> {
                                 "assets/images/stop_button.png")))
                         : InkWell(
 
-                      //추후 ontap에 있는 기능 빼야됨
                         onTap: onTapPressed == true
                             ? null
                             : () async {

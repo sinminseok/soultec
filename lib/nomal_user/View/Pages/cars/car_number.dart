@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,15 +5,15 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Presenter/ble_presenter.dart';
-import 'package:soultec/View/Pages/fill/fill_setting.dart';
 import 'package:soultec/Utils/top_widget.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:soultec/Presenter/data_controller.dart';
+import '../../../../Utils/constants.dart';
+import '../../../../Utils/sound.dart';
+import '../../../../Utils/toast.dart';
 import '../../../Model/User_Model.dart';
-import '../../../Utils/constants.dart';
-import '../../../Utils/sound.dart';
-import '../../../Utils/toast.dart';
+import '../../../Presenter/ble_presenter.dart';
+import '../../../Presenter/data_controller.dart';
+import '../fill/fill_setting.dart';
 
 class CarNumberPage extends StatefulWidget {
   BluetoothDevice? device;

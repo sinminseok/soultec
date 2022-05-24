@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Utils/constants.dart';
 
-class BLE_CONTROLLER {
+import '../../Utils/constants.dart';
+
+class FU_BLE_CONTROLLER {
   BluetoothCharacteristic? targetCharacteristic;
   Stream<List<int>>? device_number_stream;
 
@@ -50,7 +51,7 @@ class BLE_CONTROLLER {
             } else {
               //‘<‘ + “LD” + ID + UP + MODE + VAL + ‘>’
               List<int> bytes =
-                  ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + litter + ‘>");
+              ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + litter + ‘>");
               value_return = characteristic.write(bytes);
               if (value_return == "ACK") {
                 check_uuid = true;
@@ -119,7 +120,7 @@ class BLE_CONTROLLER {
           if (characteristic.uuid.toString() ==
               BLE_UUID().GET_CHARACTERISTIC_UUID) {
             List<int> bytes =
-                ascii.encode("‘[‘ + “LE”+ ID + ET + UP + CQ + CP + CT + ‘]’");
+            ascii.encode("‘[‘ + “LE”+ ID + ET + UP + CQ + CP + CT + ‘]’");
             characteristic.write(bytes);
             device_number_stream = characteristic.value;
             // characteristic.setNotifyValue(!characteristic.isNotifying);

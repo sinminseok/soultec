@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soultec/Presenter/ble_presenter.dart';
-import 'package:soultec/View/Bluetooth/blue_scan.dart';
 import 'package:soultec/Utils/top_widget.dart';
-import 'package:soultec/Presenter/data_controller.dart';
-import '../../../Utils/constants.dart';
-import '../../../Utils/sound.dart';
-import '../../../Utils/toast.dart';
+import '../../../../Utils/constants.dart';
+import '../../../../Utils/sound.dart';
+import '../../../../Utils/toast.dart';
+import '../../../Presenter/data_controller.dart';
 import 'fill_ing/fill_ing.dart';
 
 //이제 여기서 블루투스 uuid랑 캐릭터리스틱 가져와서 인코딩 해줘서 해당 디바이스로 데이터를 넘겨준다.

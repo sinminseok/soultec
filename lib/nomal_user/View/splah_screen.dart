@@ -37,9 +37,11 @@ class _Splah_ScreenState extends State<Splah_Screen> {
         child: new Scaffold(
           backgroundColor: kPrimaryColor,
           body: InkWell(
-            onTap: (){
-              Navigator.push(context,
-                  PageTransition(type: PageTransitionType.fade, child: LoginScreen()));
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: LoginScreen()));
             },
             child: new Container(
               child: Column(

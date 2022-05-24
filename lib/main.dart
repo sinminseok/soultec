@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'Presenter/data_controller.dart';
-import 'View/Account/login_page.dart';
 import 'Utils/constants.dart';
-import 'View/splah_screen.dart';
+
+import 'nomal_user/Presenter/data_controller.dart';
+import 'nomal_user/View/splah_screen.dart';
 
 
 
