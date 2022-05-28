@@ -4,17 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:soultec/Utils/top_widget.dart';
+import 'package:soultec/filling_user/Presenter/FU_data_controller.dart';
 
 import '../../../../Utils/sound.dart';
 
 class FU_Fill_finish extends StatefulWidget {
-  const FU_Fill_finish({Key? key}) : super(key: key);
+  String? id;
+  FU_Fill_finish({required this.id});
 
   @override
   _FU_Fill_finishState createState() => _FU_Fill_finishState();
 }
 
 class _FU_Fill_finishState extends State<FU_Fill_finish> {
+
+  @override
+  void initState() {
+    FU_Http_services().remove_account(widget.id);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

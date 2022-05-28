@@ -57,6 +57,8 @@ class Http_services with ChangeNotifier {
     var res = await http.post(Uri.parse(Http_Url().login_url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'username': id, 'password': pw}));
+    print("ggg");
+    print(res.body);
 
     //정상 로그인 http statuscode 200
     if (res.statusCode == 200) {

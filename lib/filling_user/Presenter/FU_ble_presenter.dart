@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Utils/constants.dart';
 
 class FU_BLE_CONTROLLER {
@@ -34,7 +33,7 @@ class FU_BLE_CONTROLLER {
       if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().POST_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_RX) {
             if (litter == "가득") {
               List<int> bytes = ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + 가득 + ‘>");
               value_return = characteristic.write(bytes);
@@ -81,7 +80,7 @@ class FU_BLE_CONTROLLER {
       if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().POST_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_TX) {
             List<int> bytes = ascii.encode("‘<‘ + “RI” + ‘>’");
             device_number = characteristic.write(bytes);
             //characteristic.value;
@@ -110,15 +109,17 @@ class FU_BLE_CONTROLLER {
     }
   }
 
+
+
   //stream 으로 데이터 수신
   //주유 완료 보고로 명령을 넣은다음 완료된 응답을 받을때까지 stream 으로 관찰한다.
   discoverServices_read(device) async {
     List<BluetoothService> services = await device!.discoverServices();
     services.forEach((service) {
-      if (service.uuid.toString() == BLE_UUID().GET_SERVICE_UUID) {
+      if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().GET_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_RX) {
             List<int> bytes =
             ascii.encode("‘[‘ + “LE”+ ID + ET + UP + CQ + CP + CT + ‘]’");
             characteristic.write(bytes);

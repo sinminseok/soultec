@@ -44,43 +44,45 @@ class _Splah_ScreenState extends State<Splah_Screen> {
                       type: PageTransitionType.fade, child: LoginScreen()));
             },
             child: new Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: screenHeight * 0.3),
-                  DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 30.0,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: screenHeight * 0.3),
+                    DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 30.0,
+                      ),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          WavyAnimatedText('충전관리 솔루션 스마트 필',
+                              textStyle: TextStyle(
+                                  color: Colors.black, fontFamily: "fonttext"))
+                        ],
+                        isRepeatingAnimation: true,
+                      ),
                     ),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        WavyAnimatedText('충전관리 솔루션 스마트 필',
-                            textStyle: TextStyle(
-                                color: Colors.black, fontFamily: "fonttext"))
-                      ],
-                      isRepeatingAnimation: true,
+                    SizedBox(
+                      height: size.height * 0.2,
                     ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.2,
-                  ),
-                  Container(
-                      width: size.width * 0.8,
-                      child: Image.asset(
-                        'assets/gifs/main_img.gif',
-                      )),
-                  Expanded(child: SizedBox()),
-                  Align(
-                    child: Text("© CREATE 2022, 스마트 필(SMTF)",
-                        style: TextStyle(
-                          fontSize: screenWidth * (14 / 360),
-                          color: Color.fromRGBO(255, 255, 255, 0.6),
+                    Container(
+                        width: size.width * 0.8,
+                        child: Image.asset(
+                          'assets/gifs/main_img.gif',
                         )),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.0625,
-                  ),
-                ],
+                    Expanded(child: SizedBox()),
+                    Align(
+                      child: Text("© CREATE 2022, 스마트 필(SMTF)",
+                          style: TextStyle(
+                            fontSize: screenWidth * (14 / 360),
+                            color: Color.fromRGBO(255, 255, 255, 0.6),
+                          )),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0625,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

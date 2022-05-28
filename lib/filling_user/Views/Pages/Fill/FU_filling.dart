@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:soultec/Utils/top_widget.dart';
+import 'package:soultec/filling_user/Presenter/FU_data_controller.dart';
 import 'package:soultec/filling_user/Views/Pages/Fill/FU_fill_finish.dart';
 import '../../../../Utils/constants.dart';
 import '../../../../Utils/sound.dart';
 
 class FU_Filling extends StatefulWidget {
-  String? litter;
+  int? litter;
+  String? qr_info;
 
-  FU_Filling({required this.litter});
+  FU_Filling({required this.litter,required this.qr_info});
 
   @override
   _FU_FillingState createState() => _FU_FillingState();
@@ -24,7 +27,6 @@ class _FU_FillingState extends State<FU_Filling> {
   @override
   initState() {
     super.initState();
-    // BLE_CONTROLLER().discoverServices_read(widget.device);
   }
 
   @override
@@ -36,6 +38,7 @@ class _FU_FillingState extends State<FU_Filling> {
 
   @override
   Widget build(BuildContext context) {
+    String? user_id = Provider.of<FU_Http_services>(context).user_id;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: kPrimaryColor,
@@ -122,11 +125,13 @@ class _FU_FillingState extends State<FU_Filling> {
                   ),
 
                   InkWell(
-                    onTap: () {
+                    onTap: () async{
+                      //litter,companyID(추후 블루투스에서 가져오는 정보),tankID
+                      await FU_Http_services().post_receive_receipt(int.parse("${widget.litter}"),int.parse("6"),int.parse("${widget.qr_info}"));
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FU_Fill_finish()));
+                              builder: (context) => FU_Fill_finish(id: user_id,)));
                       Sound().play_sound("assets/mp3/success.mp3");
                     },
                     child: Container(

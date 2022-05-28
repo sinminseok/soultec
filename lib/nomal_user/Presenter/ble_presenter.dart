@@ -34,9 +34,10 @@ class BLE_CONTROLLER {
       if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().POST_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_RX) {
             if (litter == "가득") {
-              List<int> bytes = ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + 가득 + ‘>");
+              List<int> bytes =
+                  ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + 가득 + ‘>");
               value_return = characteristic.write(bytes);
               characteristic.value;
 
@@ -81,7 +82,7 @@ class BLE_CONTROLLER {
       if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().POST_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_TX) {
             List<int> bytes = ascii.encode("‘<‘ + “RI” + ‘>’");
             device_number = characteristic.write(bytes);
             //characteristic.value;
@@ -115,16 +116,14 @@ class BLE_CONTROLLER {
   discoverServices_read(device) async {
     List<BluetoothService> services = await device!.discoverServices();
     services.forEach((service) {
-      if (service.uuid.toString() == BLE_UUID().GET_SERVICE_UUID) {
+      if (service.uuid.toString() == BLE_UUID().POST_SERVICE_UUID) {
         service.characteristics.forEach((characteristic) {
           if (characteristic.uuid.toString() ==
-              BLE_UUID().GET_CHARACTERISTIC_UUID) {
+              BLE_UUID().POST_CHARACTERISTIC_UUID_RX) {
             List<int> bytes =
                 ascii.encode("‘[‘ + “LE”+ ID + ET + UP + CQ + CP + CT + ‘]’");
             characteristic.write(bytes);
             device_number_stream = characteristic.value;
-            // characteristic.setNotifyValue(!characteristic.isNotifying);
-            // device_number_stream = characteristic.value;
           }
         });
       }

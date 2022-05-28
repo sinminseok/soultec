@@ -10,6 +10,8 @@ import 'package:soultec/Utils/toast.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:soultec/filling_user/Views/Accout/FU_login.dart';
+import '../../../filling_user/Presenter/FU_data_controller.dart';
 import '../../../filling_user/Views/Pages/FU_start_page.dart';
 import '../../Model/User_Model.dart';
 import '../../Presenter/data_controller.dart';
@@ -68,14 +70,12 @@ class _LoginScreenState extends State<LoginScreen>
 
   //이전에 로그인 할떄 자동 로그인을 체크했는데 알려주는 함수
   void check_box() async {
-    print("check_box");
     final prefs = await SharedPreferences.getInstance();
     checkbox_state = prefs.getString("check_login");
     if (checkbox_state != null) {
       disk_user_info = await Http_services().get_userinfo();
       user_id_disk = disk_user_info[0];
       user_pw_disk = disk_user_info[1];
-      print(user_id_disk);
 
       setState(() {
         auth_login = true;
@@ -246,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.fade,
-                                        child: FU_Start_page()));
+                                        child: FU_LoginScreen()));
                               },
                               child: Text(
                                 "입고자로 로그인하러 가기",
