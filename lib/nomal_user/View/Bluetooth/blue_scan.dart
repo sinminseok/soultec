@@ -20,19 +20,21 @@ class Blue_scan extends StatefulWidget {
 class _Blue_scan extends State<Blue_scan> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      color: Colors.lightBlue,
-
-      home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return FindDevicesScreen();
-            }
-            return BluetoothOffScreen(state: state);
-          }),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: MaterialApp(
+        color: Colors.lightBlue,
+        home: StreamBuilder<BluetoothState>(
+            stream: FlutterBlue.instance.state,
+            initialData: BluetoothState.unknown,
+            builder: (c, snapshot) {
+              final state = snapshot.data;
+              if (state == BluetoothState.on) {
+                return FindDevicesScreen();
+              }
+              return BluetoothOffScreen(state: state);
+            }),
+      ),
     );
   }
 }

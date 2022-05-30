@@ -99,11 +99,6 @@ class _CarNumberPageState extends State<CarNumberPage>
               SizedBox(
                 height: size.height * 0.03,
               ),
-              // InkWell(
-              //   onTap: ()async{
-              //   },
-              //   child: Text("dasd")
-              // ),
               Text(
                 "차량 번호 4 자리를 입력해주세요",
                 style: TextStyle(fontSize: 24),
@@ -238,10 +233,7 @@ class _CarNumberPageState extends State<CarNumberPage>
                 ),
               ),
               SizedBox(
-                height: size.height * 0.03,
-              ),
-              SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.05,
               ),
               Center(
                 child: Text(
