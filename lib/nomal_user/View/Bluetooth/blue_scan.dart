@@ -8,6 +8,7 @@ import 'package:soultec/Utils/constants.dart';
 
 
 
+import '../../../Utils/permission.dart';
 import '../../Presenter/ble_presenter.dart';
 import '../Pages/cars/car_number.dart';
 import 'blue_device_tile.dart';
@@ -18,6 +19,14 @@ class Blue_scan extends StatefulWidget {
 }
 
 class _Blue_scan extends State<Blue_scan> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Permission_handler().requestBLUE(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -77,6 +86,7 @@ class FindDevicesScreen extends StatefulWidget {
 class _FindDevicesScreenState extends State<FindDevicesScreen> {
   @override
   void initState() {
+
     //ble scan
     FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
     super.initState();

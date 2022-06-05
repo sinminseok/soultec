@@ -11,6 +11,7 @@ import 'package:soultec/Utils/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:soultec/filling_user/Views/Accout/FU_login.dart';
+import '../../../Utils/permission.dart';
 import '../../../filling_user/Presenter/FU_data_controller.dart';
 import '../../../filling_user/Views/Pages/FU_start_page.dart';
 import '../../Model/User_Model.dart';
@@ -155,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen>
             future: Provider.of<Http_services>(context, listen: false)
                 .auto_login(disk_user_info[0], disk_user_info[1]),
             builder: (context, snapshot) {
-              if (snapshot.hasError) {
+              if (snapshot.hasError){
                 return Text("server drop");
               } else if (snapshot.hasData) {
                 return Blue_scan();
@@ -242,6 +243,7 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
                               onTap: () {
+
                                 Navigator.push(
                                     context,
                                     PageTransition(

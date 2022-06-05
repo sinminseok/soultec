@@ -64,7 +64,7 @@ class _FU_Fill_finishState extends State<FU_Fill_finish> {
           ),
           InkWell(
               onTap: () async {
-                Sound().play_sound("assets/mp3/success.mp3");
+
                 SystemNavigator.pop();
               },
               child: Container(

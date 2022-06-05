@@ -49,8 +49,7 @@ class FU_BLE_CONTROLLER {
               }
             } else {
               //‘<‘ + “LD” + ID + UP + MODE + VAL + ‘>’
-              List<int> bytes =
-              ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + litter + ‘>");
+              List<int> bytes = ascii.encode("‘<‘ + “LD” + 주유기번호 + 단가 + Q + litter + ‘>");
               value_return = characteristic.write(bytes);
               if (value_return == "ACK") {
                 check_uuid = true;

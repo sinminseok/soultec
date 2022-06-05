@@ -5,6 +5,7 @@ import 'package:flutter_qr_bar_scanner/qr_bar_scanner_camera.dart';
 import 'package:provider/provider.dart';
 import 'package:soultec/Utils/constants.dart';
 import 'package:soultec/filling_user/Presenter/FU_data_controller.dart';
+import '../../../../Utils/permission.dart';
 import '../../../../Utils/top_widget.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -33,6 +34,7 @@ class _FU_QR_pageState extends State<FU_QR_page> {
 
   /// 초기화 함수
   _init() async {
+    Permission_handler().requestCameraPermission(context);
     bool canVibrate = await Vibrate.canVibrate;
     setState(() {
       // 화면 꺼짐 방지

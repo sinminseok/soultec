@@ -46,6 +46,8 @@ class FU_Http_services with ChangeNotifier {
           // 'Accept': 'application/json',
         },
         body: json.encode({'username': id, 'tankId': tankid}));
+    print("SEX");
+    print(res);
 
     if (res.statusCode == 200) {
       if (res.body.toString() == "true") {

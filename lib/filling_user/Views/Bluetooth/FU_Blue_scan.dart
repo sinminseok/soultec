@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:soultec/Utils/constants.dart';
+import '../../../Utils/permission.dart';
 import '../../Presenter/FU_ble_presenter.dart';
 import '../Pages/QR/FU_QR_page.dart';
 import 'FU_Blue_device_tile.dart';
@@ -70,6 +71,7 @@ class FindDevicesScreen extends StatefulWidget {
 class _FindDevicesScreenState extends State<FindDevicesScreen> {
   @override
   void initState() {
+    Permission_handler().requestBLUE(context);
     //ble scan
     FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
     super.initState();
