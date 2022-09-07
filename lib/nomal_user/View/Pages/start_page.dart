@@ -62,6 +62,7 @@ class _Start_page extends State<Start_page>
 
   @override
   void dispose() {
+    _controller!.dispose();
     check_tutorial_bool = null;
     super.dispose();
   }

@@ -89,19 +89,14 @@ class _FU_Blue_device_tile extends State<FU_Blue_device_tile> {
     Size size = MediaQuery.of(context).size;
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 30,
-            bottom: 17,
-            right: 30,
-          ),
-          child: Icon(Icons.devices_rounded),
+
+        Container(
+          child: InkWell(
+              onTap: (widget.result.advertisementData.connectable)
+                  ? widget.onTap
+                  : null,
+              child: _buildTitle(context)),
         ),
-        InkWell(
-            onTap: (widget.result.advertisementData.connectable)
-                ? widget.onTap
-                : null,
-            child: _buildTitle(context)),
       ],
     );
     //_buildTitle(context)

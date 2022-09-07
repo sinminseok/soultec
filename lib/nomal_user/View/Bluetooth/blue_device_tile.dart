@@ -30,6 +30,12 @@ class _Blue_device_tile extends State<Blue_device_tile> {
     super.initState();
   }
 
+  @override
+  void dispose(){
+
+    super.dispose();
+  }
+
   void check_device(device) async {
     final prefs = await SharedPreferences.getInstance();
     String? device_id = device.id.toString();
@@ -44,7 +50,7 @@ class _Blue_device_tile extends State<Blue_device_tile> {
       Navigator.push(
           context,
           PageTransition(
-              type: PageTransitionType.fade, child: CarNumberPage(device: device,)));
+              type: PageTransitionType.fade, child: CarNumberPage(device: device)));
 
       // Navigator.of(context).push(MaterialPageRoute(builder : (context){
       //   return CarNumberPage();
@@ -75,9 +81,10 @@ class _Blue_device_tile extends State<Blue_device_tile> {
         padding: const EdgeInsets.all(8.0),
         child: Container(
             height: size.height * 0.05,
+            width: size.width*0.7,
             child: Text(
               widget.result.device.id.toString(),
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 18),
             )),
       );
     }
@@ -86,22 +93,25 @@ class _Blue_device_tile extends State<Blue_device_tile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 30,
-            bottom: 17,
-            right: 30,
+    return Container(
+      width: size.width*1,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 30,
+              bottom: 17,
+              right: 30,
+            ),
+            child: Icon(Icons.devices_rounded),
           ),
-          child: Icon(Icons.devices_rounded),
-        ),
-        InkWell(
-            onTap: (widget.result.advertisementData.connectable)
-                ? widget.onTap
-                : null,
-            child: _buildTitle(context)),
-      ],
+          InkWell(
+              onTap: (widget.result.advertisementData.connectable)
+                  ? widget.onTap
+                  : null,
+              child: _buildTitle(context)),
+        ],
+      ),
     );
     //_buildTitle(context)
   }

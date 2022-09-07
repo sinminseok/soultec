@@ -22,6 +22,11 @@ class _Recepit_detail extends State<Recepit_detail> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -112,7 +117,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                           ),
                           Text(""),
                           Text(
-                            "==================================",
+                            "=============================",
                             style: TextStyle(fontSize: 14),
                           ),
                           Row(
@@ -141,7 +146,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             ],
                           ),
                           Text(
-                            "-------------------------------------------------------------------",
+                            "------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Row(
@@ -170,7 +175,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                             ],
                           ),
                           Text(
-                            "-------------------------------------------------------------------",
+                            "------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
@@ -179,7 +184,7 @@ class _Recepit_detail extends State<Recepit_detail> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "-------------------------------------------------------------------",
+                            "------------------------------------",
                             style: TextStyle(fontSize: 14),
                           ),
                           Center(

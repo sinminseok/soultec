@@ -73,6 +73,7 @@ class _CarNumberPageState extends State<CarNumberPage>
 
   @override
   void dispose() {
+    _carnumber_text.dispose();
     _controller!.dispose();
     check_tutorial_bool = null;
     overlap_car = false;
