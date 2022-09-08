@@ -98,6 +98,8 @@ class Http_services with ChangeNotifier {
       'Authorization': 'Bearer $token',
     });
 
+
+
     //statusCode 확인해볼것
     if (res.statusCode == 200) {
       _user_info = User.fromJson(jsonDecode(res.body));
@@ -107,6 +109,14 @@ class Http_services with ChangeNotifier {
       return null;
     }
   }
+
+
+  // Future<User?> func_of_delete()async{
+  //   var res = await http.get(Uri.parse(Http_Url().get_user_info_url),headers: {
+  //     'Content-Typr'
+  //   })
+
+ // }
 
   //http 자동 로그인
   Future<User_token?> auto_login(id, pw) async {

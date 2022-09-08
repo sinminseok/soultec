@@ -31,6 +31,18 @@ class Fill_Setting extends StatefulWidget {
 class _Fill_Setting extends State<Fill_Setting>
     with SingleTickerProviderStateMixin {
   var check_tutorial_bool;
+  int interval = 500;
+
+  AnimationController? _controller;
+  int _currentWidget = 0;
+  Offset? offset;
+  int fill_value = 0;
+  String? fill_max = null;
+  double button_position = 360;
+  double block_container = 0.5;
+  bool? ble_return = null;
+  Stream<String>? device_number_stream;
+  var device_number;
 
   List<Widget> children = [
     Image.asset(
@@ -41,24 +53,14 @@ class _Fill_Setting extends State<Fill_Setting>
       color: Colors.transparent,
     ),
   ];
-  int interval = 500;
 
-  AnimationController? _controller;
-  int _currentWidget = 0;
 
   void check_tutorial() async {
     final prefs = await SharedPreferences.getInstance();
     check_tutorial_bool = prefs.get('check_tutorial');
   }
 
-  Offset? offset;
-  int fill_value = 0;
-  String? fill_max = null;
-  double button_position = 360;
-  double block_container = 0.5;
-  bool? ble_return = null;
-  Stream<String>? device_number_stream;
-  var device_number;
+
 
 //해당 주유기 번호
 //  var device_numberl;

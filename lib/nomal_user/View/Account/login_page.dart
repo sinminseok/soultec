@@ -91,17 +91,17 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  Future<void> initConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult.toString());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      // I am connected to a mobile network.
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a wifi network.
-    } else if (connectivityResult.toString() == "ConnectivityResult.none") {
-      showAlertDialog(context, "네트워크 오류", "와이파이나 데이터를 켜주세요");
-    }
-  }
+  // Future<void> initConnectivity() async {
+  //   var connectivityResult = await (Connectivity().checkConnectivity());
+  //
+  //   if (connectivityResult == ConnectivityResult.mobile) {
+  //     // I am connected to a mobile network.
+  //   } else if (connectivityResult == ConnectivityResult.wifi) {
+  //     // I am connected to a wifi network.
+  //   } else if (connectivityResult.toString() == "ConnectivityResult.none") {
+  //     showAlertDialog(context, "네트워크 오류", "와이파이나 데이터를 켜주세요");
+  //   }
+  // }
 
   void check_tutorial() async {
     final prefs = await SharedPreferences.getInstance();
@@ -126,16 +126,18 @@ class _LoginScreenState extends State<LoginScreen>
     });
 
     _controller!.forward();
-
-    super.initState();
-    initConnectivity();
+    Permission_handler().initConnectivity(context);
     check_box();
+    super.initState();
+
     //이 코드 뭐임?ㅋㅋ
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
   @override
   void dispose() {
+    _userIDController.dispose();
+    _passwordController.dispose();
     _controller!.dispose();
     check_tutorial_bool = null;
     auth_login = false;
@@ -150,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var check_tutorial = Provider.of<Http_services>(context).check_tutorial;
-    double defaultRegisterSize = size.height - (size.height * 0.1);
+
     return auth_login
         ? FutureBuilder<User_token?>(
             future: Provider.of<Http_services>(context, listen: false)
@@ -316,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         InkWell(
                           onTap: () async {
-                            initConnectivity();
+                            Permission_handler().initConnectivity(context);
                             Sound().play_sound("assets/mp3/start.mp3");
                             if (_userIDController.text == "") {
                               return showtoast("기사번호를 입력해주세요");

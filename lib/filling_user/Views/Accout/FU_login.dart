@@ -42,6 +42,8 @@ class _FU_LoginScreen extends State<FU_LoginScreen>
 
   AudioPlayer player = AudioPlayer();
 
+
+
   var check_tutorial_bool;
 
   Future<void> initConnectivity() async {
@@ -87,11 +89,15 @@ class _FU_LoginScreen extends State<FU_LoginScreen>
 
   @override
   void dispose() {
+    _userIDController.dispose();
+    _passwordController.dispose();
     _controller!.dispose();
     check_tutorial_bool = null;
 
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

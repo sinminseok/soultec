@@ -23,6 +23,8 @@ class BLE_CONTROLLER {
     return;
   }
 
+ 
+
   //해당 주유기에게 리터량을 내포해
   Future<bool?> ble_post_litter(device, litter) async {
     bool check_uuid = false;

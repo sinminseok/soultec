@@ -94,6 +94,7 @@ class _FU_Fill_SettingState extends State<FU_Fill_Setting>
 
   @override
   dispose() {
+    
     _controller!.dispose();
     check_tutorial_bool = null;
     button_position = 360;

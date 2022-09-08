@@ -1,8 +1,22 @@
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:soultec/Utils/toast.dart';
 
 class Permission_handler{
+
+  Future<void> initConnectivity(context) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.mobile) {
+      // I am connected to a mobile network.
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      // I am connected to a wifi network.
+    } else if (connectivityResult.toString() == "ConnectivityResult.none") {
+      showAlertDialog(context, "네트워크 오류", "와이파이나 데이터를 켜주세요");
+    }
+  }
 
   Future<bool> requestCameraPermission(BuildContext context) async {
 
